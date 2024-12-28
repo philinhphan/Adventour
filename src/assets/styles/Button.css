@@ -1,0 +1,32 @@
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.button-primary {
+  background-color: #ff0055;
+  color: white;
+}
+
+.button-secondary {
+  background-color: white;
+  color: #333;
+  border: 2px solid #ccc;
+}
+
+.button-black {
+  background-color: black;
+  color: white;
+  border: none;
+}
+
+.button-icon {
+  margin-right: 8px;
+  display: flex;
+}

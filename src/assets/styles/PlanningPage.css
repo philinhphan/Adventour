@@ -1,0 +1,38 @@
+.planning-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: white;
+  padding: 25px;
+  text-align: center;
+}
+
+.title {
+  font-size: 1.4em;
+  font-weight: 600;
+  color: #333;
+}
+
+.date-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.date-flexibility {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.date-inputs {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.budget-section {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 40px;
+}

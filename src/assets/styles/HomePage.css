@@ -1,0 +1,49 @@
+.home-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-size: cover;
+  background-position: center;
+  background-repeat: "no-repeat";
+  color: white;
+}
+
+.home-page-content {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.highlight {
+  color: #ff0055;
+}
+
+.tiles {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.tile {
+  position: relative; /* Allows absolute positioning inside */
+  background: rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  text-align: left; /* Align the text to the left */
+}
+
+.tile h2 {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.tile p {
+  font-size: 14px;
+  margin-bottom: 16px;
+}

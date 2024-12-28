@@ -1,5 +1,7 @@
 # Adventour App
 
+Project in User Interface Design: Adventour
+
 ## To Discuss
 
 ## Notzen Smilla
@@ -21,5 +23,3 @@
 ### Preferneces
 
 - allgmeine prefernces hier abfragen oder wie vom Prof vorgeschlagen auch als Swipe?
-# Adventour
-# Adventour

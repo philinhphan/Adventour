@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar/Navbar";
+import { useNavigate } from "react-router-dom";
 import "../assets/styles/App.css";
 import "../assets/styles/PlanningPage.css";
 
@@ -12,6 +13,7 @@ import profil from "../assets/images/LisaProfil.jpg";
 // Planning page component with form to specify trip details.
 const PlanningPage = () => {
   const [tripDetails, setTripDetails] = useState({
+    //@TODO PhiLinh -> here you get the input from the user, you can use this data to send it to the backend
     name: "",
     dateStart: "",
     dateEnd: "",
@@ -39,10 +41,11 @@ const PlanningPage = () => {
     }));
   };
 
-  // Save trip details function, for now it just logs the details and alerts.
+  const navigate = useNavigate();
+  // Save trip details and navigate to InviteFriendsPage.
   const saveTripDetails = () => {
     console.log("Trip Details Saved:", tripDetails);
-    alert("Trip details have been saved!"); // Placeholder for now!!
+    navigate("/invite"); // Navigate to InviteFriendsPage
   };
 
   return (

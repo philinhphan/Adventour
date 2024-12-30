@@ -1,0 +1,65 @@
+.invite-container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  margin-top: 20px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.invite-container h1 {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.invite-container p {
+  font-size: 1em;
+  color: #555;
+}
+
+.share-section {
+  margin-top: 20px;
+}
+
+.share-input {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.link-field {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9em;
+  background-color: #f1f1f1;
+  color: #333;
+}
+
+.share-icons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.share-icons img {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 400px;
+}

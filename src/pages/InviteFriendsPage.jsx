@@ -7,18 +7,25 @@ import "../assets/styles/InviteFriends.css";
 import logo from "../assets/images/AdventourLogo.svg";
 import profil from "../assets/images/LisaProfil.jpg";
 
+import whatsapp from "../assets/images/whatsapp.svg";
+
+// Invite friends page component
 const InviteFriendsPage = () => {
   const shareLink = "https://adventour-app.com/share";
 
+  // Handle copy link button click
   const handleCopyLink = () => {
     navigator.clipboard.writeText(shareLink);
     alert("Link copied to clipboard!");
   };
 
+  // Use navigate hook to navigate to preferences page
   const navigate = useNavigate();
   const handleContinue = () => {
-    navigate("/preferences"); // Example: Navigate to the next page
+    navigate("/preferences");
   };
+
+  //TODO: Do we need the continue Button?
 
   return (
     <div className="invite-friends-page">
@@ -44,8 +51,8 @@ const InviteFriendsPage = () => {
           </div>
 
           <div className="share-icons">
-            {/* TODO: Add Icons */}
-            <img src="../assets/icons/airdrop.png" alt="AirDrop" />
+            {/* TODO DESIGN: Add Icons */}
+            <img alt="AirDrop" src={whatsapp} />
             <img src="../assets/icons/whatsapp.png" alt="WhatsApp" />
             <img src="../assets/icons/instagram.png" alt="Instagram" />
             <img src="../assets/icons/mail.png" alt="Mail" />

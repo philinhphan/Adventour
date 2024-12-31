@@ -8,9 +8,11 @@ import "../assets/styles/Preferences.css";
 import logo from "../assets/images/AdventourLogo.svg";
 import profil from "../assets/images/LisaProfil.jpg";
 
+// Preferences page component
 const PreferencesPage = () => {
   const [preferences, setPreferences] = useState([]);
 
+  // Handle tile toggle event to update preferences state based on user selection
   const handleTileToggle = (label, isSelected) => {
     setPreferences(
       (prev) =>
@@ -20,28 +22,33 @@ const PreferencesPage = () => {
     );
   };
 
+  // Handle save preferences button click
+  // TODO: @PhiLinh Do we need to save the preferences to a database before handing to AI API?
+  // TODO: Alert is placeholder, replace with actual API call!
   const handleSavePreferences = () => {
     console.log("Saved Preferences:", preferences);
     alert("Preferences saved!");
   };
 
+  // Slider settings for tile carousel display on preferences page (responsive)
   const sliderSettings = {
     dots: true,
     infinite: false,
+    arrows: false,
     speed: 500,
-    slidesToShow: 3, // Display three tiles at once
+    slidesToShow: 3,
     slidesToScroll: 1,
     responsive: [
       {
-        breakpoint: 768,
+        breakpoint: 600,
         settings: {
-          slidesToShow: 2, // Adjust for smaller screens
+          slidesToShow: 2,
         },
       },
       {
         breakpoint: 300,
         settings: {
-          slidesToShow: 2, // Adjust for very small screens
+          slidesToShow: 2,
         },
       },
     ],
@@ -57,6 +64,8 @@ const PreferencesPage = () => {
           no specific preferences.
         </p>
 
+        {/* TODO Design: Add all the options you want to display here with picture(png) and label. 
+You can add as many categories and tiles as you want */}
         <div className="preferences-section">
           <h2>Activities</h2>
           <Slider {...sliderSettings}>

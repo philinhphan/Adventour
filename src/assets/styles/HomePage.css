@@ -22,14 +22,14 @@
   color: #ff0055;
 }
 
-.tiles {
+.options {
   display: flex;
   flex-direction: column;
   gap: 20px;
   width: 100%;
 }
 
-.tile {
+.options-tile {
   position: relative; /* Allows absolute positioning inside */
   background: rgba(0, 0, 0, 0.6);
   padding: 20px;
@@ -38,12 +38,12 @@
   text-align: left; /* Align the text to the left */
 }
 
-.tile h2 {
+.options-tile h2 {
   font-size: 20px;
   margin-bottom: 8px;
 }
 
-.tile p {
+.options-tile p {
   font-size: 14px;
   margin-bottom: 16px;
 }

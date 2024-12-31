@@ -7,6 +7,11 @@ import "../assets/styles/Preferences.css";
 
 import logo from "../assets/images/AdventourLogo.svg";
 import profil from "../assets/images/LisaProfil.jpg";
+import PreferenceCultural from "../assets/images/PreferenceCultural.png";
+import PreferenceAdventure from "../assets/images/PreferenceAdventure.png";
+import PreferenceLeisure from "../assets/images/PreferenceLeisure.png";
+import PreferenceSports from "../assets/images/PreferenceSports.png";
+import PreferenceNature from "../assets/images/PreferenceNature.png";
 
 // Preferences page component
 const PreferencesPage = () => {
@@ -71,27 +76,27 @@ You can add as many categories and tiles as you want */}
           <Slider {...sliderSettings}>
             <Tile
               label="Cultural"
-              imageSrc="../assets/images/cultural.jpg"
+              imageSrc={PreferenceCultural}
               onToggle={handleTileToggle}
             />
             <Tile
               label="Adventure"
-              imageSrc="../assets/images/adventure.jpg"
+              imageSrc={PreferenceAdventure}
               onToggle={handleTileToggle}
             />
             <Tile
               label="Leisure"
-              imageSrc="../assets/images/leisure.jpg"
+              imageSrc={PreferenceLeisure}
               onToggle={handleTileToggle}
             />
             <Tile
               label="Sports"
-              imageSrc="../assets/images/sports.jpg"
+              imageSrc={PreferenceSports}
               onToggle={handleTileToggle}
             />
             <Tile
               label="Nature"
-              imageSrc="../assets/images/nature.jpg"
+              imageSrc={PreferenceNature}
               onToggle={handleTileToggle}
             />
           </Slider>

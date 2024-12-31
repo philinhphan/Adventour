@@ -8,6 +8,9 @@ import logo from "../assets/images/AdventourLogo.svg";
 import profil from "../assets/images/LisaProfil.jpg";
 
 import whatsapp from "../assets/images/whatsapp.svg";
+import Instagram from "../assets/images/Instagram.svg";
+import Airdrop from "../assets/images/Airdrop.svg";
+import Mail from "../assets/images/Mail.svg";
 
 // Invite friends page component
 const InviteFriendsPage = () => {
@@ -52,10 +55,10 @@ const InviteFriendsPage = () => {
 
           <div className="share-icons">
             {/* TODO DESIGN: Add Icons */}
-            <img alt="AirDrop" src={whatsapp} />
-            <img src="../assets/icons/whatsapp.png" alt="WhatsApp" />
-            <img src="../assets/icons/instagram.png" alt="Instagram" />
-            <img src="../assets/icons/mail.png" alt="Mail" />
+            <img alt="AirDrop" src={Airdrop}/>
+            <img alt="WhatsApp" src={whatsapp}/>
+            <img alt="Instagram" src={Instagram}/>
+            <img alt="Mail" src={Mail}/>
           </div>
         </div>
         <div className="action-buttons">

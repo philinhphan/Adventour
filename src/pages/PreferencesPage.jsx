@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Slider from "react-slick";
 import Navbar from "../components/Navbar/Navbar";
-import Button from "../components/Button/Button";
 import Tile from "../components/Tile/Tile";
 import "../assets/styles/Preferences.css";
 
@@ -12,6 +11,17 @@ import PreferenceAdventure from "../assets/images/PreferenceAdventure.png";
 import PreferenceLeisure from "../assets/images/PreferenceLeisure.png";
 import PreferenceSports from "../assets/images/PreferenceSports.png";
 import PreferenceNature from "../assets/images/PreferenceNature.png";
+import WeatherCold from "../assets/images/WeatherCold.jpg";
+import WeatherWarm from "../assets/images/WeatherWarm.jpg";
+import WeatherMixed from "../assets/images/WeatherMixed.jpg";
+import LocationUrban from "../assets/images/Urban.jpg";
+import LocationBeach from "../assets/images/LocationBeach.jpg";
+import LocationLeisure from "../assets/images/LocationLeisure.jpg";
+import AccommodationHotel from "../assets/images/AccommodationHotel.jpg";
+import AccommodationResort from "../assets/images/AccommodationResort.jpg";
+import AccommodationAirBnB from "../assets/images/AccommodationAirBnB.jpg";
+import AccommodationCamping from "../assets/images/AccommodationCamping.jpg";
+;
 
 // Preferences page component
 const PreferencesPage = () => {
@@ -105,17 +115,17 @@ You can add as many categories and tiles as you want */}
           <Slider {...sliderSettings}>
             <Tile
               label="Cold"
-              imageSrc="../assets/images/cold.jpg"
+              imageSrc={WeatherCold}
               onToggle={handleTileToggle}
             />
             <Tile
               label="Warm"
-              imageSrc="../assets/images/warm.jpg"
+              imageSrc={WeatherWarm}
               onToggle={handleTileToggle}
             />
             <Tile
               label="Mixed"
-              imageSrc="../assets/images/mixed.jpg"
+              imageSrc={WeatherMixed}
               onToggle={handleTileToggle}
             />
           </Slider>
@@ -124,27 +134,55 @@ You can add as many categories and tiles as you want */}
           <Slider {...sliderSettings}>
             <Tile
               label="Urban"
-              imageSrc="../assets/images/urban.jpg"
+              imageSrc={LocationUrban}
               onToggle={handleTileToggle}
             />
             <Tile
               label="Beach"
-              imageSrc="../assets/images/beach.jpg"
+              imageSrc={LocationBeach}
               onToggle={handleTileToggle}
             />
             <Tile
               label="Leisure"
-              imageSrc="../assets/images/leisure-location.jpg"
+              imageSrc={LocationLeisure}
               onToggle={handleTileToggle}
             />
           </Slider>
+
+             <h2>Accommodation</h2>
+          <Slider {...sliderSettings}>
+            <Tile
+              label="Hotel"
+              imageSrc={AccommodationHotel}
+              onToggle={handleTileToggle}
+            />
+            <Tile
+              label="Resort"
+              imageSrc={AccommodationResort}
+              onToggle={handleTileToggle}
+            />
+            <Tile
+              label="AirBnB"
+              imageSrc={AccommodationAirBnB}
+              onToggle={handleTileToggle}
+            />
+            <Tile
+              label="Camping"
+              imageSrc={AccommodationCamping}
+              onToggle={handleTileToggle}
+            />
+          </Slider>
+          </div>
         </div>
 
-        <Button
-          label="Save preferences"
-          styleType="primary"
+         {/* Added fixed button container */}
+      <div className="fixed-button-container">
+        <button
+          className="button button-primary"
           onClick={handleSavePreferences}
-        />
+        >
+          Save preferences
+        </button>
       </div>
     </div>
   );

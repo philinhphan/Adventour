@@ -26,6 +26,7 @@
   height: 100px;
   object-fit: cover;
   border-bottom: 2px solid #ddd;
+  border-radius: 12px;
 }
 
 .tile-label {

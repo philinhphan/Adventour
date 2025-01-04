@@ -8,6 +8,7 @@ import plane from "../assets/icons/planeIcon.svg";
 import logo from "../assets/images/AdventourLogo.svg";
 import profil from "../assets/images/LisaProfil.jpg";
 
+//TODO Design: Rework the styling for this page. There are some issues with the layout and spacing. Also it looks really empty
 // Processing page component
 const ProcessingPage = () => {
   const navigate = useNavigate();

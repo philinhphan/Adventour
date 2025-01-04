@@ -1,0 +1,132 @@
+.card-container {
+  position: relative;
+  width: 300px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card {
+  width: 100%;
+  height: 75vh;
+  perspective: 1000px;
+  transition: transform 0.6s ease-in-out;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-front {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f9f9f9;
+}
+
+.card-back {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 20px;
+  background: white;
+  text-align: left;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: rotateY(180deg);
+}
+
+.card.flipped .card-front {
+  transform: rotateY(180deg);
+}
+
+.card.flipped .card-back {
+  transform: rotateY(0deg);
+}
+
+.card-back h3 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #000;
+}
+
+.card-back .card-tags {
+  margin-bottom: 15px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.card-back .card-tags span {
+  background: #e5e5e5;
+  padding: 5px 8px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  color: #333;
+}
+
+.card-back p {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #666;
+  margin-top: 10px;
+}
+
+.swipe-buttons {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-top: 25px;
+}
+
+/*Animation*/
+
+/* Base card styles remain the same */
+
+@keyframes swipe-left {
+  to {
+    transform: translateX(-100%) rotate(-20deg);
+    opacity: 0;
+  }
+}
+
+@keyframes swipe-right {
+  to {
+    transform: translateX(100%) rotate(20deg);
+    opacity: 0;
+  }
+}
+
+@keyframes swipe-up {
+  to {
+    transform: translateY(-100%) rotate(0);
+    opacity: 0;
+  }
+}
+
+@keyframes swipe-down {
+  to {
+    transform: translateY(100%) rotate(0);
+    opacity: 0;
+  }
+}
+
+/* Swipe direction animations */
+.swipe-left {
+  animation: swipe-left 0.5s ease-in-out forwards;
+}
+
+.swipe-right {
+  animation: swipe-right 0.5s ease-in-out forwards;
+}
+
+.swipe-up {
+  animation: swipe-up 0.5s ease-in-out forwards;
+}
+
+.swipe-down {
+  animation: swipe-down 0.5s ease-in-out forwards;
+}

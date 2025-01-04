@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Slider from "react-slick";
 import Navbar from "../components/Navbar/Navbar";
 import Tile from "../components/Tile/Tile";
+import { useNavigate } from "react-router-dom";
 import "../assets/styles/Preferences.css";
 
 import logo from "../assets/images/AdventourLogo.svg";
@@ -21,11 +22,10 @@ import AccommodationHotel from "../assets/images/AccommodationHotel.jpg";
 import AccommodationResort from "../assets/images/AccommodationResort.jpg";
 import AccommodationAirBnB from "../assets/images/AccommodationAirBnB.jpg";
 import AccommodationCamping from "../assets/images/AccommodationCamping.jpg";
-;
-
 // Preferences page component
 const PreferencesPage = () => {
   const [preferences, setPreferences] = useState([]);
+  const navigate = useNavigate();
 
   // Handle tile toggle event to update preferences state based on user selection
   const handleTileToggle = (label, isSelected) => {
@@ -42,7 +42,7 @@ const PreferencesPage = () => {
   // TODO: Alert is placeholder, replace with actual API call!
   const handleSavePreferences = () => {
     console.log("Saved Preferences:", preferences);
-    alert("Preferences saved!");
+    navigate("/suggestions");
   };
 
   // Slider settings for tile carousel display on preferences page (responsive)
@@ -79,7 +79,7 @@ const PreferencesPage = () => {
           no specific preferences.
         </p>
 
-        {/* TODO Design: Add all the options you want to display here with picture(png) and label. 
+        {/* TODO Design: Add all the options you want to display here with picture(jpg) and label. 
 You can add as many categories and tiles as you want */}
         <div className="preferences-section">
           <h2>Activities</h2>
@@ -149,7 +149,7 @@ You can add as many categories and tiles as you want */}
             />
           </Slider>
 
-             <h2>Accommodation</h2>
+          <h2>Accommodation</h2>
           <Slider {...sliderSettings}>
             <Tile
               label="Hotel"
@@ -172,10 +172,10 @@ You can add as many categories and tiles as you want */}
               onToggle={handleTileToggle}
             />
           </Slider>
-          </div>
         </div>
+      </div>
 
-         {/* Added fixed button container */}
+      {/* Added fixed button container */}
       <div className="fixed-button-container">
         <button
           className="button button-primary"

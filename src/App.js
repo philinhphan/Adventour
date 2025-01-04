@@ -7,6 +7,7 @@ import PreferencesPage from "./pages/PreferencesPage";
 import SuggestionsPage from "./pages/SuggestionsPage";
 import FinalSuggestionsPage from "./pages/FinalSuggestionsPage";
 import EndScreenPage from "./pages/EndScreenPage";
+import ProcessingPage from "./pages/ProcessingPage";
 
 import backgroundImage from "./assets/images/background_homepage.jpg";
 
@@ -25,6 +26,7 @@ function App() {
           <Route path="/planning" element={<PlanningPage />} />
           <Route path="/preferences" element={<PreferencesPage />} />
           <Route path="/suggestions" element={<SuggestionsPage />} />
+          <Route path="/processing" element={<ProcessingPage />} />
           <Route path="/final-suggestions" element={<FinalSuggestionsPage />} />
           <Route path="/end" element={<EndScreenPage />} />
         </Routes>

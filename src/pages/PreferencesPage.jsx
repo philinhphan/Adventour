@@ -5,6 +5,9 @@ import Tile from "../components/Tile/Tile";
 import { useNavigate } from "react-router-dom";
 import "../assets/styles/Preferences.css";
 
+import { useTripContext } from "../context/TripContext";
+import { fetchSwipeSuggestions } from "../api/tripApi";
+
 import logo from "../assets/images/AdventourLogo.svg";
 import profil from "../assets/images/LisaProfil.jpg";
 import PreferenceCultural from "../assets/images/PreferenceCultural.png";
@@ -22,10 +25,12 @@ import AccommodationHotel from "../assets/images/AccommodationHotel.jpg";
 import AccommodationResort from "../assets/images/AccommodationResort.jpg";
 import AccommodationAirBnB from "../assets/images/AccommodationAirBnB.jpg";
 import AccommodationCamping from "../assets/images/AccommodationCamping.jpg";
+
 // Preferences page component
 const PreferencesPage = () => {
   const [preferences, setPreferences] = useState([]);
   const navigate = useNavigate();
+  const { tripData, updatePreferences } = useTripContext();
 
   // Handle tile toggle event to update preferences state based on user selection
   const handleTileToggle = (label, isSelected) => {
@@ -38,12 +43,24 @@ const PreferencesPage = () => {
   };
 
   // Handle save preferences button click
-  // TODO: @PhiLinh Do we need to save the preferences to a database before handing to AI API?
-  // TODO: Alert is placeholder, replace with actual API call!
-  //TODO: Combine preferences with trip details and send to AI API
-  const handleSavePreferences = () => {
-    console.log("Saved Preferences:", preferences);
+  // TODO: @PhiLinh - Implement API call to fetch swipe suggestions based on preferences
+  const handleSavePreferences = async () => {
     navigate("/suggestions");
+    console.log("Saved Preferences:", preferences);
+    updatePreferences(preferences); // Update context with preferences
+
+    // Call API for swipe suggestions
+    /*try {
+      const suggestions = await fetchSwipeSuggestions(
+        tripData.tripDetails,
+        preferences
+      );
+      console.log("Swipe Suggestions:", suggestions);
+      // TODO: Pass suggestions to SuggestionsPage
+      navigate("/suggestions");
+    } catch (error) {
+      alert("Error fetching suggestions.");
+    }*/
   };
 
   // Slider settings for tile carousel display on preferences page (responsive)

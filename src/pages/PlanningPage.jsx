@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
 import "../assets/styles/App.css";
 import "../assets/styles/PlanningPage.css";
+import { useTripContext } from "../context/TripContext";
 
 import InputField from "../components/FormElements/InputField";
 import Button from "../components/Button/Button";
@@ -23,6 +24,14 @@ const PlanningPage = () => {
   });
   const navigate = useNavigate();
 
+  const { updateTripDetails } = useTripContext();
+
+  const saveTripDetails = () => {
+    console.log("Trip Details Saved:", tripDetails);
+    updateTripDetails(tripDetails); // Update context with trip details
+    navigate("/invite");
+  };
+
   // Handle input change for form fields and update tripDetails state.
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -40,12 +49,6 @@ const PlanningPage = () => {
       dateStart: flexibility === "flexible" ? "" : prevDetails.dateStart,
       dateEnd: flexibility === "flexible" ? "" : prevDetails.dateEnd,
     }));
-  };
-
-  // Save trip details and navigate to InviteFriendsPage.
-  const saveTripDetails = () => {
-    console.log("Trip Details Saved:", tripDetails);
-    navigate("/invite"); // Navigate to InviteFriendsPage
   };
 
   return (

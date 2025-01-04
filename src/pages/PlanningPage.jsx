@@ -21,6 +21,7 @@ const PlanningPage = () => {
     budgetMax: "",
     dateFlexibility: "exact",
   });
+  const navigate = useNavigate();
 
   // Handle input change for form fields and update tripDetails state.
   const handleInputChange = (e) => {
@@ -41,7 +42,6 @@ const PlanningPage = () => {
     }));
   };
 
-  const navigate = useNavigate();
   // Save trip details and navigate to InviteFriendsPage.
   const saveTripDetails = () => {
     console.log("Trip Details Saved:", tripDetails);

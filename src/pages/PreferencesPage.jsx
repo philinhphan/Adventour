@@ -40,6 +40,7 @@ const PreferencesPage = () => {
   // Handle save preferences button click
   // TODO: @PhiLinh Do we need to save the preferences to a database before handing to AI API?
   // TODO: Alert is placeholder, replace with actual API call!
+  //TODO: Combine preferences with trip details and send to AI API
   const handleSavePreferences = () => {
     console.log("Saved Preferences:", preferences);
     navigate("/suggestions");

@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
 import "../assets/styles/App.css";
 import "../assets/styles/PlanningPage.css";
+import { useTripContext } from "../context/TripContext";
 
 import InputField from "../components/FormElements/InputField";
 import Button from "../components/Button/Button";
@@ -10,10 +11,11 @@ import Button from "../components/Button/Button";
 import logo from "../assets/images/AdventourLogo.svg";
 import profil from "../assets/images/LisaProfil.jpg";
 
+//TODO Design: Rework the styling for this page. There are some issues with the layout and spacing.
+
 // Planning page component with form to specify trip details.
 const PlanningPage = () => {
   const [tripDetails, setTripDetails] = useState({
-    //@TODO PhiLinh -> here you get the input from the user, you can use this data to send it to the backend
     name: "",
     dateStart: "",
     dateEnd: "",
@@ -21,6 +23,15 @@ const PlanningPage = () => {
     budgetMax: "",
     dateFlexibility: "exact",
   });
+  const navigate = useNavigate();
+
+  const { updateTripDetails } = useTripContext();
+
+  const saveTripDetails = () => {
+    console.log("Trip Details Saved:", tripDetails);
+    updateTripDetails(tripDetails); // Update context with trip details @PhiLinh
+    navigate("/invite");
+  };
 
   // Handle input change for form fields and update tripDetails state.
   const handleInputChange = (e) => {
@@ -39,13 +50,6 @@ const PlanningPage = () => {
       dateStart: flexibility === "flexible" ? "" : prevDetails.dateStart,
       dateEnd: flexibility === "flexible" ? "" : prevDetails.dateEnd,
     }));
-  };
-
-  const navigate = useNavigate();
-  // Save trip details and navigate to InviteFriendsPage.
-  const saveTripDetails = () => {
-    console.log("Trip Details Saved:", tripDetails);
-    navigate("/invite"); // Navigate to InviteFriendsPage
   };
 
   return (

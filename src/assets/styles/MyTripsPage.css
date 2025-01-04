@@ -1,0 +1,60 @@
+.my-trips-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f9f9f9;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.trips-container {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.trips-container h1 {
+  font-size: 2em;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.trip-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.trip-list li {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 15px 0;
+  padding: 20px;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.trip-list li:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.trip-list h3 {
+  font-size: 1.2em;
+  margin: 0;
+  color: #ff0055;
+}
+
+.trip-list p {
+  font-size: 0.9em;
+  color: #666;
+}
+
+.no-trips-message {
+  font-size: 1.2em;
+  color: #777;
+  margin-top: 50px;
+}

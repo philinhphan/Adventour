@@ -2,8 +2,13 @@ import React, { useState } from "react";
 import Slider from "react-slick";
 import Navbar from "../components/Navbar/Navbar";
 import Tile from "../components/Tile/Tile";
+import { useNavigate } from "react-router-dom";
 import "../assets/styles/Preferences.css";
 
+import { useTripContext } from "../context/TripContext";
+import { fetchSwipeSuggestions } from "../api/tripApi";
+
+//TODO Design: Find better solution for image imports
 import logo from "../assets/images/AdventourLogo.svg";
 import profil from "../assets/images/LisaProfil.jpg";
 import PreferenceCultural from "../assets/images/PreferenceCultural.png";
@@ -21,11 +26,12 @@ import AccommodationHotel from "../assets/images/AccommodationHotel.jpg";
 import AccommodationResort from "../assets/images/AccommodationResort.jpg";
 import AccommodationAirBnB from "../assets/images/AccommodationAirBnB.jpg";
 import AccommodationCamping from "../assets/images/AccommodationCamping.jpg";
-;
 
 // Preferences page component
 const PreferencesPage = () => {
   const [preferences, setPreferences] = useState([]);
+  const navigate = useNavigate();
+  const { tripData, updatePreferences } = useTripContext();
 
   // Handle tile toggle event to update preferences state based on user selection
   const handleTileToggle = (label, isSelected) => {
@@ -38,11 +44,24 @@ const PreferencesPage = () => {
   };
 
   // Handle save preferences button click
-  // TODO: @PhiLinh Do we need to save the preferences to a database before handing to AI API?
-  // TODO: Alert is placeholder, replace with actual API call!
-  const handleSavePreferences = () => {
+  // TODO: @PhiLinh - Implement API call to fetch swipe suggestions based on preferences, i already implemented the fetchSwipeSuggestions function in tripApi
+  const handleSavePreferences = async () => {
+    navigate("/suggestions");
     console.log("Saved Preferences:", preferences);
-    alert("Preferences saved!");
+    updatePreferences(preferences); // Update context with preferences
+
+    // Call API for swipe suggestions
+    /*try {
+      const suggestions = await fetchSwipeSuggestions(
+        tripData.tripDetails,
+        preferences
+      );
+      console.log("Swipe Suggestions:", suggestions);
+      // TODO: Pass suggestions to SuggestionsPage
+      navigate("/suggestions");
+    } catch (error) {
+      alert("Error fetching suggestions.");
+    }*/
   };
 
   // Slider settings for tile carousel display on preferences page (responsive)
@@ -79,8 +98,7 @@ const PreferencesPage = () => {
           no specific preferences.
         </p>
 
-        {/* TODO Design: Add all the options you want to display here with picture(png) and label. 
-You can add as many categories and tiles as you want */}
+        {/* TODO Design: Add all the options you want to display here with picture(jpg) and label. You can add as many categories and tiles as you want */}
         <div className="preferences-section">
           <h2>Activities</h2>
           <Slider {...sliderSettings}>
@@ -149,7 +167,7 @@ You can add as many categories and tiles as you want */}
             />
           </Slider>
 
-             <h2>Accommodation</h2>
+          <h2>Accommodation</h2>
           <Slider {...sliderSettings}>
             <Tile
               label="Hotel"
@@ -172,10 +190,10 @@ You can add as many categories and tiles as you want */}
               onToggle={handleTileToggle}
             />
           </Slider>
-          </div>
         </div>
+      </div>
 
-         {/* Added fixed button container */}
+      {/* Added fixed button container */}
       <div className="fixed-button-container">
         <button
           className="button button-primary"

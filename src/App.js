@@ -5,8 +5,9 @@ import InviteFriendsPage from "./pages/InviteFriendsPage";
 import PlanningPage from "./pages/PlanningPage";
 import PreferencesPage from "./pages/PreferencesPage";
 import SuggestionsPage from "./pages/SuggestionsPage";
-import FinalSuggestionsPage from "./pages/FinalSuggestionsPage";
 import EndScreenPage from "./pages/EndScreenPage";
+import ProcessingPage from "./pages/ProcessingPage";
+import MyTripsPage from "./pages/MyTripsPage";
 
 import backgroundImage from "./assets/images/background_homepage.jpg";
 
@@ -25,7 +26,8 @@ function App() {
           <Route path="/planning" element={<PlanningPage />} />
           <Route path="/preferences" element={<PreferencesPage />} />
           <Route path="/suggestions" element={<SuggestionsPage />} />
-          <Route path="/final-suggestions" element={<FinalSuggestionsPage />} />
+          <Route path="/processing" element={<ProcessingPage />} />
+          <Route path="/my-trips" element={<MyTripsPage />} />
           <Route path="/end" element={<EndScreenPage />} />
         </Routes>
       </Router>

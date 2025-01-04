@@ -14,7 +14,12 @@ const Tile = ({ label, imageSrc, onToggle }) => {
       className={`tile ${isSelected ? "selected" : ""}`}
       onClick={handleToggle}
     >
-      <img src={imageSrc} alt={label} className="tile-image" />
+      <img 
+        src={imageSrc} 
+        alt={label} 
+        className="tile-image" 
+        loading="lazy" // Lazy Loading hinzugefügt
+      />
       <p className="tile-label">{label}</p>
     </div>
   );

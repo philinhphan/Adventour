@@ -11,10 +11,11 @@ import Button from "../components/Button/Button";
 import logo from "../assets/images/AdventourLogo.svg";
 import profil from "../assets/images/LisaProfil.jpg";
 
+//TODO Design: Rework the styling for this page. There are some issues with the layout and spacing.
+
 // Planning page component with form to specify trip details.
 const PlanningPage = () => {
   const [tripDetails, setTripDetails] = useState({
-    //@TODO PhiLinh -> here you get the input from the user, you can use this data to send it to the backend
     name: "",
     dateStart: "",
     dateEnd: "",
@@ -28,7 +29,7 @@ const PlanningPage = () => {
 
   const saveTripDetails = () => {
     console.log("Trip Details Saved:", tripDetails);
-    updateTripDetails(tripDetails); // Update context with trip details
+    updateTripDetails(tripDetails); // Update context with trip details @PhiLinh
     navigate("/invite");
   };
 

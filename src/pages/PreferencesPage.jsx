@@ -8,6 +8,7 @@ import "../assets/styles/Preferences.css";
 import { useTripContext } from "../context/TripContext";
 import { fetchSwipeSuggestions } from "../api/tripApi";
 
+//TODO Design: Find better solution for image imports
 import logo from "../assets/images/AdventourLogo.svg";
 import profil from "../assets/images/LisaProfil.jpg";
 import PreferenceCultural from "../assets/images/PreferenceCultural.png";
@@ -43,7 +44,7 @@ const PreferencesPage = () => {
   };
 
   // Handle save preferences button click
-  // TODO: @PhiLinh - Implement API call to fetch swipe suggestions based on preferences
+  // TODO: @PhiLinh - Implement API call to fetch swipe suggestions based on preferences, i already implemented the fetchSwipeSuggestions function in tripApi
   const handleSavePreferences = async () => {
     navigate("/suggestions");
     console.log("Saved Preferences:", preferences);
@@ -97,8 +98,7 @@ const PreferencesPage = () => {
           no specific preferences.
         </p>
 
-        {/* TODO Design: Add all the options you want to display here with picture(jpg) and label. 
-You can add as many categories and tiles as you want */}
+        {/* TODO Design: Add all the options you want to display here with picture(jpg) and label. You can add as many categories and tiles as you want */}
         <div className="preferences-section">
           <h2>Activities</h2>
           <Slider {...sliderSettings}>

@@ -6,10 +6,13 @@ import "../assets/styles/MyTripsPage.css";
 import logo from "../assets/images/AdventourLogo.svg";
 import profil from "../assets/images/LisaProfil.jpg";
 
+// My Trips page component
 const MyTripsPage = () => {
   const [trips, setTrips] = useState([]);
   const navigate = useNavigate();
 
+  // Fetch trips from API or local storage
+  // TODO @PhiLinh - Replace with API or local storage retrieval
   useEffect(() => {
     // TODO: Replace with API or local storage retrieval
     setTrips([
@@ -17,6 +20,8 @@ const MyTripsPage = () => {
     ]);
   }, []);
 
+  // Handle trip click event to navigate to trip detail page
+  // TODO @Smilla - Implement navigation to trip detail page and the trip detail page component
   const handleTripClick = (tripId) => {
     navigate(`/trip-detail/${tripId}`);
   };

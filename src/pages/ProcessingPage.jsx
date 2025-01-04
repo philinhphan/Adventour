@@ -8,9 +8,11 @@ import plane from "../assets/icons/planeIcon.svg";
 import logo from "../assets/images/AdventourLogo.svg";
 import profil from "../assets/images/LisaProfil.jpg";
 
+// Processing page component
 const ProcessingPage = () => {
   const navigate = useNavigate();
 
+  // Handle outside click to navigate back to home page
   const handleOutsideClick = (e) => {
     if (e.target.className === "processing-container") {
       navigate("/");

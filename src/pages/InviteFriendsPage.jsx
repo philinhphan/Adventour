@@ -12,6 +12,8 @@ import Instagram from "../assets/images/Instagram.svg";
 import Airdrop from "../assets/images/Airdrop.svg";
 import Mail from "../assets/images/Mail.svg";
 
+//TODO Design: Rework the styling for this page. There are some issues with the layout and spacing. Also it looks really empty
+
 // Invite friends page component
 const InviteFriendsPage = () => {
   const shareLink = "https://adventour-app.com/share";
@@ -55,10 +57,10 @@ const InviteFriendsPage = () => {
 
           <div className="share-icons">
             {/* TODO DESIGN: Add Icons */}
-            <img alt="AirDrop" src={Airdrop}/>
-            <img alt="WhatsApp" src={whatsapp}/>
-            <img alt="Instagram" src={Instagram}/>
-            <img alt="Mail" src={Mail}/>
+            <img alt="AirDrop" src={Airdrop} />
+            <img alt="WhatsApp" src={whatsapp} />
+            <img alt="Instagram" src={Instagram} />
+            <img alt="Mail" src={Mail} />
           </div>
         </div>
         <div className="action-buttons">

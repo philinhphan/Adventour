@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import logo from "../assets/images/AdventourLogo.svg";
 import profil from "../assets/images/LisaProfil.jpg";
 
+// Dummy data for suggestions, replace with API call!
 const dummySuggestions = [
   {
     id: 1,
@@ -35,12 +36,14 @@ const dummySuggestions = [
   },
 ];
 
+// Suggestions page component with swipe cards for user preferences.
 const SuggestionsPage = () => {
-  const { updateSwipeAnswers, savePerfectMatch } = useTripContext();
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [swipeAnswers, setSwipeAnswers] = useState([]);
+  const { updateSwipeAnswers, savePerfectMatch } = useTripContext(); // Context
+  const [currentIndex, setCurrentIndex] = useState(0); // Index of current suggestion
+  const [swipeAnswers, setSwipeAnswers] = useState([]); // User swipe answers
   const navigate = useNavigate();
 
+  // Handle swipe event on card and update swipe answers
   const handleSwipe = (direction, suggestion) => {
     console.log(`Swiped ${direction} on ${suggestion.name}`);
     const newAnswer = { id: suggestion.id, swipe: direction };
@@ -55,18 +58,21 @@ const SuggestionsPage = () => {
     }
   };
 
+  // Generate perfect match based on user swipes and simulated friends
+  // TODO PhiLinh: Replace with API call to fetch perfect match based on user swipes and preferences @PhiLinh
   const generatePerfectMatch = async () => {
     const simulatedFriendData = generateSimulatedFriendData();
     const requestData = {
       userSwipes: swipeAnswers,
       simulatedFriends: simulatedFriendData,
     };
-
+    // TODO: fetchPerfectMatch function is not implemented yet in tripApi.js @PhiLinh
     try {
       const perfectMatch = await fetchPerfectMatch(requestData);
       savePerfectMatch(perfectMatch); // Save to context
       console.log("API Perfect Match:", perfectMatch);
     } catch (error) {
+      // Fallback to dummy data if API fetch fails (for demo purposes)
       console.error("API fetch failed. Falling back to dummy data:", error);
       const fallbackPerfectMatch = dummySuggestions[0]; // Use the first dummy suggestion
       savePerfectMatch(fallbackPerfectMatch);
@@ -76,6 +82,8 @@ const SuggestionsPage = () => {
     navigate("/processing");
   };
 
+  // Generate simulated friend swipe data for testing
+  // Maybe we can replace this with real user data later?
   const generateSimulatedFriendData = () => {
     const friend1 = dummySuggestions.map((s) => ({
       id: s.id,

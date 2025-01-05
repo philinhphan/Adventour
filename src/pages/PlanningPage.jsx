@@ -10,6 +10,8 @@ import Button from "../components/Button/Button";
 
 import logo from "../assets/images/AdventourLogo.svg";
 import profil from "../assets/images/LisaProfil.jpg";
+import budgetIcon from "../assets/icons/Budget.svg";
+import dateIcon from "../assets/icons/Date.svg";
 
 //TODO Design: Rework the styling for this page. There are some issues with the layout and spacing.
 
@@ -67,9 +69,9 @@ const PlanningPage = () => {
             onChange={handleInputChange}
           />
           
-          
           <div className="date-box"> {/* Separate box for details on date */}
-            <label className="section-title">Trip Dates</label>
+            <label className="section-title">When is your trip?</label>
+            <img alt="dateIcon" src={dateIcon} className="date-icon" />
           <div className="date-section">
             <div className="date-inputs">
               <InputField
@@ -91,13 +93,14 @@ const PlanningPage = () => {
             </div>
             <div className="date-flexibility">
               <Button
-                label="exact date"
+                label="Exact dates"
                 styleType={
                   tripDetails.dateFlexibility === "exact"
                     ? "primary"
                     : "secondary"
                 }
                 onClick={() => handleDateFlexibilityChange("exact")}
+                className="planning-page-button" 
               />
               <Button
                 label="+/- 1 day"
@@ -107,36 +110,39 @@ const PlanningPage = () => {
                     : "secondary"
                 }
                 onClick={() => handleDateFlexibilityChange("+/-1")}
+                className="planning-page-button" 
               />
               <Button
-                label="flexible"
+                label="Flexible"
                 styleType={
                   tripDetails.dateFlexibility === "flexible"
                     ? "primary"
                     : "secondary"
                 }
                 onClick={() => handleDateFlexibilityChange("flexible")}
+                className="planning-page-button" 
               />
             </div>
           </div>
           </div>
         
           <div className="budget-box"> {/* Separate box for details on budget */}
-            <label className="section-title">My Budget</label>
+            <label className="section-title">What is your budget?</label>
+            <img alt="budgetIcon" src={budgetIcon} className="budget-icon" />
           <div className="budget-section">
             <InputField
-              label="Minimum Budget (€)"
+              label="Minimum Budget"
               type="number"
               name="budgetMin"
-              placeholder="Minimum (€)"
+              placeholder="€"
               value={tripDetails.budgetMin}
               onChange={handleInputChange}
             />
             <InputField
-              label="Maximum Budget (€)"
+              label="Maximum Budget"
               type="number"
               name="budgetMax"
-              placeholder="Maximum (€)"
+              placeholder="€€€"
               value={tripDetails.budgetMax}
               onChange={handleInputChange}
             />

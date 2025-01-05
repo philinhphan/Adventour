@@ -1,38 +1,44 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import Popup from "../components/PopUp/PopUp";
-import Navbar from "../components/Navbar/Navbar";
-import "../assets/styles/ProcessingPage.css";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+import "../assets/styles/Popup.css"; // General popup styles
+import "../assets/styles/FlightPopup.css"; // Specific airplane popup styles
 import plane from "../assets/icons/planeIcon.svg";
 
-import logo from "../assets/images/AdventourLogo.svg";
-import profil from "../assets/images/LisaProfil.jpg";
+const FlightPopup = () => {
+  const navigate = useNavigate(); // Initialize navigate
 
-// Processing page component
-const ProcessingPage = () => {
-  const navigate = useNavigate();
+  useEffect(() => {
+    // Navigate after 5 seconds
+    const timer = setTimeout(() => {
+      navigate("/suggestions");
+    }, 5000);
 
-  // Handle outside click to navigate back to home page
-  const handleOutsideClick = (e) => {
-    if (e.target.className === "processing-container") {
-      navigate("/");
-    }
-  };
+    // Cleanup timer on component unmount
+    return () => clearTimeout(timer);
+  }, [navigate]);
 
   return (
-    <div className="processing-page">
-      <Navbar logoSrc={logo} profilePicSrc={profil} />
-      <div className="processing-container" onClick={handleOutsideClick}>
-        <div className="popup-wrapper">
-          <Popup
-            message="Thank you for your feedback."
-            subMessage="Your friends received a notification and were reminded to share their preferences for the upcoming trip. Come back later :)"
-            icon={plane}
-          />
+    <div className="popup">
+      <div className="flight-popup-content">
+        {/* Title and subtext */}
+        <h2>Thank you for your preferences :)</h2>
+        <p>
+          It is just a quick moment before we whip up personalized suggestions
+          to help you discover the perfect trip—easy, breezy, and fun!
+        </p>
+
+        {/* Airplane animation */}
+        <div className="animation-wrapper">
+          <img src={plane} alt="Flying airplane" className="plane-icon" />
+        </div>
+
+        {/* Progress bar */}
+        <div className="progress-bar">
+          <div className="progress-fill"></div>
         </div>
       </div>
     </div>
   );
 };
 
-export default ProcessingPage;
+export default FlightPopup;

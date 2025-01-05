@@ -8,6 +8,7 @@ import SuggestionsPage from "./pages/SuggestionsPage";
 import EndScreenPage from "./pages/EndScreenPage";
 import ProcessingPage from "./pages/ProcessingPage";
 import MyTripsPage from "./pages/MyTripsPage";
+import ProcessingPageStart from "./pages/ProcessingPage Start"
 
 import backgroundImage from "./assets/images/background_homepage.jpg";
 
@@ -29,6 +30,7 @@ function App() {
           <Route path="/processing" element={<ProcessingPage />} />
           <Route path="/my-trips" element={<MyTripsPage />} />
           <Route path="/end" element={<EndScreenPage />} />
+          <Route path="/processingstart" element={<ProcessingPageStart />} />
         </Routes>
       </Router>
     </div>

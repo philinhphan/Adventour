@@ -66,6 +66,10 @@ const PlanningPage = () => {
             value={tripDetails.name}
             onChange={handleInputChange}
           />
+          
+          
+          <div className="date-box"> {/* Separate box for details on date */}
+            <label className="section-title">Trip Dates</label>
           <div className="date-section">
             <div className="date-inputs">
               <InputField
@@ -115,6 +119,10 @@ const PlanningPage = () => {
               />
             </div>
           </div>
+          </div>
+        
+          <div className="budget-box"> {/* Separate box for details on budget */}
+            <label className="section-title">My Budget</label>
           <div className="budget-section">
             <InputField
               label="Minimum Budget (€)"
@@ -133,6 +141,7 @@ const PlanningPage = () => {
               onChange={handleInputChange}
             />
           </div>
+        </div>
         </div>
         <Button
           label="Save details"

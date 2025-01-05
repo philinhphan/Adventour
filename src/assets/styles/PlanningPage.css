@@ -14,15 +14,37 @@
   color: #333;
 }
 
+/* Separate boxes for details on date and budget */
+.date-box,
+.budget-box {
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  margin: 25px 0;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+  box-sizing: border-box;
+}
+
+.section-title{
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
 .date-section {
   display: flex;
   flex-direction: column;
+  gap: 10px;
 }
 
 .date-flexibility {
   display: flex;
   justify-content: space-between;
-  margin-top: 10px;
+  gap: 10px;
 }
 
 .date-inputs {
@@ -34,5 +56,4 @@
 .budget-section {
   display: flex;
   gap: 10px;
-  margin-bottom: 40px;
 }

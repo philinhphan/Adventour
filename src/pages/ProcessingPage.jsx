@@ -4,6 +4,7 @@ import Popup from "../components/PopUp/PopUp";
 import Navbar from "../components/Navbar/Navbar";
 import "../assets/styles/ProcessingPage.css";
 import plane from "../assets/icons/planeIcon.svg";
+import "../assets/styles/FlightPopup.css"; // Specific airplane popup styles
 
 import logo from "../assets/images/AdventourLogo.svg";
 import profil from "../assets/images/LisaProfil.jpg";
@@ -28,7 +29,7 @@ const ProcessingPage = () => {
             message="Thank you for your feedback."
             subMessage="Your friends received a notification and were reminded to share their preferences for the upcoming trip. Come back later :)"
             icon={plane}
-          />
+            />
         </div>
       </div>
     </div>

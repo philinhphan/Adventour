@@ -21,7 +21,7 @@
   border-radius: 10px;
   padding: 15px;
   margin: 25px 0;
-  background-color: #f9f9f9;
+  background-color: #cccccc29;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 500px;
@@ -69,14 +69,13 @@
 
 .budget-icon {
   margin: 5px 0;
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   align-self: center;
 }
 
-/* ?? anpassen */
-.planning-page-button {
-  padding: 8px 10px;
-  height: 10px;
+.planning-page .date-flexibility button {
   font-size: 16px;
+  padding: 8px 10px;
+  width: 105px;
 }

@@ -70,8 +70,8 @@ const PlanningPage = () => {
           />
           
           <div className="date-box"> {/* Separate box for details on date */}
-            <label className="section-title">When is your trip?</label>
-            <img alt="dateIcon" src={dateIcon} className="date-icon" />
+             <label className="section-title">When do you plan to travel?</label> 
+             < img alt="dateIcon" src={dateIcon} className="date-icon" />
           <div className="date-section">
             <div className="date-inputs">
               <InputField
@@ -97,10 +97,9 @@ const PlanningPage = () => {
                 styleType={
                   tripDetails.dateFlexibility === "exact"
                     ? "primary"
-                    : "secondary"
+                    : "secondary"  
                 }
                 onClick={() => handleDateFlexibilityChange("exact")}
-                className="planning-page-button" 
               />
               <Button
                 label="+/- 1 day"
@@ -110,7 +109,6 @@ const PlanningPage = () => {
                     : "secondary"
                 }
                 onClick={() => handleDateFlexibilityChange("+/-1")}
-                className="planning-page-button" 
               />
               <Button
                 label="Flexible"
@@ -120,7 +118,6 @@ const PlanningPage = () => {
                     : "secondary"
                 }
                 onClick={() => handleDateFlexibilityChange("flexible")}
-                className="planning-page-button" 
               />
             </div>
           </div>

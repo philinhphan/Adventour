@@ -8,13 +8,14 @@ import { useNavigate } from "react-router-dom";
 
 import logo from "../assets/images/AdventourLogo.svg";
 import profil from "../assets/images/LisaProfil.jpg";
+import Barcelona from "../assets/images/Barceloan Dummy.webp"
 
 // Dummy data for suggestions, replace with API call!
 const dummySuggestions = [
   {
     id: 1,
     name: "Barcelona, Spain",
-    image: "https://via.placeholder.com/300x600",
+    image: Barcelona,
     tags: ["sightseeing", "shopping", "beach"],
     description: "Where culture meets coastline. Explore Gaudí’s wonders.",
   },

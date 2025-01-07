@@ -44,7 +44,6 @@ const PreferencesPage = () => {
   };
 
   // Handle save preferences button click
-  // TODO: @PhiLinh - Implement API call to fetch swipe suggestions based on preferences, i already implemented the fetchSwipeSuggestions function in tripApi
   const handleSavePreferences = async () => {
     navigate("/processingstart");
     console.log("Saved Preferences:", preferences);

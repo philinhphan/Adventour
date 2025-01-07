@@ -1,3 +1,4 @@
+// TODO: @PhiLinh - Implement API call to fetch swipe suggestions based on preferences, i already implemented the fetchSwipeSuggestions function in tripApi
 const BASE_URL = "https://your-api-url.com"; //TODO Replace with actual API URL
 
 export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
@@ -14,6 +15,8 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
     throw error;
   }
 };
+
+
 
 export const fetchPerfectMatch = async (data) => {
   console.log("Simulated API Request with Data:", data);

@@ -4,14 +4,15 @@
   flex-direction: column;
   align-items: center;
   background: white;
-  padding: 25px;
+  padding: 20px;
+  margin-top: 20px;
   text-align: center;
 }
 
 .title {
-  font-size: 1.4em;
-  font-weight: 600;
-  color: #333;
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
 /* Separate boxes for details on date and budget */
@@ -30,7 +31,7 @@
   flex-direction: column;
 }
 
-.section-title{
+.section-title {
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 5px;
@@ -52,7 +53,7 @@
 .date-inputs {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
+  gap: 15px;
 }
 
 .date-icon {
@@ -64,7 +65,7 @@
 
 .budget-section {
   display: flex;
-  gap: 10px;
+  gap: 15px;
 }
 
 .budget-icon {

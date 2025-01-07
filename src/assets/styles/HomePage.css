@@ -19,7 +19,7 @@
 }
 
 .home-page-content h1 {
-  margin-bottom: 40px;
+  margin-bottom: 100px;
 }
 .highlight {
   color: #ff0055;
@@ -43,10 +43,11 @@
 
 .options-tile h2 {
   font-size: 20px;
+  margin-top: 8px;
   margin-bottom: 8px;
 }
 
 .options-tile p {
-  font-size: 14px;
+  font-size: 16px;
   margin-bottom: 16px;
 }

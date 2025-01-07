@@ -57,7 +57,6 @@ const InviteFriendsPage = () => {
           </div>
 
           <div className="share-icons">
-            {/* TODO DESIGN: Add Icons */}
             <img alt="More" src={More} />
             <img alt="WhatsApp" src={whatsapp} />
             <img alt="Instagram" src={Instagram} />

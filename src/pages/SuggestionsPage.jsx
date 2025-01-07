@@ -45,6 +45,7 @@ const SuggestionsPage = () => {
   const navigate = useNavigate();
 
   // Handle swipe event on card and update swipe answers
+  // TODO add trip name to newAnswer?
   const handleSwipe = (direction, suggestion) => {
     console.log(`Swiped ${direction} on ${suggestion.name}`);
     const newAnswer = { id: suggestion.id, swipe: direction };
@@ -85,6 +86,7 @@ const SuggestionsPage = () => {
 
   // Generate simulated friend swipe data for testing
   // Maybe we can replace this with real user data later?
+  // TODO add trip name to friend data?
   const generateSimulatedFriendData = () => {
     const friend1 = dummySuggestions.map((s) => ({
       id: s.id,

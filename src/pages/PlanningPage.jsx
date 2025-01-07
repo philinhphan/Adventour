@@ -29,7 +29,7 @@ const PlanningPage = () => {
 
   const saveTripDetails = () => {
     console.log("Trip Details Saved:", tripDetails);
-    updateTripDetails(tripDetails); // Update context with trip details @PhiLinh
+    updateTripDetails(tripDetails); // Update context with trip details TODO @PhiLinh ?
     navigate("/invite");
   };
 

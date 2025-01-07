@@ -11,7 +11,7 @@ import likeIcon from "../../assets/icons/like.svg";
 const Card = ({ suggestion, onSwipe }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [swipeDirection, setSwipeDirection] = useState(null);
-  const [buttonPressed, setButtonPressed] = useState(null); // Track which button is pressed
+  const [buttonPressed, setButtonPressed] = useState(null);
 
   const handleFlip = () => {
     setIsFlipped(!isFlipped);
@@ -25,23 +25,18 @@ const Card = ({ suggestion, onSwipe }) => {
 
     setSwipeDirection(direction);
 
-    // Highlight the corresponding button briefly for swipe animation
     setButtonPressed(direction);
     setTimeout(() => setButtonPressed(null), 200);
 
-    // Notify parent about the swipe direction and suggestion
     setTimeout(() => {
       onSwipe(direction, suggestion);
-      setSwipeDirection(null); // Reset swipe direction
-    }, 500); // Matches the swipe animation duration
+      setSwipeDirection(null);
+    }, 500);
   };
 
   const handleButtonClick = (direction) => {
-    // Highlight the button briefly for click animation
     setButtonPressed(direction);
     setTimeout(() => setButtonPressed(null), 200);
-
-    // Trigger swipe logic
     handleSwipe(direction);
   };
 
@@ -67,11 +62,17 @@ const Card = ({ suggestion, onSwipe }) => {
         {/* Front Side */}
         <div className="card-front" onClick={handleFlip}>
           <div className="card-image-container">
+            {/* Image */}
             <img
               src={suggestion.image}
               alt={suggestion.name}
               className="card-image"
             />
+
+            {/* Gradient Overlay */}
+            <div className="card-gradient-overlay"></div>
+
+            {/* Front Content */}
             <div className="card-content">
               <h3 className="card-name">{suggestion.name}</h3>
               <div className="card-tags">
@@ -95,7 +96,7 @@ const Card = ({ suggestion, onSwipe }) => {
             />
             <div className="card-back-content">
               <h3 className="card-back-title">{suggestion.name}</h3>
-              <p className="card-back-text">{suggestion.details}</p>
+              <p className="card-back-text">Barcelona is a city full of exciting activities for every traveler. Spend your day sightseeing, exploring iconic landmarks like the colorful mosaics of Park Güell or the bustling La Rambla. Shop your way through chic boutiques in Passeig de Gràcia or hunt for unique treasures in the trendy El Born district. When it’s time to unwind, head to Barceloneta Beach, where you can relax in the sun, take a refreshing dip in the Mediterranean, or enjoy a game of beach volleyball. In Barcelona, every moment is an opportunity for adventure and discovery.</p>
             </div>
           </div>
         </div>

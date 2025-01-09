@@ -1,3 +1,5 @@
+const API_KEY = process.env.REACT_APP_PERPLEXITY_API_KEY;
+
 export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
   try {
     // 1) Build the request payload for Perplexity API
@@ -24,7 +26,7 @@ No extra text. Only the JSON array.`
     const perplexityRequestOptions = {
       method: "POST",
       headers: {
-        Authorization: "Bearer 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",
+        Authorization: `Bearer ${API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({

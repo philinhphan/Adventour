@@ -45,6 +45,7 @@ const PreferencesPage = () => {
 
   // Handle save preferences button click
   const handleSavePreferences = async () => {
+    debugger;
     navigate("/suggestions");
     console.log("Saved Preferences:", preferences);
     updatePreferences(preferences); // Update context with preferences

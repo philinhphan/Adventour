@@ -48,7 +48,7 @@ const SuggestionsPage = () => {
   // TODO add trip name to newAnswer?
   const handleSwipe = (direction, suggestion) => {
     console.log(`Swiped ${direction} on ${suggestion.name}`);
-    const newAnswer = { id: suggestion.id, swipe: direction };
+    const newAnswer = { id: suggestion.id, name: suggestion.name, tags: suggestion.tags, description: suggestion.description, swipe: direction };
     setSwipeAnswers((prev) => [...prev, newAnswer]);
 
     if (currentIndex < dummySuggestions.length - 1) {
@@ -90,10 +90,16 @@ const SuggestionsPage = () => {
   const generateSimulatedFriendData = () => {
     const friend1 = dummySuggestions.map((s) => ({
       id: s.id,
+      name: s.name, 
+      tags: s.tags, 
+      description: s.description,
       swipe: Math.random() > 0.5 ? "right" : "left",
     }));
     const friend2 = dummySuggestions.map((s) => ({
       id: s.id,
+      name: s.name, 
+      tags: s.tags, 
+      description: s.description,
       swipe: Math.random() > 0.5 ? "right" : "up",
     }));
     return { friend1, friend2 };

@@ -13,13 +13,14 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
           tripDetails
         )} and preferences: ${JSON.stringify(
           preferences
-        )}. The suggestions should be returned in JSON array format, each item containing:
+        )}. Return them ONLY as a valid JSON array of objects. 
+Each object should have the shape:
 {
   "name": "...",
   "tags": ["..."],
   "description": "..."
 }
-No extra text. Only the JSON array.`
+Do NOT include triple backticks or extra commentary. Output must be valid JSON only.`
       }
     ];
 
@@ -55,9 +56,16 @@ No extra text. Only the JSON array.`
 
     // 3) Parse the raw JSON array from the response
     //    (We assume Perplexity returns valid JSON in data.choices[0].message.content) else TODO add parsing error handling to only remove unncessary text around JSON array
+    
+    let content = data.choices?.[0]?.message?.content || "";
+    content = content
+      .replace(/```json/g, "")
+      .replace(/```/g, "");
+    
+    
     let suggestions;
     try {
-      suggestions = JSON.parse(data.choices[0].message.content);
+      suggestions = JSON.parse(content);
     } catch (parseError) {
       console.error("Error parsing suggestions from Perplexity:", parseError);
       throw new Error("Error parsing suggestions from Perplexity");
@@ -65,7 +73,7 @@ No extra text. Only the JSON array.`
 
     // 4) Log them to verify everything works
     console.log("Fetched suggestions from Perplexity:", suggestions);
-
+    
     return suggestions;
   } catch (error) {
     console.error("API Error (Perplexity):", error);

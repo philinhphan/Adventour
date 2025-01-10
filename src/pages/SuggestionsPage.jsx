@@ -11,7 +11,6 @@ import profil from "../assets/images/LisaProfil.jpg";
 import Barcelona from "../assets/images/Barceloan Dummy.webp"
 
 //TODO Smilla: SwipeButton stay big after click right now + for the last suggestion you dont see the animation anymore as is immediately goes to the processing page
-//TODO PhiLinh Dummy data for suggestions, replace with API call!
 
 // const dummySuggestions = [
 //   {
@@ -76,27 +75,28 @@ const SuggestionsPage = () => {
   };
 
   // Generate perfect match based on user swipes and simulated friends
-  // TODO PhiLinh: Replace with API call to fetch perfect match based on user swipes and preferences @PhiLinh
+  // TODO PhiLinh: Replace with API call to fetch perfect match based on user swipes and preferences
   const generatePerfectMatch = async () => {
-    const simulatedFriendData = generateSimulatedFriendData();
-    const requestData = {
-      userSwipes: swipeAnswers,
-      simulatedFriends: simulatedFriendData,
+    const generatePerfectMatch = async () => {
+      const simulatedFriendData = generateSimulatedFriendData();
+      const requestData = {
+        userSwipes: [...swipeAnswers, /* we just appended newAnswer above */],
+        simulatedFriends: simulatedFriendData,
+      };
+  
+      try {
+        const perfectMatch = await fetchPerfectMatch(requestData);
+        savePerfectMatch(perfectMatch);
+        console.log("Perfect Match:", perfectMatch);
+      } catch (error) {
+        console.error("Perfect Match Error:", error);
+        // If an error occurs, fall back to the first suggestion or null
+        const fallbackPerfectMatch = suggestions[0] || null;
+        savePerfectMatch(fallbackPerfectMatch);
+        console.log("Fallback Perfect Match:", fallbackPerfectMatch);
+      }
+      navigate("/processing");
     };
-    // TODO: fetchPerfectMatch function is not implemented yet in tripApi.js @PhiLinh
-    try {
-      const perfectMatch = await fetchPerfectMatch(requestData);
-      savePerfectMatch(perfectMatch); // Save to context
-      console.log("API Perfect Match:", perfectMatch);
-    } catch (error) {
-      // Fallback to dummy data if API fetch fails (for demo purposes)
-      console.error("API fetch failed. Falling back to dummy data:", error);
-      const fallbackPerfectMatch = suggestions[0]; // Use the first dummy suggestion
-      savePerfectMatch(fallbackPerfectMatch);
-      console.log("Fallback Perfect Match:", fallbackPerfectMatch);
-    }
-
-    navigate("/processing");
   };
 
   // Generate simulated friend swipe data for testing

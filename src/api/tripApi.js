@@ -115,10 +115,78 @@ No extra commentary, no code fences, no markdown blocks. Only a raw JSON array.`
 };
 
 export const fetchPerfectMatch = async (data) => {
+  // data = { userSwipes: [...], simulatedFriends: { friend1: [...], friend2: [...], ... } }
+
   console.log("Simulated API Request with Data:", data);
 
-  // Simulate a failed API response
-  throw new Error("Simulated API failure");
+  // 1) Combine user swipes + all friend swipes into a single array
+  const allSwipes = [...data.userSwipes];
+  if (data.simulatedFriends) {
+    Object.values(data.simulatedFriends).forEach((friendSwipes) => {
+      allSwipes.push(...friendSwipes);
+    });
+  }
+
+  // 2) Create a map to aggregate likes for each trip ID
+  const aggregator = {}; 
+  // aggregator[id] = { id, name, tags, description, likeCount, superlikeCount }
+
+  // 3) Populate aggregator
+  for (const swipeObj of allSwipes) {
+    const { id, name, tags, description, swipe } = swipeObj;
+    if (!aggregator[id]) {
+      aggregator[id] = {
+        id,
+        name,
+        tags,
+        description,
+        likeCount: 0,
+        superlikeCount: 0,
+      };
+    }
+    // "right" => like, "up" => superlike
+    if (swipe === "right" || swipe === "up") {
+      aggregator[id].likeCount += 1;
+    }
+    if (swipe === "up") {
+      aggregator[id].superlikeCount += 1;
+    }
+  }
+
+  // Convert aggregator to array
+  const aggregatorArray = Object.values(aggregator);
+  if (!aggregatorArray.length) {    // TODO find solution, e.g. return a default suggestion / error message to user
+    console.error("No swipes found for perfect match calculation.");
+    throw new Error("No swipes found");
+  }
+
+  // 4) Find the item(s) with the maximum likeCount
+  const maxLikeCount = Math.max(...aggregatorArray.map((obj) => obj.likeCount));
+  let topCandidates = aggregatorArray.filter(
+    (obj) => obj.likeCount === maxLikeCount
+  );
+
+  // If there's exactly one top candidate, return it
+  if (topCandidates.length === 1) {
+    return topCandidates[0];
+  }
+
+  // Otherwise, check superlikeCount among top candidates
+  const maxSuperlikeCount = Math.max(
+    ...topCandidates.map((obj) => obj.superlikeCount)
+  );
+  let superlikeCandidates = topCandidates.filter(
+    (obj) => obj.superlikeCount === maxSuperlikeCount
+  );
+
+  // If there's exactly one among the superlike candidates, return it
+  if (superlikeCandidates.length === 1) {
+    return superlikeCandidates[0];
+  }
+
+  // If still tied, pick randomly among the last tie group
+  const randomIndex = Math.floor(Math.random() * superlikeCandidates.length);
+  return superlikeCandidates[randomIndex];
 
   // Uncomment the following for a successful response simulation
   // return {

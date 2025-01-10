@@ -32,6 +32,7 @@ yarn-error.log*
 Thumbs.db
 .DS_Store
 
+.env
 .env.local
 .env.*.local
 

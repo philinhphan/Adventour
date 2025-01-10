@@ -7,10 +7,11 @@ import "../assets/styles/InviteFriends.css";
 import logo from "../assets/images/AdventourLogo.svg";
 import profil from "../assets/images/LisaProfil.jpg";
 
-import whatsapp from "../assets/images/whatsapp.svg";
-import Instagram from "../assets/images/Instagram.svg";
-import Airdrop from "../assets/images/Airdrop.svg";
-import Mail from "../assets/images/Mail.svg";
+import share from "../assets/icons/Share.svg";
+import whatsapp from "../assets/icons/whatsapp.svg";
+import Instagram from "../assets/icons/Instagram.svg";
+import More from "../assets/icons/More.svg";
+import Mail from "../assets/icons/Mail.svg";
 
 //TODO Design: Rework the styling for this page. There are some issues with the layout and spacing. Also it looks really empty
 
@@ -37,9 +38,9 @@ const InviteFriendsPage = () => {
       <Navbar logoSrc={logo} profilePicSrc={profil} />
       <div className="invite-container">
         <h1>Do you want to invite friends?</h1>
-        <p>Your AdvenTour Awaits!</p>
-        <p>Invite your friends and plan the perfect trip together!</p>
-
+        <img alt="Share" src={share} className="share-icon"/>
+        <h3>Your AdvenTour awaits!</h3>
+        <p>Invite your friends and plan <br /> the perfect trip together!</p>
         <div className="share-section">
           <div className="share-input">
             <input
@@ -56,8 +57,7 @@ const InviteFriendsPage = () => {
           </div>
 
           <div className="share-icons">
-            {/* TODO DESIGN: Add Icons */}
-            <img alt="AirDrop" src={Airdrop} />
+            <img alt="More" src={More} />
             <img alt="WhatsApp" src={whatsapp} />
             <img alt="Instagram" src={Instagram} />
             <img alt="Mail" src={Mail} />

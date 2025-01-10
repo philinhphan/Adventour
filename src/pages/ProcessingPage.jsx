@@ -26,10 +26,10 @@ const ProcessingPage = () => {
       <div className="processing-container" onClick={handleOutsideClick}>
         <div className="popup-wrapper">
           <Popup
+            icon={plane}
             message="Thank you for your feedback."
             subMessage="Your friends received a notification and were reminded to share their preferences for the upcoming trip. Come back later :)"
-            icon={plane}
-          />
+            />
         </div>
       </div>
     </div>

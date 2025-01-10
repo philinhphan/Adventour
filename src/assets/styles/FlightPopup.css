@@ -1,0 +1,108 @@
+/* Specific styles for the airplane popup */
+.flight-popup-content {
+  background-color: white;
+  border-radius: 16px;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 350px;
+  max-width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Title and text styles */
+.flight-popup-content h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.flight-popup-content p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+/* Animation wrapper for airplane */
+.animation-wrapper {
+  position: relative;
+  width: 100%; /* Matches the width of the progress bar */
+  height: 50px; /* Height of the airplane animation area */
+  margin-bottom: 20px;
+  overflow: hidden; /* Keeps the airplane inside the popup */
+  display: flex;
+  align-items: center;
+}
+
+.plane-icon {
+  width: 40px;
+  position: absolute;
+  left: 0; /* Start at the left edge */
+  animation: flyPlane 5s linear forwards; /* SAME duration as the progress bar */
+}
+
+/* Keyframe for airplane animation */
+@keyframes flyPlane {
+  from {
+    left: 0; /* Start at the left edge of the animation wrapper */
+  }
+  to {
+    left: calc(100% - 40px); /* End at the right edge of the animation wrapper */
+  }
+}
+
+/* Progress bar styles */
+.progress-bar {
+  width: calc(100% - 40px); /* Matches the airplane animation distance */
+  height: 12px;
+  background-color: #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #ff0055; /* Progress bar color */
+  width: 0;
+  animation: fillProgress 5s linear forwards; /* SAME duration as the airplane */
+}
+
+/* Keyframe for progress bar */
+@keyframes fillProgress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 480px) {
+  .flight-popup-content {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .flight-popup-content h2 {
+    font-size: 1.3rem;
+  }
+
+  .flight-popup-content p {
+    font-size: 0.9rem;
+  }
+
+  .plane-icon {
+    width: 30px;
+  }
+
+  .progress-bar {
+    height: 10px;
+  }
+}

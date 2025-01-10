@@ -14,13 +14,16 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
         )} and preferences: ${JSON.stringify(
           preferences
         )}. Return them ONLY as a valid JSON array of objects. 
-Each object should have the shape:
+Each object MUST have:
+[
 {
   "name": "...",
   "tags": ["..."],
   "description": "..."
-}
-Do NOT include triple backticks or extra commentary. Output must be valid JSON only.`
+}, 
+...
+]
+No extra commentary, no code fences, no markdown blocks. Only a raw JSON array.`
       }
     ];
 
@@ -33,17 +36,17 @@ Do NOT include triple backticks or extra commentary. Output must be valid JSON o
       body: JSON.stringify({
         model: "llama-3.1-sonar-small-128k-online",   // TODO: update to better model
         messages: perplexityMessages,
-        max_tokens: 256,
-        temperature: 0.2,
-        top_p: 0.9,
-        search_domain_filter: [],
+        // max_tokens: 256,
+        // temperature: 0.2,
+        // top_p: 0.9,
+        // search_domain_filter: [],
         return_images: false,
         return_related_questions: false,
-        search_recency_filter: "month",
-        top_k: 0,
-        stream: false,
-        presence_penalty: 0,
-        frequency_penalty: 1,
+        // search_recency_filter: "month",
+        // top_k: 0,
+        // stream: false,
+        // presence_penalty: 0,
+        // frequency_penalty: 1,
       }),
     };
 
@@ -58,14 +61,23 @@ Do NOT include triple backticks or extra commentary. Output must be valid JSON o
     //    (We assume Perplexity returns valid JSON in data.choices[0].message.content) else TODO add parsing error handling to only remove unncessary text around JSON array
     
     let content = data.choices?.[0]?.message?.content || "";
-    content = content
-      .replace(/```json/g, "")
-      .replace(/```/g, "");
-    
-    
+
+    // a) Find the first '[' and the last ']' in the content
+    const startIndex = content.indexOf("[");
+    const endIndex = content.lastIndexOf("]");
+
+    if (startIndex === -1 || endIndex === -1 || endIndex < startIndex) {
+      console.error("Could not find a valid JSON array in the response text:", content);
+      throw new Error("No valid JSON array found in the response");
+    }
+
+    // b) Extract just the substring that we believe is the JSON array
+    const jsonString = content.substring(startIndex, endIndex + 1);
+
+    // c) Now parse it
     let suggestions;
     try {
-      suggestions = JSON.parse(content);
+      suggestions = JSON.parse(jsonString);
     } catch (parseError) {
       console.error("Error parsing suggestions from Perplexity:", parseError);
       throw new Error("Error parsing suggestions from Perplexity");
@@ -73,7 +85,6 @@ Do NOT include triple backticks or extra commentary. Output must be valid JSON o
 
     // 4) Log them to verify everything works
     console.log("Fetched suggestions from Perplexity:", suggestions);
-    
     return suggestions;
   } catch (error) {
     console.error("API Error (Perplexity):", error);

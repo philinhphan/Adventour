@@ -8,6 +8,7 @@ export const TripProvider = ({ children }) => {
     preferences: [], // Stores user preferences (e.g., activities, weather)
     swipeAnswers: [], // Stores user swipes with suggestion IDs
     perfectMatch: null, // Stores the final perfect match suggestion
+    suggestions: [], // Stores the fetched suggestions
   });
 
   const updateTripDetails = (details) => {
@@ -26,6 +27,13 @@ export const TripProvider = ({ children }) => {
     setTripData((prev) => ({ ...prev, perfectMatch: match }));
   };
 
+  const updateSuggestions = (suggestions) => {
+    setTripData((prev) => ({
+      ...prev,
+      suggestions,
+    }));
+  };
+
   return (
     <TripContext.Provider
       value={{
@@ -34,6 +42,7 @@ export const TripProvider = ({ children }) => {
         updatePreferences,
         updateSwipeAnswers,
         savePerfectMatch,
+        updateSuggestions,
       }}
     >
       {children}

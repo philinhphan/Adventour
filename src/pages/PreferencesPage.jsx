@@ -31,7 +31,7 @@ import AccommodationCamping from "../assets/images/AccommodationCamping.jpg";
 const PreferencesPage = () => {
   const [preferences, setPreferences] = useState([]);
   const navigate = useNavigate();
-  const { tripData, updatePreferences } = useTripContext();
+  const { tripData, updatePreferences, updateSuggestions } = useTripContext();
 
   // Handle tile toggle event to update preferences state based on user selection
   const handleTileToggle = (label, isSelected) => {
@@ -49,16 +49,26 @@ const PreferencesPage = () => {
     console.log("Saved Preferences:", preferences);
     updatePreferences(preferences); // Update context with preferences
     try {
-      // Call the updated fetchSwipeSuggestions with Perplexity API
-      const suggestions = await fetchSwipeSuggestions(
+      // 1) Fetch suggestions from Perplexity
+      const rawSuggestions = await fetchSwipeSuggestions(
         tripData.tripDetails,
         preferences
       );
-      // Log to see what comes back
-      console.log("Swipe Suggestions (Perplexity API):", suggestions);
 
-      // TODO: store these suggestions in context or state if desired
-      // for the Suggestions Page. For now, just navigate onward.
+      // 2) Transform them: add 'id' and 'image' for each
+      const suggestionsWithExtras = rawSuggestions.map((s, idx) => ({
+        id: idx + 1, // or use a unique ID approach if desired
+        name: s.name,
+        image: "https://via.placeholder.com/300x600", // fixed placeholder
+        tags: s.tags,
+        description: s.description,
+      }));
+
+      // 3) Store them in our global context
+      updateSuggestions(suggestionsWithExtras);
+      console.log("Suggestions stored:", suggestionsWithExtras);
+
+      // 4) Navigate to the Suggestions Page
       navigate("/suggestions");
     } catch (error) {
       alert("Error fetching suggestions.");

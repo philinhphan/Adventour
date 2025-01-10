@@ -45,23 +45,25 @@ const PreferencesPage = () => {
 
   // Handle save preferences button click
   const handleSavePreferences = async () => {
-    debugger;
-    navigate("/suggestions");
+    // debugger;
     console.log("Saved Preferences:", preferences);
     updatePreferences(preferences); // Update context with preferences
-
-    // Call API for swipe suggestions
-    /*try {
+    try {
+      // Call the updated fetchSwipeSuggestions with Perplexity API
       const suggestions = await fetchSwipeSuggestions(
         tripData.tripDetails,
         preferences
       );
-      console.log("Swipe Suggestions:", suggestions);
-      // TODO: Pass suggestions to SuggestionsPage
+      // Log to see what comes back
+      console.log("Swipe Suggestions (Perplexity API):", suggestions);
+
+      // TODO: store these suggestions in context or state
+      // for the Suggestions Page. For now, just navigate onward.
       navigate("/suggestions");
     } catch (error) {
       alert("Error fetching suggestions.");
-    }*/
+      console.error("Error fetching suggestions:", error);
+    }
   };
 
   // Slider settings for tile carousel display on preferences page (responsive)

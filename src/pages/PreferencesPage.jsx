@@ -57,7 +57,7 @@ const PreferencesPage = () => {
       // Log to see what comes back
       console.log("Swipe Suggestions (Perplexity API):", suggestions);
 
-      // TODO: store these suggestions in context or state
+      // TODO: store these suggestions in context or state if desired
       // for the Suggestions Page. For now, just navigate onward.
       navigate("/suggestions");
     } catch (error) {

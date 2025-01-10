@@ -11,7 +11,7 @@ import profil from "../assets/images/LisaProfil.jpg";
 import Barcelona from "../assets/images/Barceloan Dummy.webp"
 
 //TODO Smilla: SwipeButton stay big after click right now + for the last suggestion you dont see the animation anymore as is immediately goes to the processing page
-// Dummy data for suggestions, replace with API call!
+//TODO PhiLinh Dummy data for suggestions, replace with API call!
 const dummySuggestions = [
   {
     id: 1,

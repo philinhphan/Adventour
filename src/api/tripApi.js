@@ -23,6 +23,28 @@ Each object MUST have:
 }, 
 ...
 ]
+
+E.g.:
+[
+  {
+    name: "Barcelona, Spain",
+    tags: ["sightseeing", "shopping", "beach"],
+    description: "Where culture meets coastline. Explore Gaudí’s wonders.",
+  },
+  {
+    name: "Miami, USA",
+    tags: ["surfing", "shopping", "yachting"],
+    description:
+      "Dive into the glamour and experience Florida’s tropical vibes.",
+  },
+  {
+    name: "Kyoto, Japan",
+    tags: ["temples", "nature", "tradition"],
+    description:
+      "A serene blend of ancient traditions and breathtaking landscapes.",
+  },
+]
+
 No extra commentary, no code fences, no markdown blocks. Only a raw JSON array.`
       }
     ];
@@ -105,26 +127,5 @@ export const fetchPerfectMatch = async (data) => {
   // };
 };
 
-
-
-
-
-// TODO: @PhiLinh - Implement API call to fetch swipe suggestions based on preferences, i already implemented the fetchSwipeSuggestions function in tripApi
-// const BASE_URL = "https://your-api-url.com"; //TODO Replace with actual API URL
-
-// export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
-//   try {
-//     const response = await fetch(`${BASE_URL}/generate-suggestions`, {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({ tripDetails, preferences }),
-//     });
-//     if (!response.ok) throw new Error("Failed to fetch suggestions");
-//     return await response.json();
-//   } catch (error) {
-//     console.error("API Error:", error);
-//     throw error;
-//   }
-// };
 
 

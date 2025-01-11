@@ -34,8 +34,8 @@ const HomePage = ({ backgroundImage, userName }) => {
         <h1>
           Welcome to <span className="highlight">AdvenTour,</span> {userName}.
         </h1>
-        <div className="tiles">
-          <div className="tile">
+        <div className="options">
+          <div className="options-tile">
             <h2>Planning</h2>
             <p>Your next AdvenTour awaits, start planning today!</p>
             {/* Button component */}
@@ -45,7 +45,7 @@ const HomePage = ({ backgroundImage, userName }) => {
               onClick={handleStartPlanning}
             />
           </div>
-          <div className="tile">
+          <div className="options-tile">
             <h2>My Trips</h2>
             <p>
               All your AdvenTours captured, explore your trips and relive the

@@ -1,0 +1,85 @@
+.preferences-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  padding: 20px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.fixed-button-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  padding: 10px 0;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.fixed-button-container .button {
+  max-width: 300px;
+  width: 100%;
+}
+
+.preferences-container h1 {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.hint {
+  font-size: 0.9em;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.preferences-section {
+  margin-bottom: 40px;
+  width: 100%;
+}
+
+.preferences-section h2 {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin: 20px 0;
+}
+
+.slick-slide {
+  justify-content: center;
+}
+
+.slick-dots li button:before {
+  color: #ff0055;
+}
+
+.slick-dots {
+  position: relative;
+  bottom: auto;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.slick-list {
+  overflow: hidden;
+  padding: 20px 0;
+  box-sizing: border-box;
+}
+
+.carousel {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.tile {
+  max-width: 140px;
+  text-align: center;
+  margin: auto;
+  box-sizing: border-box;
+}

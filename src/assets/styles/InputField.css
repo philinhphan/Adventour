@@ -1,8 +1,8 @@
 .input-label {
   display: block;
-  text-align: left;
+  /* text-align: left; */
   font-size: 1em;
-  margin-top: 40px;
+  margin-top: 10px;
   color: #555;
 }
 
@@ -13,6 +13,7 @@
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 1em;
+  color:#ccc;
 }
 
 .text-input:disabled {

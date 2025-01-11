@@ -23,7 +23,7 @@ const Navbar = ({ logoSrc, profilePicSrc }) => {
         src={profilePicSrc}
         alt="Profile"
         className="navbar-profile-pic"
-        onClick={() => alert("Profile Clicked!")} // Placeholder for now
+        onClick={() => alert("Profile Clicked!")} // Placeholder for now  // TODO @Smilla add profile page to land on
       />
     </div>
   );

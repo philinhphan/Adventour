@@ -1,0 +1,13 @@
+.suggestions-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 89vh;
+  background-color: #f9f9f9;
+}
+
+.suggestions-page {
+  height: 100vh;
+  overflow: hidden;
+  background-color: #f9f9f9;
+}

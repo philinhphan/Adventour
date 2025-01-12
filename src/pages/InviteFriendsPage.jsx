@@ -16,6 +16,9 @@ import LinkedIn from "../assets/icons/LinkedIn.svg";
 import Snapchat from "../assets/icons/Snapchat.svg";
 import TikTok from "../assets/icons/TikTok.svg";
 
+// **TODO** In the future, we have to generate uuids for trips and append them to the url
+// With this id other users can then access trip information from firebase and join the trip
+
 const InviteFriendsPage = () => {
   const shareLink = "https://adventour-app.com/share";
   const [customMessage, setCustomMessage] = useState(
@@ -24,7 +27,9 @@ const InviteFriendsPage = () => {
   const [showPopup, setShowPopup] = useState(false);
 
   const handleWhatsAppShare = () => {
-    const whatsappURL = `https://wa.me/?text=${encodeURIComponent(`${customMessage} ${shareLink}`)}`;
+    const whatsappURL = `whatsapp://send?text=${encodeURIComponent(
+      `${customMessage} ${shareLink}`
+    )}`;
     window.open(whatsappURL, "_blank");
   };
 
@@ -36,19 +41,25 @@ const InviteFriendsPage = () => {
   };
 
   const handleTelegramShare = () => {
-    const telegramURL = `https://t.me/share/url?url=${encodeURIComponent(shareLink)}&text=${encodeURIComponent(customMessage)}`;
+    const telegramURL = `https://t.me/share/url?url=${encodeURIComponent(
+      shareLink
+    )}&text=${encodeURIComponent(customMessage)}`;
     window.open(telegramURL, "_blank");
   };
 
   const handleLinkedInShare = () => {
     const linkedInURL = `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(
       shareLink
-    )}&title=${encodeURIComponent("Join our Adventure Trip!")}&summary=${encodeURIComponent(customMessage)}`;
+    )}&title=${encodeURIComponent(
+      "Join our Adventure Trip!"
+    )}&summary=${encodeURIComponent(customMessage)}`;
     window.open(linkedInURL, "_blank");
   };
 
   const handleSnapchatShare = () => {
-    alert("Snapchat sharing is not directly supported via web. Share manually!");
+    alert(
+      "Snapchat sharing is not directly supported via web. Share manually!"
+    );
   };
 
   const handleTikTokShare = () => {
@@ -63,7 +74,9 @@ const InviteFriendsPage = () => {
       <div className="invite-container">
         <h1>Do you want to invite friends?</h1>
         <h3>Your AdvenTour awaits!</h3>
-        <p>Invite your friends and plan <br /> the perfect trip together!</p>
+        <p>
+          Invite your friends and plan <br /> the perfect trip together!
+        </p>
         <div className="share-section">
           <div className="share-input">
             <div className="custom-message-field">
@@ -128,21 +141,36 @@ const InviteFriendsPage = () => {
           {showPopup && (
             <div className="popup-overlay">
               <div className="popup-content">
-                <button className="popup-close" onClick={() => setShowPopup(false)}>
+                <button
+                  className="popup-close"
+                  onClick={() => setShowPopup(false)}
+                >
                   &times;
                 </button>
                 <h2>Further Options to share your great adventure!</h2>
                 <div className="popup-options">
                   <div className="option" onClick={handleTelegramShare}>
-                    <img src={Telegram} alt="Telegram" className="option-icon" />
+                    <img
+                      src={Telegram}
+                      alt="Telegram"
+                      className="option-icon"
+                    />
                     <span>Telegram</span>
                   </div>
                   <div className="option" onClick={handleLinkedInShare}>
-                    <img src={LinkedIn} alt="LinkedIn" className="option-icon" />
+                    <img
+                      src={LinkedIn}
+                      alt="LinkedIn"
+                      className="option-icon"
+                    />
                     <span>LinkedIn</span>
                   </div>
                   <div className="option" onClick={handleSnapchatShare}>
-                    <img src={Snapchat} alt="Snapchat" className="option-icon" />
+                    <img
+                      src={Snapchat}
+                      alt="Snapchat"
+                      className="option-icon"
+                    />
                     <span>Snapchat</span>
                   </div>
                   <div className="option" onClick={handleTikTokShare}>

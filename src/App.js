@@ -12,6 +12,7 @@ import ProcessingPageStart from "./pages/ProcessingPage Start";
 import LoginPage from "./pages/LoginPage";
 import { auth, db, storage } from "./firebase/firebase";
 import backgroundImage from "./assets/images/background_homepage.jpg";
+import ProtectedRoute from "./components/routes/ProtectedRoute";
 
 function App() {
   const [firebaseReady, setFirebaseReady] = useState(false);
@@ -61,27 +62,82 @@ function App() {
     <div>
       <Router>
         <Routes>
+          <Route path="/login" element={<LoginPage />} />
           <Route
             path="/"
             element={
-              user ? (
+              <ProtectedRoute>
                 <HomePage
                   backgroundImage={backgroundImage}
-                  userName={user.email}
+                  userName={user?.email || "User"}
                 />
-              ) : (
-                <LoginPage />
-              )
+              </ProtectedRoute>
             }
           />
-          <Route path="/invite" element={<InviteFriendsPage />} />
-          <Route path="/planning" element={<PlanningPage />} />
-          <Route path="/preferences" element={<PreferencesPage />} />
-          <Route path="/suggestions" element={<SuggestionsPage />} />
-          <Route path="/processing" element={<ProcessingPage />} />
-          <Route path="/my-trips" element={<MyTripsPage />} />
-          <Route path="/end" element={<EndScreenPage />} />
-          <Route path="/processingstart" element={<ProcessingPageStart />} />
+          <Route
+            path="/invite"
+            element={
+              <ProtectedRoute>
+                <InviteFriendsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/planning"
+            element={
+              <ProtectedRoute>
+                <PlanningPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/preferences"
+            element={
+              <ProtectedRoute>
+                <PreferencesPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/suggestions"
+            element={
+              <ProtectedRoute>
+                <SuggestionsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/processing"
+            element={
+              <ProtectedRoute>
+                <ProcessingPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/my-trips"
+            element={
+              <ProtectedRoute>
+                <MyTripsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/end"
+            element={
+              <ProtectedRoute>
+                <EndScreenPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/processingstart"
+            element={
+              <ProtectedRoute>
+                <ProcessingPageStart />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </Router>
     </div>

@@ -50,9 +50,9 @@ const PlanningPage = ({ userId, setCurrentTripId }) => {
         // await linkTripToUser(userId, tripId);
         // Dummy solution link trip to all our showcase users -> For Testing reason i commented other users out
         await linkTripToUser("smilla", tripId);
-        //await linkTripToUser("jannik", tripId);
+        await linkTripToUser("jannik", tripId);
         await linkTripToUser("franzi", tripId);
-        //await linkTripToUser("phi-linh", tripId);
+        await linkTripToUser("phi-linh", tripId);
         //await linkTripToUser("initial", tripId);
 
         // Update the current trip ID and context

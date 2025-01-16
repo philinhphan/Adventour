@@ -96,7 +96,7 @@ const Card = ({ suggestion, onSwipe }) => {
             />
             <div className="card-back-content">
               <h3 className="card-back-title">{suggestion.name}</h3>
-              <p className="card-back-text">Barcelona is a city full of exciting activities for every traveler. Spend your day sightseeing, exploring iconic landmarks like the colorful mosaics of Park Güell or the bustling La Rambla. Shop your way through chic boutiques in Passeig de Gràcia or hunt for unique treasures in the trendy El Born district. When it’s time to unwind, head to Barceloneta Beach, where you can relax in the sun, take a refreshing dip in the Mediterranean, or enjoy a game of beach volleyball. In Barcelona, every moment is an opportunity for adventure and discovery.</p>
+              <p className="card-back-text">{suggestion.description}</p>
             </div>
           </div>
         </div>

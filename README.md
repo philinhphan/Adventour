@@ -30,6 +30,7 @@ Find Login Data, Password provided by Smilla to you -> firebase (Link: https://c
 - Add logout functionality when clicking on the profile
 - Planning Page: Make input test black and not gray!
 - Invite Page: Add Trip Name and TimeFrame and Max Budget to text. For this use the input from the planning page to generate this test every time based on this input
+- Invite Page: - For better usability: Alert the user when the message got copied to clipboard
 - Prefernces Page: When using a bigger Screen Size the dot count from the carousels are wrong and confusing
 - Processing PopUp: Add background image
 - Suggestions: Still al lot of styling is needed, better wait for the AI image functionality to do this

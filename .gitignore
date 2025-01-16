@@ -38,3 +38,4 @@ Thumbs.db
 
 /static/
 
+.firebase/

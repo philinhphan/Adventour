@@ -10,6 +10,7 @@ import ProcessingPage from "./pages/ProcessingPage";
 import MyTripsPage from "./pages/MyTripsPage";
 import ProcessingPageStart from "./pages/ProcessingPage Start";
 import LoginPage from "./pages/LoginPage";
+import TripDetailPage from "./pages/TripDetailPage";
 import { auth, db, storage } from "./firebase/firebase";
 import backgroundImage from "./assets/images/background_homepage.jpg";
 import ProtectedRoute from "./components/routes/ProtectedRoute";
@@ -170,6 +171,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <ProcessingPageStart currentTripId={currentTripId} />
+              </ProtectedRoute>
+            }
+          />
+          {/* TODO PhiLinh: Change TripID once the API creates the trip */}
+          <Route
+            path="/trip-detail/:tripId"
+            element={
+              <ProtectedRoute>
+                <TripDetailPage />
               </ProtectedRoute>
             }
           />

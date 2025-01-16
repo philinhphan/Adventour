@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
-import { getUserTrips, queryUsersByTrip } from "../firebase/firebaseStore"; // Import helper functions
+import { getUserTrips, queryUsersByTrip } from "../firebase/firebaseStore";
 import "../assets/styles/MyTripsPage.css";
 
 import logo from "../assets/images/AdventourLogo.svg";
@@ -23,7 +23,6 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
       try {
         const userTrips = await getUserTrips(userId);
 
-        // Fetch users for trips without `b_finalized: true`
         const enrichedTrips = await Promise.all(
           userTrips.map(async (trip) => {
             if (!trip.b_finalized) {
@@ -45,7 +44,11 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
                 };
               });
 
-              return { ...trip, userDetails };
+              const allUsersCompleted = userDetails.every(
+                (user) => user.hasPreferences && user.hasSuggestions
+              );
+
+              return { ...trip, userDetails, allUsersCompleted };
             }
 
             return trip;
@@ -81,6 +84,16 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
     }
   };
 
+  const handleGeneratePerfectMatch = (tripId) => {
+    console.log(`Generating Perfect Match for trip: ${tripId}`);
+
+    // Set the current trip ID in context
+    setCurrentTripId(tripId);
+
+    // Navigate to the Trip Detail Page
+    navigate(`/trip-detail/${tripId}`);
+  };
+
   return (
     <div className="my-trips-page">
       <Navbar logoSrc={logo} profilePicSrc={profil} />
@@ -91,24 +104,26 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
         ) : trips.length > 0 ? (
           <ul className="trip-list">
             {trips.map((trip) => (
-              <li key={trip.id} onClick={() => handleTripClick(trip)}>
-                <h3>{trip.name}</h3>
-                <p>
-                  Start:{" "}
-                  {trip.details?.start_date
-                    ? new Date(
-                        trip.details.start_date.toDate()
-                      ).toLocaleDateString()
-                    : "No start date"}
-                </p>
-                <p>
-                  End:{" "}
-                  {trip.details?.end_date
-                    ? new Date(
-                        trip.details.end_date.toDate()
-                      ).toLocaleDateString()
-                    : "No end date"}
-                </p>
+              <li key={trip.id}>
+                <div onClick={() => handleTripClick(trip)}>
+                  <h3>{trip.name}</h3>
+                  <p>
+                    Start:{" "}
+                    {trip.details?.start_date
+                      ? new Date(
+                          trip.details.start_date.toDate()
+                        ).toLocaleDateString()
+                      : "No start date"}
+                  </p>
+                  <p>
+                    End:{" "}
+                    {trip.details?.end_date
+                      ? new Date(
+                          trip.details.end_date.toDate()
+                        ).toLocaleDateString()
+                      : "No end date"}
+                  </p>
+                </div>
 
                 {trip.userDetails && (
                   <div className="trip-users">
@@ -128,6 +143,15 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
                       ))}
                     </ul>
                   </div>
+                )}
+
+                {trip.allUsersCompleted && (
+                  <button
+                    className="button-generate-match"
+                    onClick={() => handleGeneratePerfectMatch(trip.id)}
+                  >
+                    Generate Perfect Match
+                  </button>
                 )}
               </li>
             ))}

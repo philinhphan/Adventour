@@ -12,7 +12,7 @@ Find Login Data, Password provided by Smilla to you -> firebase (Link: https://c
 ## To Discuss
 
 - Refine Prompt for Suggestions: Ai should also focus on time frame, Budget, ...The tags are very generic right now, It should always show citys, areas and never resorts/ hotels..
-- Create Prompt for Perfect Match, What info do we need for the Trip Detail Page (see Prototype)
+- Create Prompt for Perfect Match, What info do we need for the Trip Detail Page (see Prototype), give the Perplexity not only the swipes but also the initial prefrences to create a better perfect match
 - For the saved swipe directions: maybe we should change using/saving the directions but instead like,dislike,superlike, indifferent? So its eser to develop and read th code and communicate with the api
 - Image API Solution!
 - Right now every Trip we create will be added to all the users we want manually -> for demo resons okay
@@ -20,6 +20,10 @@ Find Login Data, Password provided by Smilla to you -> firebase (Link: https://c
 ## To Do - Must Dos
 
 ### - High Prio: Resize all images quality and Size! Right Now they are way too big and are ccosting a lot of firebase resources!
+
+### - High Prio: For Api Cals use Databse Data
+
+### - High Prio: Create perfect match and add it in the trip detail page
 
 - Style LogIn Page
 - Add own Profile Picture for each user!
@@ -35,9 +39,17 @@ Find Login Data, Password provided by Smilla to you -> firebase (Link: https://c
 - Homepage: When all have swiped add a small note on the MyTrips tile saying somethin like "new perferct match"
 - My Trips Page: All the Styling!
 - My Trips Page: When all invited users gabe their prefrences there should be a button available saying something like "show me the perfect match" -> Only when clicking on it the API get fetched an the pefect match will be created -> the trip tile changes now as it gets a name of the destination -> Every user can now click on the trip and will be directed to the trip detail page
-- Trip Detail Page: Needs to be created! See Figma Moblie Prototype for styling this (https://www.figma.com/design/qU0lZ1vktP1sJEH73d0tGk/Prototyp_1_Adventour?node-id=352-400&p=f&t=IqUqN6bJ5iiNxNE0-0)
+- Trip Detail Page: Needs to be Designed, wait until we have the API Data. See Figma Moblie Prototype for styling this (https://www.figma.com/design/qU0lZ1vktP1sJEH73d0tGk/Prototyp_1_Adventour?node-id=352-400&p=f&t=IqUqN6bJ5iiNxNE0-0)
 
 ## To Do - Nice to have
 
 - Sign Up functionality
 - make it possible to invite anyone, no matter if they have an account or not
+- make it possible to stop anywhere in the process of planning and come back to the right page over the my trip menu
+
+## To Do - Before handing it in
+
+- write documentation
+- comment everything!
+- error handling!
+- specify inputs and make it error resitent

@@ -2,113 +2,15 @@ import { db } from "./firebase"; // Firestore instance
 import {
   collection,
   addDoc,
-  setDoc,
-  doc,
   getDoc,
-  getDocs,
+  doc,
   updateDoc,
-  deleteDoc,
   query,
   where,
+  getDocs,
+  arrayUnion,
+  serverTimestamp,
 } from "firebase/firestore";
-
-/**
- * Add a new document to a Firestore collection.
- * @param {string} collectionName - The name of the Firestore collection.
- * @param {object} data - The data to store in the document.
- * @returns {Promise<string>} - Resolves with the document ID.
- */
-export const addDocument = async (collectionName, data) => {
-  try {
-    const docRef = await addDoc(collection(db, collectionName), data);
-    return docRef.id;
-  } catch (error) {
-    console.error("Error adding document:", error);
-    throw error;
-  }
-};
-
-/**
- * Set or overwrite a document in a Firestore collection.
- * @param {string} collectionName - The name of the Firestore collection.
- * @param {string} docId - The ID of the document to set.
- * @param {object} data - The data to store in the document.
- * @returns {Promise<void>} - Resolves when the document is set.
- */
-export const setDocument = async (collectionName, docId, data) => {
-  try {
-    await setDoc(doc(db, collectionName, docId), data);
-  } catch (error) {
-    console.error("Error setting document:", error);
-    throw error;
-  }
-};
-
-/**
- * Get a single document by its ID.
- * @param {string} collectionName - The name of the Firestore collection.
- * @param {string} docId - The ID of the document to retrieve.
- * @returns {Promise<object>} - Resolves with the document data.
- */
-export const getDocument = async (collectionName, docId) => {
-  try {
-    const docSnap = await getDoc(doc(db, collectionName, docId));
-    if (docSnap.exists()) {
-      return docSnap.data();
-    } else {
-      throw new Error("Document does not exist.");
-    }
-  } catch (error) {
-    console.error("Error getting document:", error);
-    throw error;
-  }
-};
-
-/**
- * Get all documents in a Firestore collection.
- * @param {string} collectionName - The name of the Firestore collection.
- * @returns {Promise<object[]>} - Resolves with an array of document data.
- */
-export const getAllDocuments = async (collectionName) => {
-  try {
-    const querySnapshot = await getDocs(collection(db, collectionName));
-    return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-  } catch (error) {
-    console.error("Error getting documents:", error);
-    throw error;
-  }
-};
-
-/**
- * Update an existing document by its ID.
- * @param {string} collectionName - The name of the Firestore collection.
- * @param {string} docId - The ID of the document to update.
- * @param {object} data - The updated data for the document.
- * @returns {Promise<void>} - Resolves when the document is updated.
- */
-export const updateDocument = async (collectionName, docId, data) => {
-  try {
-    await updateDoc(doc(db, collectionName, docId), data);
-  } catch (error) {
-    console.error("Error updating document:", error);
-    throw error;
-  }
-};
-
-/**
- * Delete a document by its ID.
- * @param {string} collectionName - The name of the Firestore collection.
- * @param {string} docId - The ID of the document to delete.
- * @returns {Promise<void>} - Resolves when the document is deleted.
- */
-export const deleteDocument = async (collectionName, docId) => {
-  try {
-    await deleteDoc(doc(db, collectionName, docId));
-  } catch (error) {
-    console.error("Error deleting document:", error);
-    throw error;
-  }
-};
 
 /**
  * Query documents in a Firestore collection with conditions.
@@ -128,6 +30,158 @@ export const queryDocuments = async (collectionName, conditions) => {
     return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
   } catch (error) {
     console.error("Error querying documents:", error);
+    throw error;
+  }
+};
+
+/**
+ * Add a new trip to the Firestore `trips` collection and include the creator ID.
+ * @param {object} tripData - The trip data to store.
+ * @param {string} creatorId - The user ID of the trip creator.
+ * @returns {Promise<string>} - Resolves with the trip document ID.
+ */
+export const addTrip = async (tripData, creatorId) => {
+  try {
+    const tripRef = await addDoc(collection(db, "trips"), {
+      ...tripData,
+      creatorId, // Save the user ID as the creator of the trip
+      createdAt: serverTimestamp(), // Optionally, add a timestamp
+    });
+    console.log(`Trip created with ID: ${tripRef.id} by user: ${creatorId}`);
+    return tripRef.id;
+  } catch (error) {
+    console.error("Error adding trip:", error);
+    throw error;
+  }
+};
+
+/**
+ * Add a trip reference to the user's `trips` array in the `users` collection.
+ * @param {string} userId - The user's document ID.
+ * @param {string} tripId - The trip ID to add.
+ * @returns {Promise<void>} - Resolves when the update is complete.
+ */
+export const linkTripToUser = async (userId, tripId) => {
+  try {
+    const userRef = doc(db, "users", userId);
+    const tripRef = doc(db, "trips", tripId); // Create a reference to the trip document
+    await updateDoc(userRef, {
+      trips: arrayUnion(tripRef), // Add the trip reference
+    });
+    console.log(`Trip ${tripId} linked to user ${userId} as a reference.`);
+  } catch (error) {
+    console.error("Error linking trip to user:", error);
+    throw error;
+  }
+};
+
+/**
+ * Save user preferences under the current trip in Firestore with subcategories.
+ * @param {string} tripId - The ID of the current trip.
+ * @param {string} creatorId - The ID of the user saving the preferences.
+ * @param {object} preferences - The structured preferences by category.
+ * @returns {Promise<void>} - Resolves when the preferences are saved.
+ */
+export const savePreferences = async (tripId, creatorId, preferences) => {
+  try {
+    const tripRef = doc(db, "trips", tripId);
+    await updateDoc(tripRef, {
+      preferences: arrayUnion({
+        creatorId,
+        preferences,
+      }),
+    });
+    console.log(`Preferences saved for trip ${tripId} by user ${creatorId}.`);
+  } catch (error) {
+    console.error("Error saving preferences:", error);
+    throw error;
+  }
+};
+
+/**
+ * Save suggestions and swipe answers under the current trip in Firestore.
+ * @param {string} tripId - The ID of the current trip.
+ * @param {string} creatorId - The ID of the user saving the suggestions and answers.
+ * @param {Array} swipeAnswers - The array of user responses to the suggestions.
+ * @returns {Promise<void>} - Resolves when the data is saved.
+ */
+export const saveSuggestionsAndAnswers = async (
+  tripId,
+  creatorId,
+  swipeAnswers
+) => {
+  try {
+    const tripRef = doc(db, "trips", tripId);
+    await updateDoc(tripRef, {
+      suggestions: arrayUnion({
+        creatorId,
+        answers: swipeAnswers,
+      }),
+    });
+    console.log(
+      `Suggestions and answers saved for trip ${tripId} by user ${creatorId}.`
+    );
+  } catch (error) {
+    console.error("Error saving suggestions and answers:", error);
+    throw error;
+  }
+};
+
+/**
+ * Retrieve all trips referenced in the current user's document.
+ * @param {string} userId - The ID of the user document in Firestore.
+ * @returns {Promise<Array>} - Resolves with an array of trip documents.
+ */
+export const getUserTrips = async (userId) => {
+  try {
+    // Reference to the user's document
+    const userRef = doc(db, "users", userId);
+    const userDoc = await getDoc(userRef);
+
+    if (!userDoc.exists()) {
+      throw new Error(`User document with ID ${userId} does not exist.`);
+    }
+
+    // Get the `trips` array from the user's document
+    const userData = userDoc.data();
+    const tripRefs = userData.trips || [];
+
+    // Fetch each trip document referenced in the `trips` array
+    const trips = [];
+    for (const tripRef of tripRefs) {
+      const tripDoc = await getDoc(tripRef);
+      if (tripDoc.exists()) {
+        trips.push({ id: tripDoc.id, ...tripDoc.data() });
+      } else {
+        console.warn(
+          `Trip document referenced does not exist: ${tripRef.path}`
+        );
+      }
+    }
+
+    return trips;
+  } catch (error) {
+    console.error("Error retrieving user trips:", error);
+    throw error;
+  }
+};
+
+/**
+ * Query users who have a specific trip reference in their `trips` array.
+ * @param {string} tripId - The ID of the trip to find users for.
+ * @returns {Promise<object[]>} - Resolves with an array of user documents.
+ */
+export const queryUsersByTrip = async (tripId) => {
+  try {
+    const tripRef = doc(db, "trips", tripId); // Create a reference to the trip document
+    const q = query(
+      collection(db, "users"),
+      where("trips", "array-contains", tripRef) // Match users with this trip reference
+    );
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  } catch (error) {
+    console.error("Error querying users by trip:", error);
     throw error;
   }
 };

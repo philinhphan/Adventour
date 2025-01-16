@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "../assets/styles/App.css";
 import "../assets/styles/PlanningPage.css";
 import { useTripContext } from "../context/TripContext";
+import { addTrip, linkTripToUser } from "../firebase/firebaseStore";
 
 import InputField from "../components/FormElements/InputField";
 import Button from "../components/Button/Button";
@@ -13,10 +14,7 @@ import profil from "../assets/images/LisaProfil.jpg";
 import budgetIcon from "../assets/icons/Budget.svg";
 import dateIcon from "../assets/icons/Date.svg";
 
-//TODO Design: Rework the styling for this page. There are some issues with the layout and spacing.
-
-// Planning page component with form to specify trip details.
-const PlanningPage = () => {
+const PlanningPage = ({ userId, setCurrentTripId }) => {
   const [tripDetails, setTripDetails] = useState({
     name: "",
     dateStart: "",
@@ -26,16 +24,50 @@ const PlanningPage = () => {
     dateFlexibility: "exact",
   });
   const navigate = useNavigate();
-
   const { updateTripDetails } = useTripContext();
 
-  const saveTripDetails = () => {
-    console.log("Trip Details Saved:", tripDetails);
-    updateTripDetails(tripDetails); // Update context with trip details TODO @PhiLinh ?
-    navigate("/invite");
+  const saveTripDetails = async () => {
+    try {
+      const tripData = {
+        name: tripDetails.name,
+        details: {
+          b_exact: tripDetails.dateFlexibility === "exact",
+          b_flexible: tripDetails.dateFlexibility === "flexible",
+          b_plusminus: tripDetails.dateFlexibility === "+/-1",
+          start_date: tripDetails.dateStart
+            ? new Date(tripDetails.dateStart)
+            : null,
+          end_date: tripDetails.dateEnd ? new Date(tripDetails.dateEnd) : null,
+          min_budget: parseFloat(tripDetails.budgetMin || 0),
+          max_budget: parseFloat(tripDetails.budgetMax || 0),
+        },
+      };
+
+      if (userId) {
+        // Add trip to `trips` collection
+        const tripId = await addTrip(tripData, userId);
+        // Link the trip ID to the user's document
+        // await linkTripToUser(userId, tripId);
+        // Dummy solution link trip to all our showcase users -> For Testing reason i commented other users out
+        await linkTripToUser("smilla", tripId);
+        //await linkTripToUser("jannik", tripId);
+        await linkTripToUser("franzi", tripId);
+        //await linkTripToUser("phi-linh", tripId);
+        //await linkTripToUser("initial", tripId);
+
+        // Update the current trip ID and context
+        setCurrentTripId(tripId);
+        updateTripDetails(tripDetails);
+        navigate("/invite");
+      } else {
+        throw new Error("User ID is not available.");
+      }
+    } catch (error) {
+      console.error("Error saving trip details:", error);
+    }
   };
 
-  // Handle input change for form fields and update tripDetails state.
+  // Handle input change for form fields and update tripDetails state
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setTripDetails((prevDetails) => ({
@@ -44,7 +76,6 @@ const PlanningPage = () => {
     }));
   };
 
-  // Handle date flexibility change and update tripDetails state.
   const handleDateFlexibilityChange = (flexibility) => {
     setTripDetails((prevDetails) => ({
       ...prevDetails,
@@ -68,83 +99,81 @@ const PlanningPage = () => {
             value={tripDetails.name}
             onChange={handleInputChange}
           />
-          
-          <div className="date-box"> {/* Separate box for details on date */}
-             <label className="section-title">When do you plan to travel?</label> 
-             < img alt="dateIcon" src={dateIcon} className="date-icon" />
-          <div className="date-section">
-            <div className="date-inputs">
-              <InputField
-                label="Start Date"
-                type="date"
-                name="dateStart"
-                value={tripDetails.dateStart}
-                onChange={handleInputChange}
-                disabled={tripDetails.dateFlexibility === "flexible"}
-              />
-              <InputField
-                label="End Date"
-                type="date"
-                name="dateEnd"
-                value={tripDetails.dateEnd}
-                onChange={handleInputChange}
-                disabled={tripDetails.dateFlexibility === "flexible"}
-              />
-            </div>
-            <div className="date-flexibility">
-              <Button
-                label="Exact dates"
-                styleType={
-                  tripDetails.dateFlexibility === "exact"
-                    ? "primary"
-                    : "secondary"  
-                }
-                onClick={() => handleDateFlexibilityChange("exact")}
-              />
-              <Button
-                label="+/- 1 day"
-                styleType={
-                  tripDetails.dateFlexibility === "+/-1"
-                    ? "primary"
-                    : "secondary"
-                }
-                onClick={() => handleDateFlexibilityChange("+/-1")}
-              />
-              <Button
-                label="Flexible"
-                styleType={
-                  tripDetails.dateFlexibility === "flexible"
-                    ? "primary"
-                    : "secondary"
-                }
-                onClick={() => handleDateFlexibilityChange("flexible")}
-              />
+          <div className="date-box">
+            <label className="section-title">When do you plan to travel?</label>
+            <img alt="dateIcon" src={dateIcon} className="date-icon" />
+            <div className="date-section">
+              <div className="date-inputs">
+                <InputField
+                  label="Start Date"
+                  type="date"
+                  name="dateStart"
+                  value={tripDetails.dateStart}
+                  onChange={handleInputChange}
+                  disabled={tripDetails.dateFlexibility === "flexible"}
+                />
+                <InputField
+                  label="End Date"
+                  type="date"
+                  name="dateEnd"
+                  value={tripDetails.dateEnd}
+                  onChange={handleInputChange}
+                  disabled={tripDetails.dateFlexibility === "flexible"}
+                />
+              </div>
+              <div className="date-flexibility">
+                <Button
+                  label="Exact dates"
+                  styleType={
+                    tripDetails.dateFlexibility === "exact"
+                      ? "primary"
+                      : "secondary"
+                  }
+                  onClick={() => handleDateFlexibilityChange("exact")}
+                />
+                <Button
+                  label="+/- 1 day"
+                  styleType={
+                    tripDetails.dateFlexibility === "+/-1"
+                      ? "primary"
+                      : "secondary"
+                  }
+                  onClick={() => handleDateFlexibilityChange("+/-1")}
+                />
+                <Button
+                  label="Flexible"
+                  styleType={
+                    tripDetails.dateFlexibility === "flexible"
+                      ? "primary"
+                      : "secondary"
+                  }
+                  onClick={() => handleDateFlexibilityChange("flexible")}
+                />
+              </div>
             </div>
           </div>
-          </div>
-        
-          <div className="budget-box"> {/* Separate box for details on budget */}
+          <div className="budget-box">
             <label className="section-title">What is your budget?</label>
             <img alt="budgetIcon" src={budgetIcon} className="budget-icon" />
-          <div className="budget-section">
-            <InputField
-              label="Minimum Budget"
-              type="number"
-              name="budgetMin"
-              placeholder="€"
-              value={tripDetails.budgetMin}
-              onChange={handleInputChange}
-            />
-            <InputField
-              label="Maximum Budget"
-              type="number"
-              name="budgetMax"
-              placeholder="€€€"
-              value={tripDetails.budgetMax}
-              onChange={handleInputChange}
-            />
+            <div className="budget-section">
+              <InputField
+                label="Minimum Budget"
+                type="number"
+                name="budgetMin"
+                placeholder="€"
+                value={tripDetails.budgetMin}
+                onChange={handleInputChange}
+              />
+              <InputField
+                label="Maximum Budget"
+                type="number"
+                name="budgetMax"
+                placeholder="€€€"
+                value={tripDetails.budgetMax}
+                onChange={handleInputChange}
+              />
+            </div>
           </div>
-        </div>
         </div>
         <Button
           label="Save details"

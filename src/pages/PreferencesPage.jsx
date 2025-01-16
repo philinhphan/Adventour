@@ -7,6 +7,7 @@ import "../assets/styles/Preferences.css";
 
 import { useTripContext } from "../context/TripContext";
 import { fetchSwipeSuggestions } from "../api/tripApi";
+import { savePreferences } from "../firebase/firebaseStore";
 
 //TODO Design: Find better solution for image imports
 import logo from "../assets/images/AdventourLogo.svg";
@@ -28,7 +29,7 @@ import AccommodationAirBnB from "../assets/images/AccommodationAirBnB.jpg";
 import AccommodationCamping from "../assets/images/AccommodationCamping.jpg";
 
 // Preferences page component
-const PreferencesPage = () => {
+const PreferencesPage = ({ currentTripId, userId }) => {
   const [preferences, setPreferences] = useState([]);
   const navigate = useNavigate();
   const { tripData, updatePreferences, updateSuggestions } = useTripContext();
@@ -46,7 +47,16 @@ const PreferencesPage = () => {
   // Handle save preferences button click
   const handleSavePreferences = async () => {
     navigate("/processingstart");
-    console.log("Saved Preferences:", preferences);
+    try {
+      // Save preferences to Firestore
+      await savePreferences(currentTripId, userId, preferences);
+
+      // Navigate to the processing page
+      navigate("/processingstart");
+    } catch (error) {
+      alert("Error saving preferences.");
+      console.error("Error saving preferences:", error);
+    }
     updatePreferences(preferences); // Update context with preferences
     try {
       // 1) Fetch suggestions from Perplexity

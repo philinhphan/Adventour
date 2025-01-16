@@ -53,6 +53,33 @@
   color: #666;
 }
 
+.trip-users {
+  margin-top: 15px;
+}
+
+.trip-users h4 {
+  font-size: 1em;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.trip-users ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.trip-users li {
+  font-size: 0.9em;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.trip-users li.grayed-out {
+  color: #bbb;
+}
+
 .no-trips-message {
   font-size: 1.2em;
   color: #777;

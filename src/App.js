@@ -13,10 +13,14 @@ import LoginPage from "./pages/LoginPage";
 import { auth, db, storage } from "./firebase/firebase";
 import backgroundImage from "./assets/images/background_homepage.jpg";
 import ProtectedRoute from "./components/routes/ProtectedRoute";
+import { queryDocuments } from "./firebase/firebaseStore"; // Import query functionality
 
 function App() {
   const [firebaseReady, setFirebaseReady] = useState(false);
   const [user, setUser] = useState(null);
+  const [userName, setUserName] = useState("User"); // State for storing the user's name
+  const [userId, setUserId] = useState(null); // State for storing the user's document ID
+  const [currentTripId, setCurrentTripId] = useState(null); // State for storing the current trip ID
 
   // Firebase Initialization Check
   useEffect(() => {
@@ -42,8 +46,27 @@ function App() {
     testFirebase();
 
     // Listen for authentication state changes
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       setUser(user);
+
+      if (user) {
+        try {
+          // Query the users collection for the document with the user's email
+          const results = await queryDocuments("users", [
+            ["email", "==", user.email],
+          ]);
+
+          if (results.length > 0) {
+            const userData = results[0];
+            setUserName(userData.name || "User"); // Update userName with the name field
+            setUserId(userData.id); // Store the user document ID
+          } else {
+            console.warn("No user document found for the email", user.email);
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      }
     });
 
     return () => unsubscribe();
@@ -69,7 +92,7 @@ function App() {
               <ProtectedRoute>
                 <HomePage
                   backgroundImage={backgroundImage}
-                  userName={user?.email || "User"}
+                  userName={userName} // Use userName state here
                 />
               </ProtectedRoute>
             }
@@ -86,7 +109,10 @@ function App() {
             path="/planning"
             element={
               <ProtectedRoute>
-                <PlanningPage />
+                <PlanningPage
+                  setCurrentTripId={setCurrentTripId} // Pass state setter for currentTripId
+                  userId={userId} // Pass the user document ID
+                />
               </ProtectedRoute>
             }
           />
@@ -94,7 +120,10 @@ function App() {
             path="/preferences"
             element={
               <ProtectedRoute>
-                <PreferencesPage />
+                <PreferencesPage
+                  currentTripId={currentTripId}
+                  userId={userId}
+                />
               </ProtectedRoute>
             }
           />
@@ -102,7 +131,10 @@ function App() {
             path="/suggestions"
             element={
               <ProtectedRoute>
-                <SuggestionsPage />
+                <SuggestionsPage
+                  currentTripId={currentTripId}
+                  userId={userId}
+                />
               </ProtectedRoute>
             }
           />
@@ -110,7 +142,7 @@ function App() {
             path="/processing"
             element={
               <ProtectedRoute>
-                <ProcessingPage />
+                <ProcessingPage currentTripId={currentTripId} userId={userId} />
               </ProtectedRoute>
             }
           />
@@ -118,7 +150,10 @@ function App() {
             path="/my-trips"
             element={
               <ProtectedRoute>
-                <MyTripsPage />
+                <MyTripsPage
+                  userId={userId}
+                  setCurrentTripId={setCurrentTripId}
+                />
               </ProtectedRoute>
             }
           />
@@ -126,7 +161,7 @@ function App() {
             path="/end"
             element={
               <ProtectedRoute>
-                <EndScreenPage />
+                <EndScreenPage currentTripId={currentTripId} />
               </ProtectedRoute>
             }
           />
@@ -134,7 +169,7 @@ function App() {
             path="/processingstart"
             element={
               <ProtectedRoute>
-                <ProcessingPageStart />
+                <ProcessingPageStart currentTripId={currentTripId} />
               </ProtectedRoute>
             }
           />

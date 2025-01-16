@@ -5,10 +5,11 @@ import Navbar from "../components/Navbar/Navbar";
 import Card from "../components/TinderCard/Card";
 import "../assets/styles/SuggestionsPage.css";
 import { useNavigate } from "react-router-dom";
+import { saveSuggestionsAndAnswers } from "../firebase/firebaseStore";
 
 import logo from "../assets/images/AdventourLogo.svg";
 import profil from "../assets/images/LisaProfil.jpg";
-import Barcelona from "../assets/images/Barceloan Dummy.webp"
+import Barcelona from "../assets/images/Barceloan Dummy.webp";
 
 //TODO Smilla: SwipeButton stay big after click right now + for the last suggestion you dont see the animation anymore as is immediately goes to the processing page
 
@@ -38,20 +39,15 @@ import Barcelona from "../assets/images/Barceloan Dummy.webp"
 //   },
 // ];
 
-
-
-
 // Suggestions page component with swipe cards for user preferences.
-const SuggestionsPage = () => {
-  const { tripData, updateSwipeAnswers, savePerfectMatch } = useTripContext(); // Context
+const SuggestionsPage = ({ currentTripId, userId }) => {
+  const { tripData, updateSwipeAnswers, savePerfectMatch } = useTripContext();
   const navigate = useNavigate();
 
   const suggestions = tripData.suggestions || [];
-  const [currentIndex, setCurrentIndex] = useState(0); // Index of current suggestion
-  const [swipeAnswers, setSwipeAnswers] = useState([]); // User swipe answers
-  
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [swipeAnswers, setSwipeAnswers] = useState([]);
 
-  // Handle swipe event on card and update swipe answers
   const handleSwipe = (direction, suggestion) => {
     console.log(`Swiped ${direction} on ${suggestion.name}`);
     const newAnswer = {
@@ -68,39 +64,37 @@ const SuggestionsPage = () => {
       setCurrentIndex((prevIndex) => prevIndex + 1);
     } else {
       console.log("No more suggestions. Processing final match...");
-      // Save the answers to context
       updateSwipeAnswers([...swipeAnswers, newAnswer]);
-      generatePerfectMatch();
+      generatePerfectMatch([...swipeAnswers, newAnswer]);
     }
   };
 
-  // Generate perfect match based on user swipes and simulated friends
-  // TODO PhiLinh: Replace with API call to fetch perfect match based on user swipes and preferences
-  const generatePerfectMatch = async () => {
-    const generatePerfectMatch = async () => {
-      const simulatedFriendData = generateSimulatedFriendData();
-      const requestData = {
-        userSwipes: [...swipeAnswers, /* we just appended newAnswer above */],
-        simulatedFriends: simulatedFriendData,
-      };
-  
-      try {
-        const perfectMatch = await fetchPerfectMatch(requestData);
-        savePerfectMatch(perfectMatch);
-        console.log("Perfect Match:", perfectMatch);
-      } catch (error) {
-        console.error("Perfect Match Error:", error);
-        // If an error occurs, fall back to the first suggestion or null
-        const fallbackPerfectMatch = suggestions[0] || null;
-        savePerfectMatch(fallbackPerfectMatch);
-        console.log("Fallback Perfect Match:", fallbackPerfectMatch);
-      }
-      navigate("/processing");
+  const generatePerfectMatch = async (allSwipeAnswers) => {
+    const simulatedFriendData = generateSimulatedFriendData();
+    const requestData = {
+      userSwipes: allSwipeAnswers,
+      simulatedFriends: simulatedFriendData,
     };
+
+    try {
+      const perfectMatch = await fetchPerfectMatch(requestData);
+      savePerfectMatch(perfectMatch);
+      console.log("Perfect Match:", perfectMatch);
+
+      // Save suggestions and answers to Firestore
+      await saveSuggestionsAndAnswers(currentTripId, userId, allSwipeAnswers);
+    } catch (error) {
+      console.error("Perfect Match Error:", error);
+      const fallbackPerfectMatch = suggestions[0] || null;
+      savePerfectMatch(fallbackPerfectMatch);
+
+      // Save fallback data to Firestore
+      await saveSuggestionsAndAnswers(currentTripId, userId, allSwipeAnswers);
+      console.log("Fallback suggestions and answers saved in Firestore.");
+    }
+    navigate("/processing");
   };
 
-  // Generate simulated friend swipe data for testing
-  // Maybe we can replace this with real user data later?
   const generateSimulatedFriendData = () => {
     const friend1 = suggestions.map((s) => ({
       id: s.id,
@@ -124,10 +118,7 @@ const SuggestionsPage = () => {
       <Navbar logoSrc={logo} profilePicSrc={profil} />
       <div className="suggestions-container">
         {currentIndex < suggestions.length ? (
-          <Card
-            suggestion={suggestions[currentIndex]}
-            onSwipe={handleSwipe}
-          />
+          <Card suggestion={suggestions[currentIndex]} onSwipe={handleSwipe} />
         ) : (
           <h2>No more suggestions</h2>
         )}

@@ -1,3 +1,11 @@
+.processing-page {
+  background: url(../images/ProcessingPage_Background.jpg) no-repeat center center fixed;
+  background-size: cover;
+  /* Alternatively, you can use a background color */
+  /* background-color: #f0f0f0; */
+  height: 100vh; /* Ensure the background covers the full viewport height */
+}
+
 .processing-container {
   position: fixed;
   top: 0;

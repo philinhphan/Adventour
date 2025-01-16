@@ -10,8 +10,8 @@ import { fetchSwipeSuggestions } from "../api/tripApi";
 import { savePreferences } from "../firebase/firebaseStore";
 
 //TODO Design: Find better solution for image imports
-import logo from "../assets/images/AdventourLogo.svg";
-import profil from "../assets/images/LisaProfil.jpg";
+/* import logo from "../assets/images/AdventourLogo.svg";
+import profil from "../assets/images/LisaProfil.jpg"; */
 import PreferenceCultural from "../assets/images/PreferenceCultural.png";
 import PreferenceAdventure from "../assets/images/PreferenceAdventure.png";
 import PreferenceLeisure from "../assets/images/PreferenceLeisure.png";
@@ -112,7 +112,7 @@ const PreferencesPage = ({ currentTripId, userId }) => {
 
   return (
     <div className="preferences-page">
-      <Navbar logoSrc={logo} profilePicSrc={profil} />
+      { /* <Navbar logoSrc={logo} profilePicSrc={profil} /> */ }
       <div className="preferences-container">
         <h1>Select general preferences</h1>
         <p className="hint">

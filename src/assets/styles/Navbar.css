@@ -1,20 +1,32 @@
 .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 91%;
+    height: 60px;
+    color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background-color: transparent;
+    z-index: 1000; 
   }
   
   .navbar-logo {
     width: 40px;
     height: 40px;
+    cursor: pointer;
   }
   
+  .navbar-profile {
+    display: flex;
+    align-items: center;
+  }
+
   .navbar-profile-pic {
     width: 40px;
     height: 40px;
     border-radius: 50%;
+    object-fit: cover;
     cursor: pointer;
   }
-  

@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { getUserTrips, queryUsersByTrip } from "../firebase/firebaseStore";
 import "../assets/styles/MyTripsPage.css";
 
-import logo from "../assets/images/AdventourLogo.svg";
-import profil from "../assets/images/LisaProfil.jpg";
+/* import logo from "../assets/images/AdventourLogo.svg";
+import profil from "../assets/images/LisaProfil.jpg"; */
 
 const MyTripsPage = ({ userId, setCurrentTripId }) => {
   const [trips, setTrips] = useState([]);
@@ -96,7 +96,7 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
 
   return (
     <div className="my-trips-page">
-      <Navbar logoSrc={logo} profilePicSrc={profil} />
+      { /* <Navbar logoSrc={logo} profilePicSrc={profil} /> */}
       <div className="trips-container">
         <h1>My Trips</h1>
         {loading ? (

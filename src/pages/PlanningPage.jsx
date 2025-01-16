@@ -9,8 +9,8 @@ import { addTrip, linkTripToUser } from "../firebase/firebaseStore";
 import InputField from "../components/FormElements/InputField";
 import Button from "../components/Button/Button";
 
-import logo from "../assets/images/AdventourLogo.svg";
-import profil from "../assets/images/LisaProfil.jpg";
+/* import logo from "../assets/images/AdventourLogo.svg";
+import profil from "../assets/images/LisaProfil.jpg"; */
 import budgetIcon from "../assets/icons/Budget.svg";
 import dateIcon from "../assets/icons/Date.svg";
 
@@ -87,7 +87,7 @@ const PlanningPage = ({ userId, setCurrentTripId }) => {
 
   return (
     <div className="planning-page">
-      <Navbar logoSrc={logo} profilePicSrc={profil} />
+      { /* <Navbar logoSrc={logo} profilePicSrc={profil} /> */ }
       <div className="planning-container">
         <h1 className="title">Please specify your trip details</h1>
         <div className="planning-section">

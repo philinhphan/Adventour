@@ -7,6 +7,7 @@ import "../../assets/styles/Navbar.css";
 // Profile picture is displayed with onProfileClick function -> right now it just alerts.
 
 const Navbar = ({ logoSrc, profilePicSrc }) => {
+  
   return (
     <div className="navbar">
       <Link to="/">
@@ -19,12 +20,14 @@ const Navbar = ({ logoSrc, profilePicSrc }) => {
           style={{ cursor: "pointer" }}
         />
       </Link>
+      <div className="navbar-profile">
       <img
         src={profilePicSrc}
         alt="Profile"
         className="navbar-profile-pic"
-        onClick={() => alert("Profile Clicked!")} // Placeholder for now  // TODO @Smilla add profile page to land on
+        onClick={() => alert("Profile clicked!")} // Placeholder for now  // TODO @Smilla add profile page to land on
       />
+      </div>
     </div>
   );
 };

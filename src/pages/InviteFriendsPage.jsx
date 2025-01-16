@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import Button from "../components/Button/Button";
 import "../assets/styles/InviteFriends.css";
 
-import logo from "../assets/images/AdventourLogo.svg";
-import profil from "../assets/images/LisaProfil.jpg";
+/* import logo from "../assets/images/AdventourLogo.svg";
+import profil from "../assets/images/LisaProfil.jpg"; */
 
 import whatsapp from "../assets/icons/whatsapp.svg";
 import Instagram from "../assets/icons/Instagram.svg";
@@ -70,7 +70,7 @@ const InviteFriendsPage = () => {
 
   return (
     <div className="invite-friends-page">
-      <Navbar logoSrc={logo} profilePicSrc={profil} />
+      {/* <Navbar logoSrc={logo} profilePicSrc={profil} /> */}
       <div className="invite-container">
         <h1>Do you want to invite friends?</h1>
         <h3>Your AdvenTour awaits!</h3>

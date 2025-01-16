@@ -7,8 +7,8 @@ import "../assets/styles/SuggestionsPage.css";
 import { useNavigate } from "react-router-dom";
 import { saveSuggestionsAndAnswers } from "../firebase/firebaseStore";
 
-import logo from "../assets/images/AdventourLogo.svg";
-import profil from "../assets/images/LisaProfil.jpg";
+/* import logo from "../assets/images/AdventourLogo.svg";
+import profil from "../assets/images/LisaProfil.jpg"; */
 import Barcelona from "../assets/images/Barceloan Dummy.webp";
 
 //TODO Smilla: SwipeButton stay big after click right now + for the last suggestion you dont see the animation anymore as is immediately goes to the processing page
@@ -115,7 +115,7 @@ const SuggestionsPage = ({ currentTripId, userId }) => {
 
   return (
     <div className="suggestions-page">
-      <Navbar logoSrc={logo} profilePicSrc={profil} />
+      { /* <Navbar logoSrc={logo} profilePicSrc={profil} /> */ }
       <div className="suggestions-container">
         {currentIndex < suggestions.length ? (
           <Card suggestion={suggestions[currentIndex]} onSwipe={handleSwipe} />

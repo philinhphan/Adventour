@@ -15,6 +15,9 @@ import { auth, db, storage } from "./firebase/firebase";
 import backgroundImage from "./assets/images/background_homepage.jpg";
 import ProtectedRoute from "./components/routes/ProtectedRoute";
 import { queryDocuments } from "./firebase/firebaseStore"; // Import query functionality
+import Navbar from "./components/Navbar/Navbar";
+import logo from "./assets/images/AdventourLogo.svg";
+import profilePic from "./assets/images/LisaProfil.jpg";
 
 function App() {
   const [firebaseReady, setFirebaseReady] = useState(false);
@@ -22,6 +25,16 @@ function App() {
   const [userName, setUserName] = useState("User"); // State for storing the user's name
   const [userId, setUserId] = useState(null); // State for storing the user's document ID
   const [currentTripId, setCurrentTripId] = useState(null); // State for storing the current trip ID
+  /* const [profilePic, setProfilePic] = useState("/assets/images/defaultProfile.jpg"); // Standard-Profilbild */
+
+ /* DOESNT WORK AT THE MOMENT! const getProfilePicture = (userName) => {
+    const profilePictures = {
+      Franzi: "/assets/images/Profil2.jpg", // Beispiel für User 2
+      Smilla: "/assets/images/LisaProfil.jpg", // Beispiel für User 3
+      default: "/assets/images/emptyProfile.jpg", // Standardbild
+    };
+    return profilePictures[userName] || profilePictures.default; // Rückgabebild
+  } */
 
   // Firebase Initialization Check
   useEffect(() => {
@@ -61,6 +74,8 @@ function App() {
             const userData = results[0];
             setUserName(userData.name || "User"); // Update userName with the name field
             setUserId(userData.id); // Store the user document ID
+            /* setProfilePic(getProfilePicture(userData.name)); // Dynamisches Profilbild setzen */
+
           } else {
             console.warn("No user document found for the email", user.email);
           }
@@ -84,7 +99,10 @@ function App() {
 
   return (
     <div>
+
       <Router>
+        <Navbar logoSrc={logo} profilePicSrc={profilePic} />
+        <div className="content">
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route
@@ -184,6 +202,7 @@ function App() {
             }
           />
         </Routes>
+        </div>
       </Router>
     </div>
   );

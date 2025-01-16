@@ -4,8 +4,8 @@ import Button from "../components/Button/Button";
 import { useNavigate } from "react-router-dom";
 import "../assets/styles/HomePage.css";
 
-import logo from "../assets/images/AdventourLogo.svg";
-import profil from "../assets/images/LisaProfil.jpg";
+/* import logo from "../assets/images/AdventourLogo.svg";
+import profil from "../assets/images/LisaProfil.jpg"; */
 
 // Home page component, takes in backgroundImage and userName.
 const HomePage = ({ backgroundImage, userName }) => {
@@ -28,8 +28,8 @@ const HomePage = ({ backgroundImage, userName }) => {
         backgroundImage: `url(${backgroundImage})`, // Set background image
       }}
     >
-      {/* Navbar component */}
-      <Navbar logoSrc={logo} profilePicSrc={profil} />
+       {/* Navbar component */}
+      {/* <Navbar logoSrc={logo} profilePicSrc={profil} /> */}
       <div className="home-page-content">
         <h1>
           Welcome to <span className="highlight">AdvenTour,</span> {userName}.

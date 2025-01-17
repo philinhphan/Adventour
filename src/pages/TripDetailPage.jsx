@@ -1,12 +1,15 @@
 import React from "react";
+import Slider from "react-slick"; // For swipe functionality
 import Navbar from "../components/Navbar/Navbar";
 import "../assets/styles/TripDetailPage.css";
 
 import logo from "../assets/images/AdventourLogo.svg";
 import profil from "../assets/images/LisaProfil.jpg";
+import nine from "../assets/images/Nine.jpg";
+import ljota from "../assets/images/La-Llotja-1.webp";
+import tribitz from "../assets/images/the-main-dining-area.jpg";
 
 const TripDetailPage = ({ tripData }) => {
-  // Placeholder trip data until integrated with API
   const placeholderTrip = {
     name: "Barcelona, Spain",
     tags: ["sightseeing", "shopping", "beach", "nightlife", "water sport"],
@@ -14,9 +17,9 @@ const TripDetailPage = ({ tripData }) => {
       "Get ready to fall in love with Barcelona—a city that blends vibrant culture, stunning architecture, and Mediterranean charm. This trip will take you through the iconic Sagrada Familia, the whimsical wonders of Park Güell, and the winding streets of the Gothic Quarter. You’ll sip sangria by the beach, devour mouthwatering tapas, and soak up breathtaking views from Montjuïc Hill.",
     recommendations: {
       restaurants: [
-        { name: "Nine", image: "path/to/restaurant1.jpg" },
-        { name: "La Lotja", image: "path/to/restaurant2.jpg" },
-        { name: "El Tributz", image: "path/to/restaurant3.jpg" },
+        { name: "Nine", image: nine },
+        { name: "La Lotja", image: ljota },
+        { name: "El Tributz", image: tribitz },
       ],
       accommodations: [
         { name: "Mandarin Oriental", image: "path/to/accommodation1.jpg" },
@@ -33,31 +36,59 @@ const TripDetailPage = ({ tripData }) => {
 
   const trip = tripData || placeholderTrip;
 
+  // Slider settings (same as PreferencesPage.jsx)
+  const sliderSettings = {
+    dots: true,
+    infinite: false,
+    arrows: false,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 300,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
+  };
+
   return (
     <div className="trip-detail-page">
       <Navbar logoSrc={logo} profilePicSrc={profil} />
 
-      <div className="trip-detail-container">
-        <div className="trip-header">
-          <h1>{trip.name}</h1>
-          <div className="trip-tags">
-            {trip.tags.map((tag, index) => (
-              <span key={index} className="trip-tag">
-                {tag}
-              </span>
-            ))}
-          </div>
+      {/* Sticky header section */}
+      <div className="sticky-header">
+        <h1>{trip.name}</h1>
+        <div className="trip-tags">
+          {trip.tags.map((tag, index) => (
+            <span key={index} className="trip-tag">
+              {tag}
+            </span>
+          ))}
         </div>
+      </div>
 
+      <div className="trip-detail-container">
+        {/* Description */}
         <p className="trip-description">{trip.description}</p>
 
+        {/* Recommendations */}
         <h2>Recommendations</h2>
         <div className="recommendations-section">
+          {/* Restaurants */}
           <div className="recommendation-category">
             <h3>Restaurants</h3>
-            <div className="recommendation-items">
+            <Slider {...sliderSettings}>
               {trip.recommendations.restaurants.map((restaurant, index) => (
-                <div key={index} className="recommendation-item">
+                <div key={index} className="recommendation-tile">
                   <img
                     src={restaurant.image}
                     alt={restaurant.name}
@@ -66,51 +97,46 @@ const TripDetailPage = ({ tripData }) => {
                   <p>{restaurant.name}</p>
                 </div>
               ))}
-            </div>
+            </Slider>
           </div>
 
+          {/* Accommodations */}
           <div className="recommendation-category">
             <h3>Accommodations</h3>
-            <div className="recommendation-items">
-              {trip.recommendations.accommodations.map(
-                (accommodation, index) => (
-                  <div key={index} className="recommendation-item">
-                    <img
-                      src={accommodation.image}
-                      alt={accommodation.name}
-                      className="recommendation-image"
-                    />
-                    <p>{accommodation.name}</p>
-                  </div>
-                )
-              )}
-            </div>
+            <Slider {...sliderSettings}>
+              {trip.recommendations.accommodations.map((accommodation, index) => (
+                <div key={index} className="recommendation-tile">
+                  <img
+                    src={accommodation.image}
+                    alt={accommodation.name}
+                    className="recommendation-image"
+                  />
+                  <p>{accommodation.name}</p>
+                </div>
+              ))}
+            </Slider>
           </div>
         </div>
 
+        {/* Balanced Preferences */}
         <h2>Balanced Preferences</h2>
         <div className="balanced-preferences">
           {trip.userPreferences.map((user, index) => (
-            <div key={index} className="preference-bar">
-              <p>{user.userName}</p>
+            <div key={index} className="preference-item">
+              <img
+                src={`path/to/${user.userName.toLowerCase()}Profile.jpg`}
+                alt={user.userName}
+                className="profile-picture"
+              />
               <div className="preference-bar-container">
                 <div
                   className="preference-bar-fill"
                   style={{ width: `${user.preferenceMatch}%` }}
                 ></div>
               </div>
-              <span>{user.preferenceMatch}%</span>
+              <p className="preference-percentage">{user.preferenceMatch}%</p>
             </div>
           ))}
-        </div>
-
-        <div className="premium-section">
-          <h3>Detailed Travel Plan</h3>
-          <p>
-            This feature provides a fully optimized travel plan tailored to your
-            preferences.
-          </p>
-          <button className="premium-button">Update to Premium</button>
         </div>
       </div>
     </div>

@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Popup from "../components/PopUp/PopUp";
-import Navbar from "../components/Navbar/Navbar";
 import "../assets/styles/ProcessingPage.css";
 import plane from "../assets/icons/Notifcation.svg";
 

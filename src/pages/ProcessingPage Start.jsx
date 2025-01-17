@@ -27,7 +27,7 @@ const FlightPopup = () => {
         <p>
           It is just a quick moment before we whip up personalized suggestions
           to help you discover the perfect trip—easy, breezy, and fun!
-        </p>
+        </p >
 
         {/* Airplane animation */}
         <div className="animation-wrapper">

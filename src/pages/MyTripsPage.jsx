@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "../components/Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
 import { getUserTrips, queryUsersByTrip } from "../firebase/firebaseStore";
 import "../assets/styles/MyTripsPage.css";

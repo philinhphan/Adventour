@@ -1,12 +1,25 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "../../assets/styles/Navbar.css";
+import { logout } from "../../firebase/firebaseAuth"; 
 
 // Navbar component, takes in logoSrc, profilePicSrc and onProfileClick function.
 // Logo is wrapped in Link to navigate to home page.
 // Profile picture is displayed with onProfileClick function -> right now it just alerts.
 
 const Navbar = ({ logoSrc, profilePicSrc }) => {
+  const [showLogout, setShowLogout] = useState(false); // Zustand für das Logout-Menü
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await logout(); // Firebase-Logout
+      setShowLogout(false); // Logout-Menü verbergen
+      navigate("/login"); // Zur Login-Seite navigieren
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
   
   return (
     <div className="navbar">
@@ -25,8 +38,16 @@ const Navbar = ({ logoSrc, profilePicSrc }) => {
         src={profilePicSrc}
         alt="Profile"
         className="navbar-profile-pic"
-        onClick={() => alert("Profile clicked!")} // Placeholder for now  // TODO @Smilla add profile page to land on
-      />
+        onClick={() => setShowLogout((prev) => !prev)} // Logout-Menü anzeigen/verbergen
+        />
+        {showLogout && (
+          <button
+            className="logout-button"
+            onClick={handleLogout} // Logout-Logik
+          >
+            Logout
+          </button>
+        )}
       </div>
     </div>
   );

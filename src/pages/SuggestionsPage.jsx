@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useTripContext } from "../context/TripContext";
 import { fetchPerfectMatch } from "../api/tripApi";
-import Navbar from "../components/Navbar/Navbar";
 import Card from "../components/TinderCard/Card";
 import "../assets/styles/SuggestionsPage.css";
 import { useNavigate } from "react-router-dom";

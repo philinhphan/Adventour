@@ -1,5 +1,4 @@
 import React from "react";
-import Navbar from "../components/Navbar/Navbar";
 import Button from "../components/Button/Button";
 import { useNavigate } from "react-router-dom";
 import "../assets/styles/HomePage.css";

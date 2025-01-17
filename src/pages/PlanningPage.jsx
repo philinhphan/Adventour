@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Navbar from "../components/Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
 import "../assets/styles/App.css";
 import "../assets/styles/PlanningPage.css";

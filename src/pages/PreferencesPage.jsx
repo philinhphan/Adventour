@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Slider from "react-slick";
-import Navbar from "../components/Navbar/Navbar";
 import Tile from "../components/Tile/Tile";
 import { useNavigate } from "react-router-dom";
 import "../assets/styles/Preferences.css";

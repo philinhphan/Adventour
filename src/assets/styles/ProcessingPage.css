@@ -1,26 +1,112 @@
 .processing-page {
   background: url(../images/ProcessingPage_Background.jpg) no-repeat center center fixed;
   background-size: cover;
-  /* Alternatively, you can use a background color */
-  /* background-color: #f0f0f0; */
   height: 100vh; /* Ensure the background covers the full viewport height */
 }
 
+/* Smooth fade-in background animation */
 .processing-container {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+  background-color: rgba(0, 0, 0, 0.6); /* Dimmed background */
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  opacity: 0; /* Start invisible */
+  animation: fadeIn 1s ease-in-out forwards; /* Smooth fade-in */
 }
 
+/* Popup wrapper: subtle fade-in and zoom */
 .popup-wrapper {
   display: flex;
+  flex-direction: column; /* Stack the icon and text vertically */
   justify-content: center;
   align-items: center;
+  opacity: 0;
+  transform: scale(0.95); /* Start slightly smaller */
+  animation: zoomIn 0.8s ease-out forwards; /* Smooth zoom-in */
+  animation-delay: 0.2s; /* Slight delay after background */
+}
+
+/* Icon: Fast vibrating effect with short breaks */
+.popup-wrapper img {
+  width: 80px; /* Slightly larger icon */
+  height: 80px;
+  margin-bottom: 0px; /* Add more spacing below the icon */
+  animation: fastVibrationWithBreaks 1.1s infinite ease-in-out; /* Fast vibrating effect with short breaks */
+}
+
+/* Text inside popup */
+.popup-wrapper p {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  font-size: 18px; /* Elegant font size */
+  font-weight: 500; /* Slightly bold for readability */
+  color: #333; /* Neutral text color */
+  text-align: center; /* Center-align the text */
+}
+
+/* Animations */
+
+/* Fade-in for background */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Zoom-in for popup */
+@keyframes zoomIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95); /* Slightly smaller */
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1); /* Full size */
+  }
+}
+
+/* Fast vibrating effect with short breaks */
+@keyframes fastVibrationWithBreaks {
+  0% {
+    transform: translate(0, 0); /* Neutral position */
+  }
+  5% {
+    transform: translate(-1px, -1px); /* Tiny shake left-up */
+  }
+  10% {
+    transform: translate(1px, -1px); /* Tiny shake right-up */
+  }
+  15% {
+    transform: translate(-1px, 1px); /* Tiny shake left-down */
+  }
+  20% {
+    transform: translate(1px, 1px); /* Tiny shake right-down */
+  }
+  25% {
+    transform: translate(-1px, -1px); /* Tiny shake left-up */
+  }
+  30% {
+    transform: translate(1px, -1px); /* Tiny shake right-up */
+  }
+  35% {
+    transform: translate(-1px, 1px); /* Tiny shake left-down */
+  }
+  40% {
+    transform: translate(1px, 1px); /* Tiny shake right-down */
+  }
+  50% {
+    transform: translate(0, 0); /* Back to neutral */
+  }
+  100% {
+    transform: translate(0, 0); /* Pause */
+  }
 }

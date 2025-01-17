@@ -1,6 +1,5 @@
 import React from "react";
 import Slider from "react-slick"; // For swipe functionality
-import Navbar from "../components/Navbar/Navbar";
 import "../assets/styles/TripDetailPage.css";
 
 import logo from "../assets/images/AdventourLogo.svg";
@@ -8,6 +7,10 @@ import profil from "../assets/images/LisaProfil.jpg";
 import nine from "../assets/images/Nine.jpg";
 import ljota from "../assets/images/La-Llotja-1.webp";
 import tribitz from "../assets/images/the-main-dining-area.jpg";
+import barcelonaBackground from "../assets/images/barcelona.jpg"; // Background image
+import hyatt from "../assets/images/hyatt.webp";
+import mandarin from "../assets/images/Mandarin.jpg";
+import W from "../assets/images/w-barcelona.jpg";
 
 const TripDetailPage = ({ tripData }) => {
   const placeholderTrip = {
@@ -15,6 +18,7 @@ const TripDetailPage = ({ tripData }) => {
     tags: ["sightseeing", "shopping", "beach", "nightlife", "water sport"],
     description:
       "Get ready to fall in love with Barcelona—a city that blends vibrant culture, stunning architecture, and Mediterranean charm. This trip will take you through the iconic Sagrada Familia, the whimsical wonders of Park Güell, and the winding streets of the Gothic Quarter. You’ll sip sangria by the beach, devour mouthwatering tapas, and soak up breathtaking views from Montjuïc Hill.",
+    backgroundImage: barcelonaBackground, // Background image for the city section
     recommendations: {
       restaurants: [
         { name: "Nine", image: nine },
@@ -22,9 +26,9 @@ const TripDetailPage = ({ tripData }) => {
         { name: "El Tributz", image: tribitz },
       ],
       accommodations: [
-        { name: "Mandarin Oriental", image: "path/to/accommodation1.jpg" },
-        { name: "W Hotel", image: "path/to/accommodation2.jpg" },
-        { name: "Hyatt Regency", image: "path/to/accommodation3.jpg" },
+        { name: "Mandarin Oriental", image: mandarin },
+        { name: "W Hotel", image: W },
+        { name: "Hyatt Regency", image: hyatt },
       ],
     },
     userPreferences: [
@@ -36,7 +40,6 @@ const TripDetailPage = ({ tripData }) => {
 
   const trip = tripData || placeholderTrip;
 
-  // Slider settings (same as PreferencesPage.jsx)
   const sliderSettings = {
     dots: true,
     infinite: false,
@@ -62,10 +65,14 @@ const TripDetailPage = ({ tripData }) => {
 
   return (
     <div className="trip-detail-page">
-      <Navbar logoSrc={logo} profilePicSrc={profil} />
-
-      {/* Sticky header section */}
-      <div className="sticky-header">
+      {/* Hero Section with Background */}
+      <div
+        className="sticky-header"
+        style={{
+          backgroundImage: `url(${trip.backgroundImage})`,
+        }}
+      >
+        <div className="overlay"></div> {/* Dark overlay for readability */}
         <h1>{trip.name}</h1>
         <div className="trip-tags">
           {trip.tags.map((tag, index) => (
@@ -75,6 +82,10 @@ const TripDetailPage = ({ tripData }) => {
           ))}
         </div>
       </div>
+
+      {/* Fixed Icons (Logo and Profile Picture) */}
+      {/* <img src={logo} alt="Logo" className="fixed-logo" />
+      <img src={profil} alt="Profile" className="fixed-profile-icon" /> */}
 
       <div className="trip-detail-container">
         {/* Description */}

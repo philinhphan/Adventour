@@ -30,8 +30,8 @@ const LoginPage = () => {
     <div className="login-page">
       <Navbar logoSrc={logo} profilePicSrc={profil} />
       <div className="login-container">
-        <h1>Welcome Back!</h1>
-        <p>Please login to continue your AdvenTour.</p>
+        <h1>Welcome Back !</h1>
+        <h2>Start your AdvenTour of a Lifetime</h2>
         {error && <p className="error-message">{error}</p>}
         <form className="login-form" onSubmit={handleLogin}>
           <div className="form-group">
@@ -59,9 +59,11 @@ const LoginPage = () => {
           <button type="submit" className="button button-primary">
             Login
           </button>
+
         </form>
+        <p2>Please login to continue your AdvenTour</p2>
         <p className="signup-prompt">
-          Don’t have an account? <a href="/signup">Sign up here</a>.
+          Don’t have an account? <a href="/signup">Sign up here</a>
         </p>
       </div>
     </div>

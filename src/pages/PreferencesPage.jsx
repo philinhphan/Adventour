@@ -12,11 +12,11 @@ import { savePreferences } from "../firebase/firebaseStore";
 //TODO Design: Find better solution for image imports
 /* import logo from "../assets/images/AdventourLogo.svg";
 import profil from "../assets/images/LisaProfil.jpg"; */
-import PreferenceCultural from "../assets/images/PreferenceCultural.png";
-import PreferenceAdventure from "../assets/images/PreferenceAdventure.png";
-import PreferenceLeisure from "../assets/images/PreferenceLeisure.png";
-import PreferenceSports from "../assets/images/PreferenceSports.png";
-import PreferenceNature from "../assets/images/PreferenceNature.png";
+import PreferenceCultural from "../assets/images/PreferenceCultural.jpg";
+import PreferenceAdventure from "../assets/images/PreferenceAdventure.jpg";
+import PreferenceLeisure from "../assets/images/PreferenceLeisure.jpg";
+import PreferenceSports from "../assets/images/PreferenceSports.jpg";
+import PreferenceNature from "../assets/images/PreferenceNature.jpg";
 import WeatherCold from "../assets/images/WeatherCold.jpg";
 import WeatherWarm from "../assets/images/WeatherWarm.jpg";
 import WeatherMixed from "../assets/images/WeatherMixed.jpg";

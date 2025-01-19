@@ -144,11 +144,11 @@ export const fetchPerfectMatch = async (data) => {
         superlikeCount: 0,
       };
     }
-    // "right" => like, "up" => superlike
-    if (swipe === "right" || swipe === "up") {
+
+    if (swipe === "like" || swipe === "superlike") {
       aggregator[id].likeCount += 1;
     }
-    if (swipe === "up") {
+    if (swipe === "superlike") {
       aggregator[id].superlikeCount += 1;
     }
   }

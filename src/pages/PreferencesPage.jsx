@@ -66,7 +66,7 @@ const PreferencesPage = ({ currentTripId, userId }) => {
 
       // 2) Transform them: add 'id' and 'image' for each
       const suggestionsWithExtras = rawSuggestions.map((s, idx) => ({
-        id: idx + 1, // or use a unique ID approach if desired
+        id: idx + 1, 
         name: s.name,
         image: "https://via.placeholder.com/300x600", // fixed placeholder
         tags: s.tags,

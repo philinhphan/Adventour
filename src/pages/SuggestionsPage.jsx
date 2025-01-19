@@ -100,14 +100,14 @@ const SuggestionsPage = ({ currentTripId, userId }) => {
       name: s.name,
       tags: s.tags,
       description: s.description,
-      swipe: Math.random() > 0.5 ? "right" : "left",
+      swipe: Math.random() > 0.5 ? "like" : "dislike",
     }));
     const friend2 = suggestions.map((s) => ({
       id: s.id,
       name: s.name,
       tags: s.tags,
       description: s.description,
-      swipe: Math.random() > 0.5 ? "right" : "up",
+      swipe: Math.random() > 0.5 ? "like" : "dislike",
     }));
     return { friend1, friend2 };
   };

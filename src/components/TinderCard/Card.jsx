@@ -41,10 +41,10 @@ const Card = ({ suggestion, onSwipe }) => {
   };
 
   const swipeHandlers = useSwipeable({
-    onSwipedLeft: () => handleSwipe("left"),
-    onSwipedRight: () => handleSwipe("right"),
-    onSwipedUp: () => handleSwipe("up"),
-    onSwipedDown: () => handleSwipe("down"),
+    onSwipedLeft: () => handleSwipe("dislike"),
+    onSwipedRight: () => handleSwipe("like"),
+    onSwipedUp: () => handleSwipe("superlike"),
+    onSwipedDown: () => handleSwipe("indifferent"),
   });
 
   if (!suggestion) {
@@ -105,26 +105,26 @@ const Card = ({ suggestion, onSwipe }) => {
       {/* Swipe Buttons */}
       <div className="swipe-buttons">
         <button
-          className={buttonPressed === "left" ? "button-pressed" : ""}
-          onClick={() => handleButtonClick("left")}
+          className={buttonPressed === "dislike" ? "button-pressed" : ""}
+          onClick={() => handleButtonClick("dislike")}
         >
           <img src={dislikeIcon} alt="Dislike" />
         </button>
         <button
-          className={buttonPressed === "down" ? "button-pressed" : ""}
-          onClick={() => handleButtonClick("down")}
+          className={buttonPressed === "indifferent" ? "button-pressed" : ""}
+          onClick={() => handleButtonClick("indifferent")}
         >
           <img src={indifferentIcon} alt="Indifferent" />
         </button>
         <button
-          className={buttonPressed === "up" ? "button-pressed" : ""}
-          onClick={() => handleButtonClick("up")}
+          className={buttonPressed === "superlike" ? "button-pressed" : ""}
+          onClick={() => handleButtonClick("superlike")}
         >
           <img src={superlikeIcon} alt="Superlike" />
         </button>
         <button
-          className={buttonPressed === "right" ? "button-pressed" : ""}
-          onClick={() => handleButtonClick("right")}
+          className={buttonPressed === "like" ? "button-pressed" : ""}
+          onClick={() => handleButtonClick("like")}
         >
           <img src={likeIcon} alt="Like" />
         </button>

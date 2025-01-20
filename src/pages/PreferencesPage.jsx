@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import "../assets/styles/Preferences.css";
 
 import { useTripContext } from "../context/TripContext";
-import { fetchSwipeSuggestions, fetchPexelsImage } from "../api/tripApi";
+import { fetchSwipeSuggestions} from "../api/tripApi";
 import { savePreferences } from "../firebase/firebaseStore";
 
 //TODO Design: Find better solution for image imports
@@ -43,6 +43,39 @@ const PreferencesPage = ({ currentTripId, userId }) => {
     );
   };
 
+  /**
+   * Helper to get the best matching image from Pexels for the given query.
+   * Returns a fallback placeholder if no match is found or if an error occurs.
+   */
+  // Possible TODO: update query: 'travel' or other keywords can yield more relevant travel images
+  const fetchPexelsImage = async (query) => {
+    try {
+      const url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(
+        query
+      )}&per_page=1`; // We only want the top match
+      const response = await fetch(url, {
+        headers: {
+          Authorization: process.env.REACT_APP_PEXELS_API_KEY, // stored in .env
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch from Pexels");
+      }
+
+      const data = await response.json();
+      // Return the 'large' image if we have results, else fallback to placeholder
+      if (data.photos && data.photos.length > 0) {
+        return data.photos[0].src.large2x || data.photos[0].src.large;
+      }
+      return "https://via.placeholder.com/300x600"; // fallback TODO: update placeholder image with good one
+    } catch (error) {
+      console.error("Pexels API error:", error);
+      return "https://via.placeholder.com/300x600"; // fallback TODO: update placeholder image with good one
+    }
+  };
+
+
   // Handle save preferences button click
   const handleSavePreferences = async () => {
     navigate("/processingstart");
@@ -65,30 +98,24 @@ const PreferencesPage = ({ currentTripId, userId }) => {
         preferences
       );
 
-      // 2) Map them into a typed object 
-      const suggestionsWithExtras = rawSuggestions.map((s, idx) => ({
-        id: idx + 1,
-        name: s.name,
-        tags: s.tags,
-        description: s.description,
-      }));
-
-      // 3) For each suggestion, fetch an appropriate image from Pexels
-      const finalSuggestions = await Promise.all(
-        suggestionsWithExtras.map(async (sugg) => {
-          const pexelsImageUrl = await fetchPexelsImage(sugg.name);
+      const suggestionsWithExtras = await Promise.all(
+        rawSuggestions.map(async (s, idx) => {
+          const imageUrl = await fetchPexelsImage(s.name);
           return {
-            ...sugg,
-            image: pexelsImageUrl, // fallback is handled in fetchPexelsImage
+            id: idx + 1,
+            name: s.name,
+            image: imageUrl, // Use the real image from Pexels
+            tags: s.tags,
+            description: s.description,
           };
         })
       );
 
-      // Store them in global context
-      updateSuggestions(finalSuggestions);
-      console.log("Suggestions stored:", finalSuggestions);
+      // 2) Store them in global context
+      updateSuggestions(suggestionsWithExtras);
+      console.log("Suggestions stored:", suggestionsWithExtras);
 
-      // 4) Navigate to the Suggestions Page
+      // 3) Navigate to the Suggestions Page
       navigate("/suggestions");
     } catch (error) {
       alert("Error fetching suggestions.");

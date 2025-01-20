@@ -1,4 +1,45 @@
 const API_KEY = process.env.REACT_APP_PERPLEXITY_API_KEY;
+const PEXELS_API_KEY = process.env.REACT_APP_PEXELS_API_KEY;
+
+
+/**
+ * Helper to get the best matching image from Pexels for the given query.
+ * Returns a fallback placeholder if no match is found or if an error occurs.
+ */
+export const fetchPexelsImage = async (query) => {
+  try {
+    // Build the Pexels search URL
+    // Possible TODO: update query: 'travel' or other keywords can yield more relevant travel images
+    const encodedQuery = encodeURIComponent(query);
+    const pexelsUrl = `https://api.pexels.com/v1/search?query=${encodedQuery}&per_page=1`;
+
+    // Make the request
+    const response = await fetch(pexelsUrl, {
+      headers: {
+        Authorization: PEXELS_API_KEY,
+      },
+    });
+
+    // If Pexels returns an error status, or we can't parse results, fallback
+    if (!response.ok) {
+      console.error(`Pexels API request failed with status ${response.status}`);
+      return "https://via.placeholder.com/300x600";   // TODO: update placeholder image with good one
+    }
+
+    const data = await response.json();
+    if (data.photos && data.photos.length > 0) {
+      // Return a decently sized image, e.g. large2x or large
+      return data.photos[0].src.large2x || data.photos[0].src.large;
+    } else {
+      return "https://via.placeholder.com/300x600";
+    }
+  } catch (error) {
+    console.error("Error fetching image from Pexels:", error);
+    return "https://via.placeholder.com/300x600";
+  }
+};
+
+
 
 export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
   try {
@@ -194,6 +235,10 @@ export const fetchPerfectMatch = async (data) => {
   //   description: "A serene blend of ancient traditions and breathtaking landscapes.",
   // };
 };
+
+
+
+
 
 
 

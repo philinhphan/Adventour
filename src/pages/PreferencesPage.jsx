@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import "../assets/styles/Preferences.css";
 
 import { useTripContext } from "../context/TripContext";
-import { fetchSwipeSuggestions } from "../api/tripApi";
+import { fetchSwipeSuggestions, fetchPexelsImage } from "../api/tripApi";
 import { savePreferences } from "../firebase/firebaseStore";
 
 //TODO Design: Find better solution for image imports
@@ -51,12 +51,13 @@ const PreferencesPage = ({ currentTripId, userId }) => {
       await savePreferences(currentTripId, userId, preferences);
 
       // Navigate to the processing page
-      navigate("/processingstart");
+      // navigate("/processingstart"); TODO why called here again?
     } catch (error) {
       alert("Error saving preferences.");
       console.error("Error saving preferences:", error);
     }
     updatePreferences(preferences); // Update context with preferences
+    
     try {
       // 1) Fetch suggestions from Perplexity
       const rawSuggestions = await fetchSwipeSuggestions(
@@ -64,18 +65,28 @@ const PreferencesPage = ({ currentTripId, userId }) => {
         preferences
       );
 
-      // 2) Transform them: add 'id' and 'image' for each
+      // 2) Map them into a typed object 
       const suggestionsWithExtras = rawSuggestions.map((s, idx) => ({
-        id: idx + 1, 
+        id: idx + 1,
         name: s.name,
-        image: "https://via.placeholder.com/300x600", // fixed placeholder
         tags: s.tags,
         description: s.description,
       }));
 
-      // 3) Store them in our global context
-      updateSuggestions(suggestionsWithExtras);
-      console.log("Suggestions stored:", suggestionsWithExtras);
+      // 3) For each suggestion, fetch an appropriate image from Pexels
+      const finalSuggestions = await Promise.all(
+        suggestionsWithExtras.map(async (sugg) => {
+          const pexelsImageUrl = await fetchPexelsImage(sugg.name);
+          return {
+            ...sugg,
+            image: pexelsImageUrl, // fallback is handled in fetchPexelsImage
+          };
+        })
+      );
+
+      // Store them in global context
+      updateSuggestions(finalSuggestions);
+      console.log("Suggestions stored:", finalSuggestions);
 
       // 4) Navigate to the Suggestions Page
       navigate("/suggestions");

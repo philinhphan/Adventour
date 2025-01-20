@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getUserTrips, queryUsersByTrip } from "../firebase/firebaseStore";
+import {
+  getUserTrips,
+  queryUsersByTrip,
+  deleteTrip,
+} from "../firebase/firebaseStore";
 import "../assets/styles/MyTripsPage.css";
-
-/* import logo from "../assets/images/AdventourLogo.svg";
-import profil from "../assets/images/LisaProfil.jpg"; */
 
 const MyTripsPage = ({ userId, setCurrentTripId }) => {
   const [trips, setTrips] = useState([]);
@@ -83,19 +84,23 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
     }
   };
 
+  const handleDeleteTrip = async (tripId) => {
+    try {
+      await deleteTrip(tripId);
+      setTrips((prevTrips) => prevTrips.filter((trip) => trip.id !== tripId));
+    } catch (error) {
+      console.error("Error deleting trip:", error);
+    }
+  };
+
   const handleGeneratePerfectMatch = (tripId) => {
     console.log(`Generating Perfect Match for trip: ${tripId}`);
-
-    // Set the current trip ID in context
     setCurrentTripId(tripId);
-
-    // Navigate to the Trip Detail Page
     navigate(`/trip-detail/${tripId}`);
   };
 
   return (
     <div className="my-trips-page">
-      { /* <Navbar logoSrc={logo} profilePicSrc={profil} /> */}
       <div className="trips-container">
         <h1>My Trips</h1>
         {loading ? (
@@ -123,7 +128,12 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
                       : "No end date"}
                   </p>
                 </div>
-
+                <button
+                  className="delete-button"
+                  onClick={() => handleDeleteTrip(trip.id)}
+                >
+                  🗑️
+                </button>
                 {trip.userDetails && (
                   <div className="trip-users">
                     <h4>Users:</h4>
@@ -143,7 +153,6 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
                     </ul>
                   </div>
                 )}
-
                 {trip.allUsersCompleted && (
                   <button
                     className="button-generate-match"

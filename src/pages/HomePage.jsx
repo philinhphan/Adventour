@@ -27,7 +27,7 @@ const HomePage = ({ backgroundImage, userName }) => {
         backgroundImage: `url(${backgroundImage})`, // Set background image
       }}
     >
-       {/* Navbar component */}
+      {/* Navbar component */}
       {/* <Navbar logoSrc={logo} profilePicSrc={profil} /> */}
       <div className="home-page-content">
         <h1>

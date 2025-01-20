@@ -39,7 +39,7 @@
 
 /* Darken Back of the Card */
 .card-back .card-image-container::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -60,26 +60,55 @@
 }
 
 /* Swipe Animations */
-@keyframes swipe-left {
+
+/* Dislike Animation */
+@keyframes swipe-dislike {
   to {
     transform: translateX(-100%) rotate(-20deg);
     opacity: 0;
   }
 }
 
-@keyframes swipe-right {
+/* Like Animation */
+@keyframes swipe-like {
   to {
     transform: translateX(100%) rotate(20deg);
     opacity: 0;
   }
 }
 
-.swipe-left {
-  animation: swipe-left 0.5s ease forwards;
+/* Superlike Animation */
+@keyframes swipe-superlike {
+  to {
+    transform: translateY(-100%) rotate(0deg);
+    opacity: 0;
+  }
 }
 
-.swipe-right {
-  animation: swipe-right 0.5s ease forwards;
+/* Indifferent Animation */
+@keyframes swipe-indifferent {
+  to {
+    transform: translateY(100%) rotate(0deg);
+    opacity: 0;
+  }
+}
+
+/* Animation Classes */
+/* Adjusted Animation Duration for Better Experience */
+.swipe-dislike {
+  animation: swipe-dislike 0.5s ease forwards; /* Match duration */
+}
+
+.swipe-like {
+  animation: swipe-like 0.5s ease forwards;
+}
+
+.swipe-superlike {
+  animation: swipe-superlike 0.5s ease forwards;
+}
+
+.swipe-indifferent {
+  animation: swipe-indifferent 0.5s ease forwards;
 }
 
 /* Image Styling */
@@ -108,7 +137,11 @@
   width: 100%;
   height: 100%;
   border-radius: 16px;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 22%, rgba(0, 0, 0, 0) 50%);
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.7) 22%,
+    rgba(0, 0, 0, 0) 50%
+  );
   z-index: 1; /* Gradient is above the image but below content */
   pointer-events: none; /* Prevent interactions with the gradient */
 }
@@ -153,14 +186,14 @@
 }
 
 .card-back-title {
-  font-size: 2.0rem;
+  font-size: 2rem;
   font-weight: bold;
   margin-bottom: 10px;
 }
 
 .card-back-text {
   font-size: 1.1rem;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-weight: 500;
   line-height: 1.5;
   margin-right: 20px;
@@ -187,28 +220,6 @@
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
   border: none;
   transition: transform 0.2s ease;
-}
-
-/* Hover animation */
-.swipe-buttons button:hover {
-  transform: scale(1.2);
-}
-
-/* Pop animation for active button */
-.swipe-buttons button.button-pressed {
-  animation: pop 0.2s ease-out;
-}
-
-@keyframes pop {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.5);
-  }
-  0% {
-    transform: scale(1);
-  }
 }
 
 /* Button Icon */

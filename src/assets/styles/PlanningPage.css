@@ -1,3 +1,5 @@
+/* PlanningPage.css */
+
 .planning-container {
   min-height: 100vh;
   display: flex;
@@ -81,22 +83,29 @@
   padding: 8px 10px;
   width: 105px;
 }
+
 .date-box input,
 .budget-box input {
-  color: black; /* Set text color to black */
-  }
+  color: black;
+}
 
-  input[type="date"],
-  input[type="number"],
-  input.text-input {
-    font-family: Arial, sans-serif; /* Consistent font-family */
-    font-size: 15px; /* Consistent font-size */
-    font-weight: 540;
-    color: rgba(0, 0, 0, 0.774); /* Text color */
-    padding: 10px; /* Consistent padding */
-    border: 1px solid #ddd; /* Consistent border */
-    background-color: white; /* Ensure contrast */
-    box-sizing: border-box; /* Prevent padding issues */
-    width: 100%; /* Optional: Make input width consistent */
-  }  
+input[type="date"],
+input[type="number"],
+input.text-input {
+  font-family: Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 540;
+  color: rgba(0, 0, 0, 0.774);
+  padding: 10px;
+  border: 1px solid #ddd;
+  background-color: white;
+  box-sizing: border-box;
+  width: 100%;
+}
 
+/* Error message styling */
+.error-message {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 5px;
+}

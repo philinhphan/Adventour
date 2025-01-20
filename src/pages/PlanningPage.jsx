@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../assets/styles/App.css";
 import "../assets/styles/PlanningPage.css";
@@ -7,9 +7,6 @@ import { addTrip, linkTripToUser } from "../firebase/firebaseStore";
 
 import InputField from "../components/FormElements/InputField";
 import Button from "../components/Button/Button";
-
-/* import logo from "../assets/images/AdventourLogo.svg";
-import profil from "../assets/images/LisaProfil.jpg"; */
 import budgetIcon from "../assets/icons/Budget.svg";
 import dateIcon from "../assets/icons/Date.svg";
 
@@ -22,10 +19,63 @@ const PlanningPage = ({ userId, setCurrentTripId }) => {
     budgetMax: "",
     dateFlexibility: "exact",
   });
+  const [isEdited, setIsEdited] = useState(false);
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const { updateTripDetails } = useTripContext();
 
+  const validateInputs = () => {
+    const newErrors = {};
+
+    // Validate trip name (mandatory, alphanumeric)
+    if (!tripDetails.name.trim()) {
+      newErrors.name = "Trip name is required.";
+    } else if (!/^[a-zA-Z0-9\s]+$/.test(tripDetails.name)) {
+      newErrors.name = "Trip name can only contain letters and numbers.";
+    }
+
+    // Validate dates (mandatory unless flexible)
+    if (tripDetails.dateFlexibility !== "flexible") {
+      if (!tripDetails.dateStart) {
+        newErrors.dateStart = "Start date is required.";
+      }
+      if (!tripDetails.dateEnd) {
+        newErrors.dateEnd = "End date is required.";
+      }
+      if (
+        tripDetails.dateStart &&
+        tripDetails.dateEnd &&
+        new Date(tripDetails.dateStart) > new Date(tripDetails.dateEnd)
+      ) {
+        newErrors.dateEnd = "End date must be after the start date.";
+      }
+    }
+
+    // Validate budget (optional but must be numbers and min < max)
+    if (tripDetails.budgetMin && isNaN(tripDetails.budgetMin)) {
+      newErrors.budgetMin = "Minimum budget must be a number.";
+    }
+    if (tripDetails.budgetMax && isNaN(tripDetails.budgetMax)) {
+      newErrors.budgetMax = "Maximum budget must be a number.";
+    }
+    if (
+      tripDetails.budgetMin &&
+      tripDetails.budgetMax &&
+      parseFloat(tripDetails.budgetMin) > parseFloat(tripDetails.budgetMax)
+    ) {
+      newErrors.budgetMax =
+        "Maximum budget must be greater than minimum budget.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0; // Return true if no errors
+  };
+
   const saveTripDetails = async () => {
+    if (!validateInputs()) {
+      return; // Prevent save if validation fails
+    }
+
     try {
       const tripData = {
         name: tripDetails.name,
@@ -43,20 +93,13 @@ const PlanningPage = ({ userId, setCurrentTripId }) => {
       };
 
       if (userId) {
-        // Add trip to `trips` collection
         const tripId = await addTrip(tripData, userId);
-        // Link the trip ID to the user's document
-        // await linkTripToUser(userId, tripId);
-        // Dummy solution link trip to all our showcase users -> For Testing reason i commented other users out
         await linkTripToUser("smilla", tripId);
         await linkTripToUser("jannik", tripId);
-        await linkTripToUser("franzi", tripId);
-        await linkTripToUser("phi-linh", tripId);
-        //await linkTripToUser("initial", tripId);
 
-        // Update the current trip ID and context
         setCurrentTripId(tripId);
         updateTripDetails(tripDetails);
+        setIsEdited(false); // Reset unsaved changes
         navigate("/invite");
       } else {
         throw new Error("User ID is not available.");
@@ -66,13 +109,13 @@ const PlanningPage = ({ userId, setCurrentTripId }) => {
     }
   };
 
-  // Handle input change for form fields and update tripDetails state
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setTripDetails((prevDetails) => ({
       ...prevDetails,
       [name]: value,
     }));
+    setIsEdited(true);
   };
 
   const handleDateFlexibilityChange = (flexibility) => {
@@ -82,11 +125,11 @@ const PlanningPage = ({ userId, setCurrentTripId }) => {
       dateStart: flexibility === "flexible" ? "" : prevDetails.dateStart,
       dateEnd: flexibility === "flexible" ? "" : prevDetails.dateEnd,
     }));
+    setIsEdited(true);
   };
 
   return (
     <div className="planning-page">
-      { /* <Navbar logoSrc={logo} profilePicSrc={profil} /> */ }
       <div className="planning-container">
         <h1 className="title">Please specify your trip details</h1>
         <div className="planning-section">
@@ -98,6 +141,7 @@ const PlanningPage = ({ userId, setCurrentTripId }) => {
             value={tripDetails.name}
             onChange={handleInputChange}
           />
+          {errors.name && <p className="error-message">{errors.name}</p>}
           <div className="date-box">
             <label className="section-title">When do you plan to travel?</label>
             <img alt="dateIcon" src={dateIcon} className="date-icon" />
@@ -111,6 +155,7 @@ const PlanningPage = ({ userId, setCurrentTripId }) => {
                   onChange={handleInputChange}
                   disabled={tripDetails.dateFlexibility === "flexible"}
                 />
+
                 <InputField
                   label="End Date"
                   type="date"
@@ -120,6 +165,12 @@ const PlanningPage = ({ userId, setCurrentTripId }) => {
                   disabled={tripDetails.dateFlexibility === "flexible"}
                 />
               </div>
+              {errors.dateStart && (
+                <p className="error-message">{errors.dateStart}</p>
+              )}
+              {errors.dateEnd && (
+                <p className="error-message">{errors.dateEnd}</p>
+              )}
               <div className="date-flexibility">
                 <Button
                   label="Exact dates"
@@ -163,6 +214,7 @@ const PlanningPage = ({ userId, setCurrentTripId }) => {
                 value={tripDetails.budgetMin}
                 onChange={handleInputChange}
               />
+
               <InputField
                 label="Maximum Budget"
                 type="number"
@@ -172,6 +224,12 @@ const PlanningPage = ({ userId, setCurrentTripId }) => {
                 onChange={handleInputChange}
               />
             </div>
+            {errors.budgetMin && (
+              <p className="error-message">{errors.budgetMin}</p>
+            )}
+            {errors.budgetMax && (
+              <p className="error-message">{errors.budgetMax}</p>
+            )}
           </div>
         </div>
         <Button

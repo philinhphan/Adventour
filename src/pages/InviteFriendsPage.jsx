@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTripContext } from "../context/TripContext"; // Import TripContext
 import Button from "../components/Button/Button";
 import "../assets/styles/InviteFriends.css";
 
-/* import logo from "../assets/images/AdventourLogo.svg";
-import profil from "../assets/images/LisaProfil.jpg"; */
-
+// Import icons
 import whatsapp from "../assets/icons/whatsapp.svg";
 import Instagram from "../assets/icons/Instagram.svg";
 import More from "../assets/icons/More.svg";
@@ -15,15 +14,37 @@ import LinkedIn from "../assets/icons/LinkedIn.svg";
 import Snapchat from "../assets/icons/Snapchat.svg";
 import TikTok from "../assets/icons/TikTok.svg";
 
-// **TODO** In the future, we have to generate uuids for trips and append them to the url
-// With this id other users can then access trip information from firebase and join the trip
-
 const InviteFriendsPage = () => {
+  const { tripData } = useTripContext(); // Access trip data from context
   const shareLink = "https://adventour-app.com/share";
-  const [customMessage, setCustomMessage] = useState(
-    `Hey my lovely girls! 💕\nIt’s time to start planning our amazing trip! ✈️✨\nCan’t wait to create unforgettable memories together!\nLet’s make this adventure one for the books! 🌍💖\nWho’s in? 😍\n\nTo join our trip, follow the link:`
-  );
+
+  // Generate trip details for the custom message
+  const tripName = tripData.tripDetails.name || "our amazing trip";
+  const dateStart = tripData.tripDetails.dateStart || "unspecified start date";
+  const dateEnd = tripData.tripDetails.dateEnd || "unspecified end date";
+  const dateFlexibility =
+    tripData.tripDetails.dateFlexibility === "flexible"
+      ? "The trip date is flexible,"
+      : `from ${dateStart} to ${dateEnd}`;
+  const budget =
+    tripData.tripDetails.budgetMin && tripData.tripDetails.budgetMax
+      ? `with a budget range of €${tripData.tripDetails.budgetMin} - €${tripData.tripDetails.budgetMax}`
+      : tripData.tripDetails.budgetMin
+      ? `with a minimum budget of €${tripData.tripDetails.budgetMin}`
+      : tripData.tripDetails.budgetMax
+      ? `with a maximum budget of €${tripData.tripDetails.budgetMax}`
+      : "with no specific budget inputted";
+
+  const defaultMessage = `Hey my lovely friends! 💕\nLet's plan our amazing trip "${tripName}" ${dateFlexibility} ${budget}.\nCan’t wait to create unforgettable memories together! ✈️✨\nLet’s make this adventure one for the books! 🌍💖 Who’s in? 😍\nFollow the link to join:`;
+
+  const [customMessage, setCustomMessage] = useState(defaultMessage);
   const [showPopup, setShowPopup] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Update the custom message whenever trip data changes
+    setCustomMessage(defaultMessage);
+  }, [defaultMessage]);
 
   const handleWhatsAppShare = () => {
     const whatsappURL = `whatsapp://send?text=${encodeURIComponent(
@@ -65,11 +86,13 @@ const InviteFriendsPage = () => {
     alert("TikTok sharing is not directly supported via web. Share manually!");
   };
 
-  const navigate = useNavigate();
+  const handleCopyMessage = () => {
+    navigator.clipboard.writeText(`${customMessage} ${shareLink}`);
+    alert("Message copied to clipboard!"); // Alert user after copying
+  };
 
   return (
     <div className="invite-friends-page">
-      {/* <Navbar logoSrc={logo} profilePicSrc={profil} /> */}
       <div className="invite-container">
         <h1>Do you want to invite friends?</h1>
         <h3>Your AdvenTour awaits!</h3>
@@ -94,9 +117,7 @@ const InviteFriendsPage = () => {
             <Button
               label="Copy Message"
               styleType="secondary"
-              onClick={() =>
-                navigator.clipboard.writeText(`${customMessage} ${shareLink}`)
-              }
+              onClick={handleCopyMessage}
             />
           </div>
 
@@ -126,7 +147,6 @@ const InviteFriendsPage = () => {
               onClick={handleMailShare}
               style={{ cursor: "pointer" }}
             />
-            {/* More Options Icon */}
             <img
               alt="More"
               src={More}
@@ -136,7 +156,6 @@ const InviteFriendsPage = () => {
             />
           </div>
 
-          {/* Popup Modal */}
           {showPopup && (
             <div className="popup-overlay">
               <div className="popup-content">

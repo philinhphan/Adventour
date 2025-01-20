@@ -8,14 +8,11 @@ import superlikeIcon from "../../assets/icons/superlike.svg";
 import indifferentIcon from "../../assets/icons/indifferent.svg";
 import likeIcon from "../../assets/icons/like.svg";
 
-const Card = ({ suggestion, onSwipe }) => {
-  const [isFlipped, setIsFlipped] = useState(false);
+const Card = ({ suggestion, onSwipe, isLastCard, onLastSwipe }) => {
   const [swipeDirection, setSwipeDirection] = useState(null);
   const [buttonPressed, setButtonPressed] = useState(null);
-
-  const handleFlip = () => {
-    setIsFlipped(!isFlipped);
-  };
+  const [isHidden, setIsHidden] = useState(false); // State to hide the card
+  const [isFlipped, setIsFlipped] = useState(false); // State to track flip
 
   const handleSwipe = (direction) => {
     if (!suggestion) {
@@ -24,20 +21,23 @@ const Card = ({ suggestion, onSwipe }) => {
     }
 
     setSwipeDirection(direction);
-
     setButtonPressed(direction);
-    setTimeout(() => setButtonPressed(null), 200);
 
+    // Trigger callback after animation with delay
     setTimeout(() => {
-      onSwipe(direction, suggestion);
-      setSwipeDirection(null);
-    }, 500);
+      if (isLastCard) {
+        setIsHidden(true); // Hide the card immediately
+        onLastSwipe(direction, suggestion); // Trigger last swipe callback
+      } else {
+        onSwipe(direction, suggestion);
+      }
+      setSwipeDirection(null); // Reset swipe direction after animation
+      setButtonPressed(null); // Reset button state
+    }, 1000); // Animation + delay (e.g., 1 second total)
   };
 
-  const handleButtonClick = (direction) => {
-    setButtonPressed(direction);
-    setTimeout(() => setButtonPressed(null), 200);
-    handleSwipe(direction);
+  const handleFlip = () => {
+    setIsFlipped(!isFlipped); // Toggle the flip state
   };
 
   const swipeHandlers = useSwipeable({
@@ -47,32 +47,27 @@ const Card = ({ suggestion, onSwipe }) => {
     onSwipedDown: () => handleSwipe("indifferent"),
   });
 
-  if (!suggestion) {
-    return <div>No suggestion available</div>;
+  if (isHidden || !suggestion) {
+    return null; // Hide the card when `isHidden` is true
   }
 
   return (
     <div className="card-container">
       <div
-        className={`card ${swipeDirection ? `swipe-${swipeDirection}` : ""} ${
-          isFlipped ? "is-flipped" : ""
+        className={`card ${isFlipped ? "is-flipped" : ""} ${
+          swipeDirection ? `swipe-${swipeDirection}` : ""
         }`}
         {...swipeHandlers}
       >
         {/* Front Side */}
         <div className="card-front" onClick={handleFlip}>
           <div className="card-image-container">
-            {/* Image */}
             <img
               src={suggestion.image}
               alt={suggestion.name}
               className="card-image"
             />
-
-            {/* Gradient Overlay */}
             <div className="card-gradient-overlay"></div>
-
-            {/* Front Content */}
             <div className="card-content">
               <h3 className="card-name">{suggestion.name}</h3>
               <div className="card-tags">
@@ -92,7 +87,7 @@ const Card = ({ suggestion, onSwipe }) => {
             <img
               src={suggestion.image}
               alt={suggestion.name}
-              className="card-image card-image-darkened"
+              className="card-image"
             />
             <div className="card-back-content">
               <h3 className="card-back-title">{suggestion.name}</h3>
@@ -106,25 +101,25 @@ const Card = ({ suggestion, onSwipe }) => {
       <div className="swipe-buttons">
         <button
           className={buttonPressed === "dislike" ? "button-pressed" : ""}
-          onClick={() => handleButtonClick("dislike")}
+          onClick={() => handleSwipe("dislike")}
         >
           <img src={dislikeIcon} alt="Dislike" />
         </button>
         <button
           className={buttonPressed === "indifferent" ? "button-pressed" : ""}
-          onClick={() => handleButtonClick("indifferent")}
+          onClick={() => handleSwipe("indifferent")}
         >
           <img src={indifferentIcon} alt="Indifferent" />
         </button>
         <button
           className={buttonPressed === "superlike" ? "button-pressed" : ""}
-          onClick={() => handleButtonClick("superlike")}
+          onClick={() => handleSwipe("superlike")}
         >
           <img src={superlikeIcon} alt="Superlike" />
         </button>
         <button
           className={buttonPressed === "like" ? "button-pressed" : ""}
-          onClick={() => handleButtonClick("like")}
+          onClick={() => handleSwipe("like")}
         >
           <img src={likeIcon} alt="Like" />
         </button>

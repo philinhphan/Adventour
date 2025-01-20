@@ -100,3 +100,16 @@
 .button-generate-match:hover {
   background-color: #218838;
 }
+
+.delete-button {
+  background: none;
+  border: none;
+  color: red;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  transform: scale(1.2);
+  color: darkred;
+}

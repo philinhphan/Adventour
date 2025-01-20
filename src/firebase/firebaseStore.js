@@ -3,6 +3,7 @@ import {
   collection,
   addDoc,
   getDoc,
+  deleteDoc,
   doc,
   updateDoc,
   query,
@@ -162,6 +163,36 @@ export const getUserTrips = async (userId) => {
     return trips;
   } catch (error) {
     console.error("Error retrieving user trips:", error);
+    throw error;
+  }
+};
+
+export const deleteTrip = async (tripId) => {
+  try {
+    const tripRef = doc(db, "trips", tripId);
+
+    // Query all users who have this trip in their `trips` array
+    const usersQuery = query(
+      collection(db, "users"),
+      where("trips", "array-contains", tripRef)
+    );
+    const usersSnapshot = await getDocs(usersQuery);
+
+    for (const userDoc of usersSnapshot.docs) {
+      const userRef = doc(db, "users", userDoc.id);
+      await updateDoc(userRef, {
+        trips: usersSnapshot.docs[0]
+          .data()
+          .trips.filter((ref) => ref.id !== tripId),
+      });
+    }
+
+    // Finally, delete the trip document
+    await deleteDoc(tripRef);
+
+    console.log(`Successfully deleted trip: ${tripId}`);
+  } catch (error) {
+    console.error("Error deleting trip:", error);
     throw error;
   }
 };

@@ -1,14 +1,15 @@
+import { db } from "../firebase/firebase"; 
+import { doc, getDoc } from "firebase/firestore";
+
 const API_KEY = process.env.REACT_APP_PERPLEXITY_API_KEY;
 const PEXELS_API_KEY = process.env.REACT_APP_PEXELS_API_KEY;
-
-
 
 export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
   try {
     // 1) Build the request payload for Perplexity API
     const perplexityURL = "https://api.perplexity.ai/chat/completions";
     const perplexityMessages = [
-      { role: "system", content: "Be precise and concise." },
+      { role: "system", content: "You are an expert at recommending trip suggestions matching different needs of users in a group" },
       {
         role: "user",
         // Ask Perplexity to respond ONLY with a JSON array of suggestions
@@ -83,7 +84,7 @@ No extra commentary, no code fences, no markdown blocks. Only a raw JSON array.`
     const data = await response.json();
 
     // 3) Parse the raw JSON array from the response
-    //    (We assume Perplexity returns valid JSON in data.choices[0].message.content) else TODO add parsing error handling to only remove unncessary text around JSON array
+    //    (We assume Perplexity returns valid JSON in data.choices[0].message.content) 
     
     let content = data.choices?.[0]?.message?.content || "";
 
@@ -117,88 +118,109 @@ No extra commentary, no code fences, no markdown blocks. Only a raw JSON array.`
   }
 };
 
-export const fetchPerfectMatch = async (data) => {
-  // data = { userSwipes: [...], simulatedFriends: { friend1: [...], friend2: [...], ... } }
+export const fetchPerfectMatch = async (tripId) => {
+  try {
+    // 1) Fetch trip doc from Firestore to gather all real user preferences & swipes
+    const tripRef = doc(db, "trips", tripId);
+    const tripSnap = await getDoc(tripRef);
+    if (!tripSnap.exists()) {
+      throw new Error(`Trip with ID ${tripId} not found in Firestore.`);
+    }
+    const tripData = tripSnap.data();
 
-  console.log("Simulated API Request with Data:", data);
+    // 'preferences' is an array with objects like { creatorId, preferences: [...] }
+    const allPreferences = tripData.preferences || [];
 
-  // 1) Combine user swipes + all friend swipes into a single array
-  const allSwipes = [...data.userSwipes];
-  if (data.simulatedFriends) {
-    Object.values(data.simulatedFriends).forEach((friendSwipes) => {
-      allSwipes.push(...friendSwipes);
-    });
-  }
+    // 'suggestions' is an array with objects like { creatorId, answers: [...] }
+    // Each user might have different suggestions and different swipe answers
+    const allUserSuggestions = tripData.suggestions || [];
 
-  // 2) Create a map to aggregate likes for each trip ID
-  const aggregator = {}; 
-  // aggregator[id] = { id, name, tags, description, likeCount, superlikeCount }
+    // 2) Build a single prompt that includes all preferences & swipes. 
+    //    Let Perplexity figure out the best final suggestion.
+    const perplexityMessages = [
+      {
+        role: "system",
+        content: "You are an expert at recommending trip suggestions matching different needs of users in a group."
+      },
+      {
+        role: "user",
+        content: `We have a group trip. The Firestore data is:
+        Preferences: ${JSON.stringify(allPreferences)}
+        Swipes: ${JSON.stringify(allUserSuggestions)}
+        We want one final best match (the single best suggestion) for the entire group. 
+        Return it ONLY as a valid JSON object with the following fields:
+        {
+          "name": "...",
+          "tags": ["..."],
+          "description": "..."
+        }
 
-  // 3) Populate aggregator
-  for (const swipeObj of allSwipes) {
-    const { id, name, tags, description, swipe } = swipeObj;
-    if (!aggregator[id]) {
-      aggregator[id] = {
-        id,
-        name,
-        tags,
-        description,
-        likeCount: 0,
-        superlikeCount: 0,
-      };
+        E.g.:
+        {
+          name: "Barcelona, Spain",
+          tags: ["sightseeing", "shopping", "beach"],
+          description: "Where culture meets coastline. Explore Gaudí’s wonders.",
+        }
+        No extra commentary, no code fences, no markdown blocks. Only a raw JSON object.`
+      }
+    ];
+
+    // 3) Make the API call to Perplexity
+    const perplexityURL = "https://api.perplexity.ai/chat/completions";
+    const perplexityRequestOptions = {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "llama-3.1-sonar-small-128k-online",
+        messages: perplexityMessages,
+        return_images: false,
+        return_related_questions: false,
+      }),
+    };
+
+    const response = await fetch(perplexityURL, perplexityRequestOptions);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch perfect match from Perplexity: ${response.status}`);
+    }
+    const data = await response.json();
+
+    // 4) Parse JSON from the returned content
+    let content = data.choices?.[0]?.message?.content || "";
+    const startIndex = content.indexOf("{");
+    const endIndex = content.lastIndexOf("}");
+
+    if (startIndex === -1 || endIndex === -1 || endIndex < startIndex) {
+      console.error("Could not find a valid JSON object in the response text:", content);
+      throw new Error("No valid JSON object found in the response");
     }
 
-    if (swipe === "like" || swipe === "superlike") {
-      aggregator[id].likeCount += 1;
+    const jsonString = content.substring(startIndex, endIndex + 1);
+
+    let finalMatch;
+    try {
+      finalMatch = JSON.parse(jsonString);
+    } catch (parseError) {
+      console.error("Error parsing perfect match from Perplexity:", parseError);
+      throw new Error("Error parsing perfect match from Perplexity");
     }
-    if (swipe === "superlike") {
-      aggregator[id].superlikeCount += 1;
-    }
+
+    console.log("Perfect match from Perplexity:", finalMatch);
+    return finalMatch;
+  } catch (error) {
+    console.error("API Error (fetchPerfectMatch):", error);
+    throw error;
   }
 
-  // Convert aggregator to array
-  const aggregatorArray = Object.values(aggregator);
-  if (!aggregatorArray.length) {    // TODO find solution, e.g. return a default suggestion / error message to user
-    console.error("No swipes found for perfect match calculation.");
-    throw new Error("No swipes found");
-  }
-
-  // 4) Find the item(s) with the maximum likeCount
-  const maxLikeCount = Math.max(...aggregatorArray.map((obj) => obj.likeCount));
-  let topCandidates = aggregatorArray.filter(
-    (obj) => obj.likeCount === maxLikeCount
-  );
-
-  // If there's exactly one top candidate, return it
-  if (topCandidates.length === 1) {
-    return topCandidates[0];
-  }
-
-  // Otherwise, check superlikeCount among top candidates
-  const maxSuperlikeCount = Math.max(
-    ...topCandidates.map((obj) => obj.superlikeCount)
-  );
-  let superlikeCandidates = topCandidates.filter(
-    (obj) => obj.superlikeCount === maxSuperlikeCount
-  );
-
-  // If there's exactly one among the superlike candidates, return it
-  if (superlikeCandidates.length === 1) {
-    return superlikeCandidates[0];
-  }
-
-  // If still tied, pick randomly among the last tie group
-  const randomIndex = Math.floor(Math.random() * superlikeCandidates.length);
-  return superlikeCandidates[randomIndex];
-
-  // Uncomment the following for a successful response simulation
-  // return {
-  //   name: "Kyoto, Japan",
-  //   description: "A serene blend of ancient traditions and breathtaking landscapes.",
-  // };
+  //  Uncomment the following for a successful response simulation
+  //  return {
+  //         name: "Barcelona, Spain",
+  //         tags: ["sightseeing", "shopping", "beach"],
+  //         description: "Where culture meets coastline. Explore Gaudí’s wonders.",
+  //         }
 };
-
-
 
 
 

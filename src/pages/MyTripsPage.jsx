@@ -6,6 +6,7 @@ import {
   deleteTrip,
 } from "../firebase/firebaseStore";
 import "../assets/styles/MyTripsPage.css";
+import barcelona from "../assets/images/barcelona.jpg";
 
 const MyTripsPage = ({ userId, setCurrentTripId }) => {
   const [trips, setTrips] = useState([]);
@@ -101,18 +102,26 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
 
   return (
     <div className="my-trips-page">
+      <div className="trip-header">
+        <h1>Overview of my Trips.</h1> {/* NEU */}
+        <p>Let’s relive the unique magic of your adventures. Whether it’s exploring new destinations or
+          revisiting old favorites.</p> {/* NEU */}
+      </div>
+
       <div className="trips-container">
-        <h1>My Trips</h1>
+      <h3>My Trips</h3>
         {loading ? (
           <p>Loading your trips...</p>
         ) : trips.length > 0 ? (
           <ul className="trip-list">
             {trips.map((trip) => (
-              <li key={trip.id}>
-                <div onClick={() => handleTripClick(trip)}>
+              <li key={trip.id} className="trip-box">
+              <div className="trip-details" onClick={() => handleTripClick(trip)}>
+              <img src={barcelona} alt={barcelona} />
+              {/* <img src={trip.details.image} alt={trip.name} /> */}
                   <h3>{trip.name}</h3>
                   <p>
-                    Start:{" "}
+                    Starts on{" "}
                     {trip.details?.start_date
                       ? new Date(
                           trip.details.start_date.toDate()
@@ -120,23 +129,16 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
                       : "No start date"}
                   </p>
                   <p>
-                    End:{" "}
+                    Until{" "}
                     {trip.details?.end_date
                       ? new Date(
                           trip.details.end_date.toDate()
                         ).toLocaleDateString()
                       : "No end date"}
                   </p>
-                </div>
-                <button
-                  className="delete-button"
-                  onClick={() => handleDeleteTrip(trip.id)}
-                >
-                  🗑️
-                </button>
                 {trip.userDetails && (
                   <div className="trip-users">
-                    <h4>Users:</h4>
+                    <h4>Participants</h4>
                     <ul>
                       {trip.userDetails.map((user) => (
                         <li
@@ -153,6 +155,15 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
                     </ul>
                   </div>
                 )}
+                </div>
+                <div className="trip-actions">
+                <button
+                  className="delete-button"
+                  onClick={() => handleDeleteTrip(trip.id)}
+                >
+                  🗑️
+                </button>
+
                 {trip.allUsersCompleted && (
                   <button
                     className="button-generate-match"
@@ -161,6 +172,7 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
                     Generate Perfect Match
                   </button>
                 )}
+                </div>
               </li>
             ))}
           </ul>

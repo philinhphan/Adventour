@@ -2,23 +2,43 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #f9f9f9;
   padding: 20px;
   font-family: Arial, sans-serif;
+  margin-top: 60px;
 }
 
 .trips-container {
-  max-width: 800px;
-  margin: 0 auto;
-  margin-top: 60px;
+  gap: 20px;
   text-align: center;
 }
 
-.trips-container h1 {
-  font-size: 2em;
-  font-weight: bold;
-  margin-bottom: 20px;
-  color: #333;
+.trip-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.trip-details {
+  flex-grow: 1;
+}
+
+.trip-details img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.trip-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .trip-list {
@@ -33,7 +53,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin: 15px 0;
   padding: 20px;
-  text-align: left;
+  text-align: center;
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
@@ -51,6 +71,65 @@
 .trip-list p {
   font-size: 0.9em;
   color: #666;
+}
+
+.trip-item {
+  margin-bottom: 20px;
+}
+
+.trip-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+  position: relative;
+}
+
+.trip-card:hover {
+  transform: translateY(-5px);
+}
+
+.trip-header h1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 15px;
+  font-size: 24px;
+}
+
+.trip-header p {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.trip-header img {
+  width: 90%;
+  max-height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.trip-info { 
+  padding: 10px;
+}
+
+.trip-info h3 { 
+  font-size: 18px;
+  margin: 5px 0;
+
+}
+
+.trip-info p { 
+  font-size: 14px;
+  color: #555;
 }
 
 .trip-users {
@@ -80,10 +159,20 @@
   color: #bbb;
 }
 
-.no-trips-message {
+.delete-button {
+  background: none;
+  border: none;
+  color: red;
   font-size: 1.2em;
-  color: #777;
-  margin-top: 50px;
+  cursor: pointer;
+  position: absolute;
+  right: 35px;
+  margin-top: 130px;
+}
+
+.delete-button:hover {
+  transform: scale(1.2);
+  color: darkred;
 }
 
 .button-generate-match {
@@ -101,15 +190,13 @@
   background-color: #218838;
 }
 
-.delete-button {
-  background: none;
-  border: none;
-  color: red;
+.no-trips-message {
   font-size: 1.2em;
-  cursor: pointer;
+  color: #777;
+  margin-top: 50px;
 }
-
-.delete-button:hover {
-  transform: scale(1.2);
-  color: darkred;
+.no-trips-message {
+  font-size: 16px;
+  color: #888;
+  text-align: center;
 }

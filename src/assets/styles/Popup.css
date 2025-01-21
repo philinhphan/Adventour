@@ -37,7 +37,7 @@
 }
 
 .popup p {
-  font-size: 1rem;
+  font-size: 16px;
   color: #555;
   line-height: 1.5;
 }
@@ -50,7 +50,7 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 1re16pxm;
   transition: background-color 0.3s;
 }
 

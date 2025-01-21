@@ -186,13 +186,13 @@
 }
 
 .card-back-title {
-  font-size: 2rem;
+  font-size: 1.5em;
   font-weight: bold;
   margin-bottom: 10px;
 }
 
 .card-back-text {
-  font-size: 1.1rem;
+  font-size: 16px;
   font-family: "Poppins", sans-serif;
   font-weight: 500;
   line-height: 1.5;

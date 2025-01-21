@@ -1,6 +1,5 @@
 /* General Page Styling */
 .trip-detail-page {
-  font-family: Arial, sans-serif;
   color: #333;
   line-height: 1.6;
   padding-top: 0; /* Remove padding for the fixed header */
@@ -87,7 +86,7 @@
 .trip-description {
   margin: 20px 0;
   text-align: justify;
-  font-size: 1em;
+  font-size: 16px;
 }
 
 /* Recommendations Section */
@@ -100,7 +99,7 @@
 }
 
 .recommendation-category h3 {
-  font-size: 1.3em;
+  font-size: 16px;
   font-style: italic;
   font-weight: 400;
   margin-bottom: -10px;
@@ -125,7 +124,7 @@
 }
 
 .recommendation-tile p {
-  font-size: 1em;
+  font-size: 16px;
   color: #555;
   font-weight: bold;
   margin: -10px;

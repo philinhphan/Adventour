@@ -35,7 +35,7 @@
 
 .login-container h1 {
   margin-bottom: -15px;
-  font-size: 2.4em;
+  font-size: 1.5em;
   font-weight: bold;
   color: #ff0055;
 }
@@ -43,31 +43,28 @@
 
 .login-container h2 { 
   margin-bottom: 40px; /* Slightly increase spacing for better readability */
-  font-size: 0.98em; /* Larger font size for emphasis */
+  font-size: 20px; /* Larger font size for emphasis */
   font-weight: 600; /* Semi-bold for a softer touch */
   color: #ffffff; /* A calming blue that evokes trust and the sky/ocean */
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Adds subtle depth */
-  font-family: 'Georgia', serif; /* A classic font for timeless appeal */
   line-height: 1.4; /* Improves spacing between lines */
   text-align: center; /* Center alignment for a quote-like appearance */
 }
 
 .login-container p {
   margin-bottom: 20px;
-  font-size: 1.15em;
+  font-size: 16px;
   font-weight: 500;
   color: #ffffff;
-  font-style: italic;
   text-align: center;
   margin-top: -25px;
 }
 
 .login-container p2 {
   margin-bottom: 20px;
-  font-size: 1.0em;
+  font-size: 16px;
   font-weight: 400;
   color: #ffffff;
-  font-style: italic;
   text-align: center;
   margin-top: -29px;
   letter-spacing: 1.3px;
@@ -92,7 +89,7 @@
 
 .form-group label {
   display: block;
-  font-size: 14px;
+  font-size: 16px;
   color: #fff;
   margin-bottom: 5px;
 }
@@ -100,7 +97,7 @@
 .form-group input {
   width: 100%;
   padding: 10px;
-  font-size: 14px;
+  font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 8px;
   box-sizing: border-box;

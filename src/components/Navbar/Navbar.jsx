@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../../assets/styles/Navbar.css";
 import { logout } from "../../firebase/firebaseAuth"; 
@@ -10,6 +10,7 @@ import { logout } from "../../firebase/firebaseAuth";
 const Navbar = ({ logoSrc, profilePicSrc }) => {
   const [showLogout, setShowLogout] = useState(false); // Zustand für das Logout-Menü
   const navigate = useNavigate();
+  const profileRef = useRef(null); 
 
   const handleLogout = async () => {
     try {
@@ -20,7 +21,23 @@ const Navbar = ({ logoSrc, profilePicSrc }) => {
       console.error("Logout failed:", error);
     }
   };
-  
+
+  useEffect(() => {
+    if (!showLogout) return; // Nur ausführen, wenn showLogout true ist
+
+    const handleClickOutside = (event) => {
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setShowLogout(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showLogout]);
+
   return (
     <div className="navbar">
       <Link to="/">
@@ -33,7 +50,7 @@ const Navbar = ({ logoSrc, profilePicSrc }) => {
           style={{ cursor: "pointer" }}
         />
       </Link>
-      <div className="navbar-profile">
+      <div className="navbar-profile" ref={profileRef}>
       <img
         src={profilePicSrc}
         alt="Profile"

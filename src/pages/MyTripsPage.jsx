@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { React, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   getUserTrips,
@@ -104,21 +104,27 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
     <div className="my-trips-page">
       <div className="trip-header">
         <h1>Overview of my Trips.</h1> {/* NEU */}
-        <p>Let’s relive the unique magic of your adventures. Whether it’s exploring new destinations or
-          revisiting old favorites.</p> {/* NEU */}
+        <p>
+          Let’s relive the unique magic of your adventures. Whether it’s
+          exploring new destinations or revisiting old favorites.
+        </p>{" "}
+        {/* NEU */}
       </div>
 
       <div className="trips-container">
-      <h3>My Trips</h3>
+        <h3>My Trips</h3>
         {loading ? (
           <p>Loading your trips...</p>
         ) : trips.length > 0 ? (
           <ul className="trip-list">
             {trips.map((trip) => (
               <li key={trip.id} className="trip-box">
-              <div className="trip-details" onClick={() => handleTripClick(trip)}>
-              <img src={barcelona} alt={barcelona} />
-              {/* <img src={trip.details.image} alt={trip.name} /> */}
+                <div
+                  className="trip-details"
+                  onClick={() => handleTripClick(trip)}
+                >
+                  <img src={barcelona} alt={barcelona} />
+                  {/* <img src={trip.details.image} alt={trip.name} /> */}
                   <h3>{trip.name}</h3>
                   <p>
                     Starts on{" "}
@@ -136,42 +142,42 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
                         ).toLocaleDateString()
                       : "No end date"}
                   </p>
-                {trip.userDetails && (
-                  <div className="trip-users">
-                    <h4>Participants</h4>
-                    <ul>
-                      {trip.userDetails.map((user) => (
-                        <li
-                          key={user.id}
-                          className={
-                            user.hasPreferences && user.hasSuggestions
-                              ? ""
-                              : "grayed-out"
-                          }
-                        >
-                          {user.name}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+                  {trip.userDetails && (
+                    <div className="trip-users">
+                      <h4>Participants</h4>
+                      <ul>
+                        {trip.userDetails.map((user) => (
+                          <li
+                            key={user.id}
+                            className={
+                              user.hasPreferences && user.hasSuggestions
+                                ? ""
+                                : "grayed-out"
+                            }
+                          >
+                            {user.name}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
                 <div className="trip-actions">
-                <button
-                  className="delete-button"
-                  onClick={() => handleDeleteTrip(trip.id)}
-                >
-                  🗑️
-                </button>
-
-                {trip.allUsersCompleted && (
                   <button
-                    className="button-generate-match"
-                    onClick={() => handleGeneratePerfectMatch(trip.id)}
+                    className="delete-button"
+                    onClick={() => handleDeleteTrip(trip.id)}
                   >
-                    Generate Perfect Match
+                    🗑️
                   </button>
-                )}
+
+                  {trip.allUsersCompleted && (
+                    <button
+                      className="button-generate-match"
+                      onClick={() => handleGeneratePerfectMatch(trip.id)}
+                    >
+                      Generate Perfect Match
+                    </button>
+                  )}
                 </div>
               </li>
             ))}

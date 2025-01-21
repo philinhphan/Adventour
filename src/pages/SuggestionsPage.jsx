@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { React, useState } from "react";
 import { useTripContext } from "../context/TripContext";
 import { fetchPerfectMatch } from "../api/tripApi";
 import Card from "../components/TinderCard/Card";

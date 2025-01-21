@@ -1,4 +1,4 @@
-import React from "react";
+import { React } from "react";
 import { useNavigate } from "react-router-dom";
 import Popup from "../components/PopUp/PopUp";
 import "../assets/styles/ProcessingPage.css";
@@ -21,7 +21,7 @@ const ProcessingPage = () => {
 
   return (
     <div className="processing-page">
-     { /* <Navbar logoSrc={logo} profilePicSrc={profil} /> */ }
+      {/* <Navbar logoSrc={logo} profilePicSrc={profil} /> */}
       <div className="processing-container" onClick={handleOutsideClick}>
         <div className="popup-wrapper">
           <Popup
@@ -30,7 +30,7 @@ const ProcessingPage = () => {
             subMessage="Your friends received a notification and were reminded to share their preferences for the upcoming trip. Come back later :)"
             buttonText="Go Back to Homepage"
             onButtonClick={() => navigate("/")}
-            />
+          />
         </div>
       </div>
     </div>

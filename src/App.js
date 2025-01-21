@@ -5,7 +5,7 @@ import InviteFriendsPage from "./pages/InviteFriendsPage";
 import PlanningPage from "./pages/PlanningPage";
 import PreferencesPage from "./pages/PreferencesPage";
 import SuggestionsPage from "./pages/SuggestionsPage";
-import EndScreenPage from "./pages/EndScreenPage";
+
 import ProcessingPage from "./pages/ProcessingPage";
 import MyTripsPage from "./pages/MyTripsPage";
 import ProcessingPageStart from "./pages/ProcessingPage Start";
@@ -27,7 +27,7 @@ function App() {
   const [currentTripId, setCurrentTripId] = useState(null); // State for storing the current trip ID
   /* const [profilePic, setProfilePic] = useState("/assets/images/defaultProfile.jpg"); // Standard-Profilbild */
 
- /* DOESNT WORK AT THE MOMENT! const getProfilePicture = (userName) => {
+  /* DOESNT WORK AT THE MOMENT! const getProfilePicture = (userName) => {
     const profilePictures = {
       Franzi: "/assets/images/Profil2.jpg", // Beispiel für User 2
       Smilla: "/assets/images/LisaProfil.jpg", // Beispiel für User 3
@@ -75,7 +75,6 @@ function App() {
             setUserName(userData.name || "User"); // Update userName with the name field
             setUserId(userData.id); // Store the user document ID
             /* setProfilePic(getProfilePicture(userData.name)); // Dynamisches Profilbild setzen */
-
           } else {
             console.warn("No user document found for the email", user.email);
           }
@@ -99,109 +98,104 @@ function App() {
 
   return (
     <div>
-
       <Router>
         <Navbar logoSrc={logo} profilePicSrc={profilePic} />
         <div className="content">
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <HomePage
-                  backgroundImage={backgroundImage}
-                  userName={userName} // Use userName state here
-                />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/invite"
-            element={
-              <ProtectedRoute>
-                <InviteFriendsPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/planning"
-            element={
-              <ProtectedRoute>
-                <PlanningPage
-                  setCurrentTripId={setCurrentTripId} // Pass state setter for currentTripId
-                  userId={userId} // Pass the user document ID
-                />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/preferences"
-            element={
-              <ProtectedRoute>
-                <PreferencesPage
-                  currentTripId={currentTripId}
-                  userId={userId}
-                />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/suggestions"
-            element={
-              <ProtectedRoute>
-                <SuggestionsPage
-                  currentTripId={currentTripId}
-                  userId={userId}
-                />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/processing"
-            element={
-              <ProtectedRoute>
-                <ProcessingPage currentTripId={currentTripId} userId={userId} />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/my-trips"
-            element={
-              <ProtectedRoute>
-                <MyTripsPage
-                  userId={userId}
-                  setCurrentTripId={setCurrentTripId}
-                />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/end"
-            element={
-              <ProtectedRoute>
-                <EndScreenPage currentTripId={currentTripId} />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/processingstart"
-            element={
-              <ProtectedRoute>
-                <ProcessingPageStart currentTripId={currentTripId} />
-              </ProtectedRoute>
-            }
-          />
-          {/* TODO PhiLinh: Change TripID once the API creates the trip */}
-          <Route
-            path="/trip-detail/:tripId"
-            element={
-              <ProtectedRoute>
-                <TripDetailPage />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <HomePage
+                    backgroundImage={backgroundImage}
+                    userName={userName} // Use userName state here
+                  />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/invite"
+              element={
+                <ProtectedRoute>
+                  <InviteFriendsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/planning"
+              element={
+                <ProtectedRoute>
+                  <PlanningPage
+                    setCurrentTripId={setCurrentTripId} // Pass state setter for currentTripId
+                    userId={userId} // Pass the user document ID
+                  />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/preferences"
+              element={
+                <ProtectedRoute>
+                  <PreferencesPage
+                    currentTripId={currentTripId}
+                    userId={userId}
+                  />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/suggestions"
+              element={
+                <ProtectedRoute>
+                  <SuggestionsPage
+                    currentTripId={currentTripId}
+                    userId={userId}
+                  />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/processing"
+              element={
+                <ProtectedRoute>
+                  <ProcessingPage
+                    currentTripId={currentTripId}
+                    userId={userId}
+                  />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/my-trips"
+              element={
+                <ProtectedRoute>
+                  <MyTripsPage
+                    userId={userId}
+                    setCurrentTripId={setCurrentTripId}
+                  />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/processingstart"
+              element={
+                <ProtectedRoute>
+                  <ProcessingPageStart currentTripId={currentTripId} />
+                </ProtectedRoute>
+              }
+            />
+            {/* TODO PhiLinh: Change TripID once the API creates the trip */}
+            <Route
+              path="/trip-detail/:tripId"
+              element={
+                <ProtectedRoute>
+                  <TripDetailPage />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
         </div>
       </Router>
     </div>

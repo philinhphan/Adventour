@@ -1,4 +1,4 @@
-import React from "react";
+import { React } from "react";
 import Button from "../components/Button/Button";
 import { useNavigate } from "react-router-dom";
 import "../assets/styles/HomePage.css";

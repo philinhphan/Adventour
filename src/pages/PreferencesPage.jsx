@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import { React, useState } from "react";
 import Slider from "react-slick";
 import Tile from "../components/Tile/Tile";
 import { useNavigate } from "react-router-dom";
 import "../assets/styles/Preferences.css";
 
 import { useTripContext } from "../context/TripContext";
-import { fetchSwipeSuggestions} from "../api/tripApi";
+import { fetchSwipeSuggestions } from "../api/tripApi";
 import { savePreferences } from "../firebase/firebaseStore";
 
 //TODO Design: Find better solution for image imports
@@ -75,7 +75,6 @@ const PreferencesPage = ({ currentTripId, userId }) => {
     }
   };
 
-
   // Handle save preferences button click
   const handleSavePreferences = async () => {
     navigate("/processingstart");
@@ -90,7 +89,7 @@ const PreferencesPage = ({ currentTripId, userId }) => {
       console.error("Error saving preferences:", error);
     }
     updatePreferences(preferences); // Update context with preferences
-    
+
     try {
       // 1) Fetch suggestions from Perplexity
       const rawSuggestions = await fetchSwipeSuggestions(
@@ -150,7 +149,7 @@ const PreferencesPage = ({ currentTripId, userId }) => {
 
   return (
     <div className="preferences-page">
-      { /* <Navbar logoSrc={logo} profilePicSrc={profil} /> */ }
+      {/* <Navbar logoSrc={logo} profilePicSrc={profil} /> */}
       <div className="preferences-container">
         <h1>Select general preferences</h1>
         <p className="hint">

@@ -1,4 +1,4 @@
-import React from "react";
+import { React } from "react";
 import Slider from "react-slick"; // For swipe functionality
 import "../assets/styles/TripDetailPage.css";
 
@@ -115,16 +115,18 @@ const TripDetailPage = ({ tripData }) => {
           <div className="recommendation-category">
             <h3>Accommodations</h3>
             <Slider {...sliderSettings}>
-              {trip.recommendations.accommodations.map((accommodation, index) => (
-                <div key={index} className="recommendation-tile">
-                  <img
-                    src={accommodation.image}
-                    alt={accommodation.name}
-                    className="recommendation-image"
-                  />
-                  <p>{accommodation.name}</p>
-                </div>
-              ))}
+              {trip.recommendations.accommodations.map(
+                (accommodation, index) => (
+                  <div key={index} className="recommendation-tile">
+                    <img
+                      src={accommodation.image}
+                      alt={accommodation.name}
+                      className="recommendation-image"
+                    />
+                    <p>{accommodation.name}</p>
+                  </div>
+                )
+              )}
             </Slider>
           </div>
         </div>

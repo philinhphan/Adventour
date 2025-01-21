@@ -20,6 +20,7 @@ const SuggestionsPage = ({ currentTripId, userId }) => {
       id: suggestion.id,
       name: suggestion.name,
       tags: suggestion.tags,
+      shortDescription: suggestion.shortDescription,
       description: suggestion.description,
       swipe: direction,
     };

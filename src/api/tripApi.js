@@ -9,47 +9,111 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
     // 1) Build the request payload for Perplexity API
     const perplexityURL = "https://api.perplexity.ai/chat/completions";
     const perplexityMessages = [
-      { role: "system", content: "You are an expert at recommending trip suggestions matching different needs of users in a group" },
+      { role: "system", content: "You are an expert at recommending trip suggestions matching certain user preferences" },
       {
         role: "user",
         // Ask Perplexity to respond ONLY with a JSON array of suggestions
-        content: `Generate about 3 suggestions for a trip with details: ${JSON.stringify(
+        content:                
+        `
+        <Task>
+        Generate 3 suggestions for a trip based on the following trip details and preferences:
+
+        1. Trip Details:       
+        ${JSON.stringify(
           tripDetails
-        )} and preferences: ${JSON.stringify(
+        )} 
+
+        2. Preferences: ${JSON.stringify(
           preferences
-        )}. Return them ONLY as a valid JSON array of objects. 
-Each object MUST have:
-[
-{
-  "name": "...",
-  "tags": ["..."],
-  "description": "..."
-}, 
-...
-]
+        )} 
 
-E.g.:
-[
-  {
-    name: "Barcelona, Spain",
-    tags: ["sightseeing", "shopping", "beach"],
-    description: "Where culture meets coastline. Explore Gaudí’s wonders.",
-  },
-  {
-    name: "Miami, USA",
-    tags: ["surfing", "shopping", "yachting"],
-    description:
-      "Dive into the glamour and experience Florida’s tropical vibes.",
-  },
-  {
-    name: "Kyoto, Japan",
-    tags: ["temples", "nature", "tradition"],
-    description:
-      "A serene blend of ancient traditions and breathtaking landscapes.",
-  },
-]
+        Return the suggestions ONLY as a valid JSON array of objects. No extra commentary, no code fences, no markdown blocks. Only a raw JSON array.
+        The JSON array and objects should look like:
+        [
+        {
+          "name": "...",
+          "tags": ["..."],
+          "shortDescription": "...",
+          "description": "..."
+        }, 
+        ...
+        ]
 
-No extra commentary, no code fences, no markdown blocks. Only a raw JSON array.`
+        For the suggestion of places respect the following rules:
+        - Provide places from all around the world
+        - Focus on places that are suitable for travelers and groups of friends.
+        - The places should be perfectly alligned with the given preferences.
+        - The given examples should be as diverse as possible and should include places from different
+        ccountries and enable doing different activities, still aligning with the preferences. 
+        - The places we want to travel to should also be perfectly aligned with the given trip details. So the date of travel and the given budget should fit to 
+        the given suggestion.
+        - For finding the right places to the given budget assume the following
+        things: 
+          - We always start our trip from Munich, Germany, so try to do an estimation of the travel costs to the suggested place based on the starting point
+          - Then try to align the preferences with the given budget and the duration
+          - Give us only realistic suggestions that can be done with the given budget and the given duration of the trip.
+
+
+
+        For every attribute in the suggestions respect the following rules:
+        1. name: 
+        - Provide for each place the name of the location and country it is in, separated by a comma, e.g.: Barcelona, Spain; Lapland, Finland
+        2. tags: 
+        - Provide 5 suitable tags that descibe the suggestion in the best possible way
+        - Limit each tag to 10 characters
+        3. shortDescription:
+        - Should cover the most important facts about the suggestion
+        - Should be formulated in a brief an catchy way covering up to 10 words, e.g.: "Where culture, beaches, and nightlife create epic adventures!
+        4. description:
+        - Consists of 2-3 sentences that describes the suggestion in an inspiring, personal, precise and cheeky way
+        - The text is targeted at young individuals aiming to go on a group trip. It should give a good impression
+        on what can be done and general summary of the suggestion. 
+
+        </Task>
+
+        <Examples>
+        [
+          {
+            name: "Barcelona, Spain",
+            tags: ["#Beaches #Culture #Nightlife #Food #Adventure"],
+            shortDescription: "Where culture, beaches, and nightlife create epic adventures!"
+            description: "Barcelona is the ultimate destination for your crew, offering
+            everything from sun-soaked beach days to jaw-dropping Gaudí architecture 
+            and nights that don’t stop until sunrise. Explore the vibrant Gothic Quarter,
+            feast on endless tapas, and catch golden hour at Park Güell for 
+            unforgettable views. It’s the perfect mix of culture, chaos, and coastal 
+            vibes, tailor-made for squad-level memories."
+
+        Tags:
+        #BeachVibes #GaudíDreamscape #EpicNightlife #FoodieHeaven #ArtAndAdventure",
+          },
+          {
+            name: "Miami, USA",
+            tags: ["#Beaches #Nightlife #Art #Food #Vibes"],
+            shortDescription: "Where sun, style, and nonstop fun collide effortlessly!"
+            description:
+              "Miami is a playground of golden beaches, vibrant nightlife, and bold flavors 
+              that will have your group living their best lives. Spend your days soaking up 
+              rays in South Beach, exploring the artsy Wynwood district, or feasting on Cuban 
+              sandwiches in Little Havana. When night falls, the city turns electric—perfect 
+              for dancing, rooftop cocktails, and making unforgettable squad memories.",
+          },
+          {
+            name: "Kyoto, Japan",
+            tags: [#Culture #Temples #Nature #Food #Zen],
+            shortDescription: "Where ancient traditions meet modern squad-worthy adventures!"
+            description:
+              "Kyoto is your gateway to Japan’s serene charm, perfect for a group 
+              craving culture and beauty. Wander through the mesmerizing Arashiyama 
+              Bamboo Grove, snap iconic photos at the red torii gates of Fushimi 
+              Inari Shrine, and enjoy a tea ceremony to experience timeless traditions. 
+              Whether you’re biking along picturesque streets or sampling  local 
+              delicacies, Kyoto blends zen and excitement for a trip your crew will 
+              never forget",
+          },
+        ]
+        </Examples>
+        `
       }
     ];
 
@@ -87,6 +151,7 @@ No extra commentary, no code fences, no markdown blocks. Only a raw JSON array.`
     //    (We assume Perplexity returns valid JSON in data.choices[0].message.content) 
     
     let content = data.choices?.[0]?.message?.content || "";
+    console.log(content);
 
     // a) Find the first '[' and the last ']' in the content
     const startIndex = content.indexOf("[");

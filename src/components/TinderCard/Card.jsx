@@ -77,6 +77,11 @@ const Card = ({ suggestion, onSwipe, isLastCard, onLastSwipe }) => {
                   </span>
                 ))}
               </div>
+              {suggestion.shortDescription && (
+                <p className="card-shortDescription">
+                  {suggestion.shortDescription}
+                </p>
+              )}
             </div>
           </div>
         </div>

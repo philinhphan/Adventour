@@ -106,6 +106,7 @@ const PreferencesPage = ({ currentTripId, userId }) => {
             name: s.name,
             image: imageUrl, // Use the real image from Pexels
             tags: s.tags,
+            shortDescription: s.shortDescription,
             description: s.description,
           };
         })

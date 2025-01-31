@@ -6,7 +6,7 @@ import {
   deleteTrip,
 } from "../firebase/firebaseStore";
 import { fetchPerfectMatch } from "../api/tripApi";
-import { useTripContext } from "../context/TripContext"; 
+import { useTripContext } from "../context/TripContext";
 import "../assets/styles/MyTripsPage.css";
 import barcelona from "../assets/images/barcelona.jpg";
 
@@ -15,8 +15,6 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { savePerfectMatch } = useTripContext();
-
-  
 
   useEffect(() => {
     const fetchTrips = async () => {
@@ -103,11 +101,11 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
     try {
       console.log(`Generating Perfect Match for trip: ${tripId}`);
       setCurrentTripId(tripId);
-  
+
       // Fetch the perfect match and store it
       const perfectMatch = await fetchPerfectMatch(tripId);
       savePerfectMatch(perfectMatch);
-  
+
       // Navigate to the trip details page
       navigate(`/trip-detail/${tripId}`);
     } catch (error) {
@@ -134,10 +132,7 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
           <ul className="trip-list">
             {trips.map((trip) => (
               <li key={trip.id} className="trip-box">
-                <div
-                  className="trip-details"
-                  onClick={() => handleTripClick(trip)}
-                >
+                <div className="trip-details">
                   <img src={barcelona} alt={barcelona} />
                   {/* <img src={trip.details.image} alt={trip.name} /> */}
                   <h3>{trip.name}</h3>
@@ -161,18 +156,32 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
                     <div className="trip-users">
                       <h4>Participants</h4>
                       <ul>
-                        {trip.userDetails.map((user) => (
-                          <li
-                            key={user.id}
-                            className={
-                              user.hasPreferences && user.hasSuggestions
-                                ? ""
-                                : "grayed-out"
-                            }
-                          >
-                            {user.name}
-                          </li>
-                        ))}
+                        {trip.userDetails.map((user) =>
+                          userId === user.id ? (
+                            <li
+                              onClick={() => handleTripClick(trip)}
+                              key={user.id}
+                              className={
+                                user.hasPreferences && user.hasSuggestions
+                                  ? ""
+                                  : "grayed-out"
+                              }
+                            >
+                              {user.name}
+                            </li>
+                          ) : (
+                            <li
+                              key={user.id}
+                              className={
+                                user.hasPreferences && user.hasSuggestions
+                                  ? ""
+                                  : "grayed-out"
+                              }
+                            >
+                              {user.name}
+                            </li>
+                          )
+                        )}
                       </ul>
                     </div>
                   )}

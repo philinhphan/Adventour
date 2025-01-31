@@ -77,49 +77,56 @@ const PreferencesPage = ({ currentTripId, userId }) => {
 
   // Handle save preferences button click
   const handleSavePreferences = async () => {
-    navigate("/processingstart");
+    // Once all async calls are successful, navigate to flight popup
+    navigate("/flight-popup");
     try {
       // Save preferences to Firestore
       await savePreferences(currentTripId, userId, preferences);
 
-      // Navigate to the processing page
-      // navigate("/processingstart"); TODO why called here again?
-    } catch (error) {
-      alert("Error saving preferences.");
-      console.error("Error saving preferences:", error);
-    }
-    updatePreferences(preferences); // Update context with preferences
+      // Update context with preferences
+      updatePreferences(preferences);
 
-    try {
-      // 1) Fetch suggestions from Perplexity
-      const rawSuggestions = await fetchSwipeSuggestions(
-        tripData.tripDetails,
-        preferences
-      );
+      let success = false;
+      let suggestionsWithExtras = [];
 
-      const suggestionsWithExtras = await Promise.all(
-        rawSuggestions.map(async (s, idx) => {
-          const imageUrl = await fetchPexelsImage(s.name);
-          return {
-            id: idx + 1,
-            name: s.name,
-            image: imageUrl, // Use the real image from Pexels
-            tags: s.tags,
-            shortDescription: s.shortDescription,
-            description: s.description,
-          };
-        })
-      );
+      while (!success) {
+        try {
+          // 1) Fetch suggestions from Perplexity
+          const rawSuggestions = await fetchSwipeSuggestions(
+            tripData.tripDetails,
+            preferences
+          );
+
+          suggestionsWithExtras = await Promise.all(
+            rawSuggestions.map(async (s, idx) => {
+              const imageUrl = await fetchPexelsImage(s.name);
+              return {
+                id: idx + 1,
+                name: s.name,
+                image: imageUrl, // Use the real image from Pexels
+                tags: s.tags,
+                shortDescription: s.shortDescription,
+                description: s.description,
+              };
+            })
+          );
+
+          // Mark as successful
+          success = true;
+        } catch (error) {
+          console.error("Error fetching suggestions, retrying...", error);
+        }
+      }
 
       // 2) Store them in global context
       updateSuggestions(suggestionsWithExtras);
       console.log("Suggestions stored:", suggestionsWithExtras);
 
-      // 3) Navigate to the Suggestions Page
+      // 3) Finally, navigate to the Suggestions Page
       navigate("/suggestions");
     } catch (error) {
-      alert("Error fetching suggestions.");
-      console.error("Error fetching suggestions:", error);
+      alert("Error saving preferences.");
+      console.error("Error saving preferences:", error);
     }
   };
 

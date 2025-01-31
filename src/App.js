@@ -8,7 +8,6 @@ import SuggestionsPage from "./pages/SuggestionsPage";
 
 import ProcessingPage from "./pages/ProcessingPage";
 import MyTripsPage from "./pages/MyTripsPage";
-import ProcessingPageStart from "./pages/ProcessingPage Start";
 import LoginPage from "./pages/LoginPage";
 import TripDetailPage from "./pages/TripDetailPage";
 import { auth, db, storage } from "./firebase/firebase";
@@ -18,6 +17,7 @@ import { queryDocuments } from "./firebase/firebaseStore"; // Import query funct
 import Navbar from "./components/Navbar/Navbar";
 import logo from "./assets/images/AdventourLogo.svg";
 import profilePic from "./assets/images/LisaProfil.jpg";
+import FlightPopup from "./pages/FlightPopup";
 
 function App() {
   const [firebaseReady, setFirebaseReady] = useState(false);
@@ -179,10 +179,10 @@ function App() {
             />
 
             <Route
-              path="/processingstart"
+              path="/flight-popup"
               element={
                 <ProtectedRoute>
-                  <ProcessingPageStart currentTripId={currentTripId} />
+                  <FlightPopup currentTripId={currentTripId} />
                 </ProtectedRoute>
               }
             />

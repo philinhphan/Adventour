@@ -1,21 +1,9 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { React } from "react";
+
 import "../assets/styles/FlightPopup.css";
 import plane from "../assets/icons/planeIcon.svg";
 
 const FlightPopup = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    // Delay navigation until animation is complete
-    const animationDuration = 5500; // Match this to the animation duration in CSS
-    const timer = setTimeout(() => {
-      navigate("/suggestions");
-    }, animationDuration);
-
-    return () => clearTimeout(timer); // Cleanup timeout on unmount
-  }, [navigate]);
-
   return (
     <div className="processing-page">
       <div className="popup">

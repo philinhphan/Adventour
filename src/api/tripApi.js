@@ -185,7 +185,7 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
 
 export const fetchPerfectMatch = async (tripId) => {
   try {
-    // 1) Fetch trip doc from Firestore to gather all real user preferences & swipes
+    // Fetch trip data from Firestore
     const tripRef = doc(db, "trips", tripId);
     const tripSnap = await getDoc(tripRef);
     if (!tripSnap.exists()) {
@@ -193,45 +193,38 @@ export const fetchPerfectMatch = async (tripId) => {
     }
     const tripData = tripSnap.data();
 
-    // 'preferences' is an array with objects like { creatorId, preferences: [...] }
+    // Gather all preferences and swipes from Firestore
     const allPreferences = tripData.preferences || [];
-
-    // 'suggestions' is an array with objects like { creatorId, answers: [...] }
-    // Each user might have different suggestions and different swipe answers
     const allUserSuggestions = tripData.suggestions || [];
 
-    // 2) Build a single prompt that includes all preferences & swipes. 
-    //    Let Perplexity figure out the best final suggestion.
+    // Construct the Perplexity API request
+    const perplexityURL = "https://api.perplexity.ai/chat/completions";
     const perplexityMessages = [
       {
         role: "system",
-        content: "You are an expert at recommending trip suggestions matching different needs of users in a group."
+        content: "You are an expert at recommending a trip that best matches all group preferences.",
       },
       {
         role: "user",
-        content: `We have a group trip. The Firestore data is:
-        Preferences: ${JSON.stringify(allPreferences)}
-        Swipes: ${JSON.stringify(allUserSuggestions)}
-        We want one final best match (the single best suggestion) for the entire group. 
-        Return it ONLY as a valid JSON object with the following fields:
+        content: `We need a final best trip match based on the following:
+        - Preferences: ${JSON.stringify(allPreferences)}
+        - Swipes: ${JSON.stringify(allUserSuggestions)}
+
+        Return ONLY as a valid JSON object:
         {
           "name": "...",
           "tags": ["..."],
-          "description": "..."
+          "description": "...",
+          "recommendations": {
+            "restaurants": [{"name": "..."}, ...],
+            "accommodations": [{"name": "..."}, ...]
+          },
+          "userPreferences": [{"userName": "...", "preferenceMatch": 100}, ...]
         }
-
-        E.g.:
-        {
-          name: "Barcelona, Spain",
-          tags: ["sightseeing", "shopping", "beach"],
-          description: "Where culture meets coastline. Explore Gaudí’s wonders.",
-        }
-        No extra commentary, no code fences, no markdown blocks. Only a raw JSON object.`
+        No extra commentary, no code fences, no markdown blocks. Only raw JSON.`
       }
     ];
 
-    // 3) Make the API call to Perplexity
-    const perplexityURL = "https://api.perplexity.ai/chat/completions";
     const perplexityRequestOptions = {
       method: "POST",
       headers: {
@@ -246,46 +239,64 @@ export const fetchPerfectMatch = async (tripId) => {
       }),
     };
 
+    // Call Perplexity API
     const response = await fetch(perplexityURL, perplexityRequestOptions);
     if (!response.ok) {
-      throw new Error(`Failed to fetch perfect match from Perplexity: ${response.status}`);
+      throw new Error(`Failed to fetch perfect match: ${response.status}`);
     }
     const data = await response.json();
 
-    // 4) Parse JSON from the returned content
+    // Parse response content
     let content = data.choices?.[0]?.message?.content || "";
     const startIndex = content.indexOf("{");
     const endIndex = content.lastIndexOf("}");
 
     if (startIndex === -1 || endIndex === -1 || endIndex < startIndex) {
-      console.error("Could not find a valid JSON object in the response text:", content);
       throw new Error("No valid JSON object found in the response");
     }
 
     const jsonString = content.substring(startIndex, endIndex + 1);
+    let finalMatch = JSON.parse(jsonString);
 
-    let finalMatch;
-    try {
-      finalMatch = JSON.parse(jsonString);
-    } catch (parseError) {
-      console.error("Error parsing perfect match from Perplexity:", parseError);
-      throw new Error("Error parsing perfect match from Perplexity");
-    }
+    // Fetch background image from Pexels
+    const pexelsImage = await fetchPexelsImage(finalMatch.name);
+    finalMatch.backgroundImage = pexelsImage;
 
-    console.log("Perfect match from Perplexity:", finalMatch);
+    console.log("Perfect Match from Perplexity:", finalMatch);
     return finalMatch;
   } catch (error) {
     console.error("API Error (fetchPerfectMatch):", error);
     throw error;
   }
-
-  //  Uncomment the following for a successful response simulation
-  //  return {
-  //         name: "Barcelona, Spain",
-  //         tags: ["sightseeing", "shopping", "beach"],
-  //         description: "Where culture meets coastline. Explore Gaudí’s wonders.",
-  //         }
 };
+
+const fetchPexelsImage = async (query) => {
+  try {
+    const url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(
+      query
+    )}&per_page=1`; // We only want the top match
+    const response = await fetch(url, {
+      headers: {
+        Authorization: process.env.REACT_APP_PEXELS_API_KEY, // stored in .env
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch from Pexels");
+    }
+
+    const data = await response.json();
+    // Return the 'large' image if we have results, else fallback to placeholder
+    if (data.photos && data.photos.length > 0) {
+      return data.photos[0].src.large2x || data.photos[0].src.large;
+    }
+    return "https://via.placeholder.com/300x600"; // fallback TODO: update placeholder image with good one
+  } catch (error) {
+    console.error("Pexels API error:", error);
+    return "https://via.placeholder.com/300x600"; // fallback TODO: update placeholder image with good one
+  }
+};
+
 
 
 

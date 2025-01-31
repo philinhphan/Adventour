@@ -5,6 +5,8 @@ import {
   queryUsersByTrip,
   deleteTrip,
 } from "../firebase/firebaseStore";
+import { fetchPerfectMatch } from "../api/tripApi";
+import { useTripContext } from "../context/TripContext"; 
 import "../assets/styles/MyTripsPage.css";
 import barcelona from "../assets/images/barcelona.jpg";
 
@@ -12,6 +14,9 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { savePerfectMatch } = useTripContext();
+
+  
 
   useEffect(() => {
     const fetchTrips = async () => {
@@ -94,10 +99,20 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
     }
   };
 
-  const handleGeneratePerfectMatch = (tripId) => {
-    console.log(`Generating Perfect Match for trip: ${tripId}`);
-    setCurrentTripId(tripId);
-    navigate(`/trip-detail/${tripId}`);
+  const handleGeneratePerfectMatch = async (tripId) => {
+    try {
+      console.log(`Generating Perfect Match for trip: ${tripId}`);
+      setCurrentTripId(tripId);
+  
+      // Fetch the perfect match and store it
+      const perfectMatch = await fetchPerfectMatch(tripId);
+      savePerfectMatch(perfectMatch);
+  
+      // Navigate to the trip details page
+      navigate(`/trip-detail/${tripId}`);
+    } catch (error) {
+      console.error("Error generating perfect match:", error);
+    }
   };
 
   return (

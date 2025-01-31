@@ -65,12 +65,6 @@ const TripDetailPage = () => {
         </div>
       </div>
 
-
-//       {/* Fixed Icons (Logo and Profile Picture) */}
-//       {/* <img src={logo} alt="Logo" className="fixed-logo" />
-//       <img src={profil} alt="Profile" className="fixed-profile-icon" /> */}
-
-
       <div className="trip-detail-container">
         <p className="trip-description">{trip.description}</p>
 
@@ -103,12 +97,12 @@ const TripDetailPage = () => {
         <div className="balanced-preferences">
           {trip.userPreferences.map((user, index) => (
             <div key={index} className="preference-item">
-{/* //               <img
-//                 src={`path/to/${user.userName.toLowerCase()}Profile.jpg`}
-//                 alt={user.userName}
-//                 className="profile-picture"
-//               /> */}
-              <p>{user.userName}</p>
+              {/* Display user profile picture */}
+              <img
+                src={user.profilePicture}
+                alt={user.userName}
+                className="profile-picture"
+              />
               <div className="preference-bar-container">
                 <div className="preference-bar-fill" style={{ width: `${user.preferenceMatch}%` }}></div>
               </div>

@@ -124,7 +124,7 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "llama-3.1-sonar-small-128k-online",   // TODO: update to better model
+        model: "sonar",   // TODO: update to better model
         messages: perplexityMessages,
         // max_tokens: 256,
         // temperature: 0.2,
@@ -197,8 +197,7 @@ export const fetchPerfectMatch = async (tripId) => {
     const allPreferences = tripData.preferences || [];
     const allUserSuggestions = tripData.suggestions || [];
 
-    // Construct the Perplexity API request
-    const perplexityURL = "https://api.perplexity.ai/chat/completions";
+    // Perplexity API Request
     const perplexityMessages = [
       {
         role: "system",
@@ -219,12 +218,13 @@ export const fetchPerfectMatch = async (tripId) => {
             "restaurants": [{"name": "..."}, ...],
             "accommodations": [{"name": "..."}, ...]
           },
-          "userPreferences": [{"userName": "...", "preferenceMatch": 100}, ...]
+          "userPreferences": [{"userId": "...", "preferenceMatch": 100}, ...]
         }
         No extra commentary, no code fences, no markdown blocks. Only raw JSON.`
       }
     ];
 
+    const perplexityURL = "https://api.perplexity.ai/chat/completions";
     const perplexityRequestOptions = {
       method: "POST",
       headers: {
@@ -258,6 +258,17 @@ export const fetchPerfectMatch = async (tripId) => {
     const jsonString = content.substring(startIndex, endIndex + 1);
     let finalMatch = JSON.parse(jsonString);
 
+    // Fetch profile pictures for each user
+    for (const user of finalMatch.userPreferences) {
+      const userRef = doc(db, "users", user.userId);
+      const userSnap = await getDoc(userRef);
+      if (userSnap.exists()) {
+        user.profilePicture = userSnap.data().profilePicture || "/assets/images/emptyProfile.jpg"; // Fallback image
+      } else {
+        user.profilePicture = "/assets/images/emptyProfile.jpg"; // Fallback image
+      }
+    }
+
     // Fetch background image from Pexels
     const pexelsImage = await fetchPexelsImage(finalMatch.name);
     finalMatch.backgroundImage = pexelsImage;
@@ -269,6 +280,7 @@ export const fetchPerfectMatch = async (tripId) => {
     throw error;
   }
 };
+
 
 const fetchPexelsImage = async (query) => {
   try {

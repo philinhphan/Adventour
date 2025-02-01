@@ -218,7 +218,7 @@ export const fetchPerfectMatch = async (tripId) => {
         <Task>
    
         Generate a final best trip match based on the following:   
-	      // TODO - Trip Details: ${JSON.stringify(allTripDetails)}
+	      // TODO @Phi Linh - Trip Details: {JSON.stringify(allTripDetails)}
         - Preferences: ${JSON.stringify(allPreferences)}
         - Swipes: ${JSON.stringify(allUserSuggestions)}
 

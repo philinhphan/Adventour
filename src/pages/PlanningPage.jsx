@@ -103,8 +103,8 @@ const PlanningPage = ({ userId, setCurrentTripId }) => {
 
       if (userId) {
         const tripId = await addTrip(tripData, userId);
-        await linkTripToUser("franzi", tripId);
-        await linkTripToUser("smilla", tripId);
+        await linkTripToUser("phi-linh", tripId);
+        
 
         setCurrentTripId(tripId);
         updateTripDetails(tripDetails);

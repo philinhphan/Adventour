@@ -16,6 +16,7 @@ import ProtectedRoute from "./components/routes/ProtectedRoute";
 import { queryDocuments } from "./firebase/firebaseStore"; // Import query functionality
 import Navbar from "./components/Navbar/Navbar";
 import logo from "./assets/images/AdventourLogo.svg";
+import profilePicDefault from "./assets/images/LisaProfil.jpg"; // Use a default profile image
 import profilePic from "./assets/images/LisaProfil.jpg";
 import FlightPopup from "./pages/FlightPopup";
 
@@ -24,6 +25,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [userName, setUserName] = useState("User"); // State for storing the user's name
   const [userId, setUserId] = useState(null); // State for storing the user's document ID
+  const [profilePic, setProfilePic] = useState(profilePicDefault);
   const [currentTripId, setCurrentTripId] = useState(null); // State for storing the current trip ID
   /* const [profilePic, setProfilePic] = useState("/assets/images/defaultProfile.jpg"); // Standard-Profilbild */
 
@@ -33,6 +35,7 @@ function App() {
       Smilla: "/assets/images/LisaProfil.jpg", // Beispiel für User 3
       default: "/assets/images/emptyProfile.jpg", // Standardbild
     };
+    
     return profilePictures[userName] || profilePictures.default; // Rückgabebild
   } */
 
@@ -75,6 +78,7 @@ function App() {
             setUserName(userData.name || "User"); // Update userName with the name field
             setUserId(userData.id); // Store the user document ID
             /* setProfilePic(getProfilePicture(userData.name)); // Dynamisches Profilbild setzen */
+            setProfilePic(userData.profilePicture || profilePicDefault);
           } else {
             console.warn("No user document found for the email", user.email);
           }
@@ -99,7 +103,13 @@ function App() {
   return (
     <div>
       <Router>
-        <Navbar logoSrc={logo} profilePicSrc={profilePic} />
+        {/* Pass setProfilePic and userId to Navbar for profile picture upload functionality */}
+        <Navbar
+          logoSrc={logo}
+          profilePicSrc={profilePic}
+          setProfilePic={setProfilePic} 
+          userId={userId} 
+        />
         <div className="content">
           <Routes>
             <Route path="/login" element={<LoginPage />} />

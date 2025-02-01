@@ -127,23 +127,23 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
                   >
                     ⛌
                   </button>
-                  <img src={barcelona} alt={barcelona} />
-                  {/* <img src={trip.details.image} alt={trip.name} /> */}
+                  <img src={trip.perfectMatch ? trip.perfectMatch.backgroundImage : barcelona} alt={barcelona} />
+                  {/* TODO: Change barcelona to the default image when no perf match is jet generated*/}
                   <h3>{trip.name}</h3>
                   <p>
                     Starts on{" "}
                     {trip.details?.start_date
                       ? new Date(
-                          trip.details.start_date.toDate()
-                        ).toLocaleDateString()
+                        trip.details.start_date.toDate()
+                      ).toLocaleDateString()
                       : "No start date"}
                   </p>
                   <p>
                     Until{" "}
                     {trip.details?.end_date
                       ? new Date(
-                          trip.details.end_date.toDate()
-                        ).toLocaleDateString()
+                        trip.details.end_date.toDate()
+                      ).toLocaleDateString()
                       : "No end date"}
                   </p>
                   {trip.userDetails && (

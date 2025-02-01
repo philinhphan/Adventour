@@ -97,22 +97,6 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
     }
   };
 
-  const handleGeneratePerfectMatch = async (tripId) => {
-    try {
-      console.log(`Generating Perfect Match for trip: ${tripId}`);
-      setCurrentTripId(tripId);
-
-      // Fetch the perfect match and store it
-      const perfectMatch = await fetchPerfectMatch(tripId);
-      savePerfectMatch(perfectMatch);
-
-      // Navigate to the trip details page
-      navigate(`/trip-detail/${tripId}`);
-    } catch (error) {
-      console.error("Error generating perfect match:", error);
-    }
-  };
-
   return (
     <div className="my-trips-page">
       <div className="trip-header">
@@ -133,6 +117,12 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
             {trips.map((trip) => (
               <li key={trip.id} className="trip-box">
                 <div className="trip-details">
+                  <button
+                    className="delete-button"
+                    onClick={() => handleDeleteTrip(trip.id)}
+                  >
+                    ⛌
+                  </button>
                   <img src={barcelona} alt={barcelona} />
                   {/* <img src={trip.details.image} alt={trip.name} /> */}
                   <h3>{trip.name}</h3>
@@ -187,21 +177,15 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
                   )}
                 </div>
                 <div className="trip-actions">
-                  <button
-                    className="delete-button"
-                    onClick={() => handleDeleteTrip(trip.id)}
-                  >
-                    🗑️
-                  </button>
 
-                  {trip.allUsersCompleted && (
+                  {/* {trip.allUsersCompleted && (
                     <button
                       className="button-generate-match"
                       onClick={() => handleGeneratePerfectMatch(trip.id)}
                     >
                       Generate Perfect Match
                     </button>
-                  )}
+                  )} */}
                 </div>
               </li>
             ))}

@@ -4,10 +4,10 @@ import { fetchPerfectMatch } from "../api/tripApi";
 import Card from "../components/TinderCard/Card";
 import "../assets/styles/SuggestionsPage.css";
 import { useNavigate } from "react-router-dom";
-import { saveSuggestionsAndAnswers } from "../firebase/firebaseStore";
+import { saveSuggestionsAndAnswers, updateTripWithPerfectMatch, checkAllUsersCompleted} from "../firebase/firebaseStore";
 
 const SuggestionsPage = ({ currentTripId, userId }) => {
-  const { tripData, updateSwipeAnswers, savePerfectMatch } = useTripContext();
+  const { tripData, updateSwipeAnswers } = useTripContext();
   const navigate = useNavigate();
 
   const suggestions = tripData.suggestions || [];
@@ -51,47 +51,44 @@ const SuggestionsPage = ({ currentTripId, userId }) => {
   };
 
   const generatePerfectMatch = async (allSwipeAnswers) => {
-    const simulatedFriendData = generateSimulatedFriendData();
-    const requestData = {
-      userSwipes: allSwipeAnswers,
-      simulatedFriends: simulatedFriendData,
-    };
+    //TODO: Check if all users have set their preferences and suggestions only if they have -> generate perfect match
+    let success = false;
+    let perfectMatch = null;
 
     try {
-      const perfectMatch = await fetchPerfectMatch(requestData);
-      savePerfectMatch(perfectMatch);
-      console.log("Perfect Match:", perfectMatch);
-
-      // Save suggestions and answers to Firestore
       await saveSuggestionsAndAnswers(currentTripId, userId, allSwipeAnswers);
     } catch (error) {
-      console.error("Perfect Match Error:", error);
-      const fallbackPerfectMatch = suggestions[0] || null;
-      savePerfectMatch(fallbackPerfectMatch);
+      console.error("Error saving swipe answers, retrying...", error);
 
-      // Save fallback data to Firestore
-      await saveSuggestionsAndAnswers(currentTripId, userId, allSwipeAnswers);
-      console.log("Fallback suggestions and answers saved in Firestore.");
+      let retrySuccess = false;
+      while (!retrySuccess) {
+        try {
+          await saveSuggestionsAndAnswers(currentTripId, userId, allSwipeAnswers);
+          retrySuccess = true;
+        } catch (retryError) {
+          console.error("Retrying saveSuggestionsAndAnswers...", retryError);
+        }
+      }
     }
-    navigate("/processing");
-  };
 
-  const generateSimulatedFriendData = () => {
-    const friend1 = suggestions.map((s) => ({
-      id: s.id,
-      name: s.name,
-      tags: s.tags,
-      description: s.description,
-      swipe: Math.random() > 0.5 ? "like" : "dislike",
-    }));
-    const friend2 = suggestions.map((s) => ({
-      id: s.id,
-      name: s.name,
-      tags: s.tags,
-      description: s.description,
-      swipe: Math.random() > 0.5 ? "like" : "dislike",
-    }));
-    return { friend1, friend2 };
+    let allUsersCompleted = await checkAllUsersCompleted(currentTripId);
+    if (allUsersCompleted) {
+      while (!success) {
+        try {
+          perfectMatch = await fetchPerfectMatch(currentTripId);
+
+          await updateTripWithPerfectMatch(currentTripId, perfectMatch);
+          console.log("Perfect Match:", perfectMatch);
+
+          success = true;
+        } catch (error) {
+          console.error("Error fetching Perfect Match, retrying...", error);
+        }
+      }
+    }
+
+
+    navigate("/processing");
   };
 
   return (

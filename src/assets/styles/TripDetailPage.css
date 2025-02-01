@@ -2,7 +2,8 @@
 .trip-detail-page {
   color: #333;
   line-height: 1.6;
-  padding-top: 0; /* Remove padding for the fixed header */
+  padding-top: 0;
+  /* Remove padding for the fixed header */
 }
 
 /* Sticky Header with Background */
@@ -29,7 +30,8 @@
   left: 10px;
   width: 40px;
   height: 40px;
-  z-index: 100; /* Ensure it stays on top */
+  z-index: 100;
+  /* Ensure it stays on top */
 }
 
 .fixed-profile-icon {
@@ -40,7 +42,8 @@
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  z-index: 100; /* Ensure it stays on top */
+  z-index: 100;
+  /* Ensure it stays on top */
 }
 
 /* Dark Overlay */
@@ -80,7 +83,8 @@
 .trip-detail-container {
   padding: 20px;
   max-width: 800px;
-  margin: 0 auto; /* Center content horizontally */
+  margin: 0 auto;
+  /* Center content horizontally */
 }
 
 .trip-description {
@@ -196,12 +200,4 @@
 
 .shadow {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.navbar {
-  position: absolute; /* Positions the navbar inside the picture (sticky-header) */
-  top: 0; /* Aligns it to the top of the sticky-header */
-  left: 0; /* Aligns it to the left edge of the sticky-header */
-  background-color: transparent; /* Transparent background */
-  z-index: 2; /* Ensures it appears above the picture but behind fixed elements if needed */
 }

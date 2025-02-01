@@ -13,6 +13,11 @@ const Card = ({ suggestion, onSwipe, isLastCard, onLastSwipe }) => {
   const [buttonPressed, setButtonPressed] = useState(null);
   const [isHidden, setIsHidden] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsImageLoaded(false); // Reset loading state on new suggestion
+  }, [suggestion]);
 
   // Ensure new cards start unflipped
   useEffect(() => {
@@ -68,6 +73,9 @@ const Card = ({ suggestion, onSwipe, isLastCard, onLastSwipe }) => {
         {/* Front Side */}
         <div className="card-front" onClick={handleFlip}>
           <div className="card-image-container">
+            {!isImageLoaded && (
+              <div className="image-placeholder">Loading...</div>
+            )}
             <img
               src={suggestion.image}
               alt={suggestion.name}

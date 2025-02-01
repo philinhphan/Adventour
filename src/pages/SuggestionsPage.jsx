@@ -19,7 +19,7 @@ const SuggestionsPage = ({ currentTripId, userId }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [swipeAnswers, setSwipeAnswers] = useState([]);
 
-  const handleSwipe = (direction, suggestion) => {
+  const handleSwipe = async (direction, suggestion) => {
     console.log(`Swiped ${direction} on ${suggestion.name}`);
     const newAnswer = {
       id: suggestion.id,
@@ -33,7 +33,15 @@ const SuggestionsPage = ({ currentTripId, userId }) => {
     setSwipeAnswers((prev) => [...prev, newAnswer]);
 
     if (currentIndex < suggestions.length - 1) {
-      setCurrentIndex((prevIndex) => prevIndex + 1);
+      const nextSuggestion = suggestions[currentIndex + 1];
+
+      // Preload the next image
+      const img = new Image();
+      img.src = nextSuggestion.image;
+      img.onload = () => {
+        // Once the image is loaded, update the card index
+        setCurrentIndex((prevIndex) => prevIndex + 1);
+      };
     } else {
       console.log("No more suggestions. Processing final match...");
       updateSwipeAnswers([...swipeAnswers, newAnswer]);
@@ -119,8 +127,8 @@ const SuggestionsPage = ({ currentTripId, userId }) => {
           <Card
             suggestion={suggestions[currentIndex]}
             onSwipe={handleSwipe}
-            isLastCard={currentIndex === suggestions.length - 1} // Pass if it's the last card
-            onLastSwipe={handleLastSwipe} // Handle last swipe
+            isLastCard={currentIndex === suggestions.length - 1}
+            onLastSwipe={handleLastSwipe}
           />
         ) : (
           <h2>No more suggestions</h2>

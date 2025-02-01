@@ -45,10 +45,13 @@
   left: 0;
   width: 100%;
   height: 75vh;
-  background: rgba(0, 0, 0, 0.65); /* Dark overlay for back image */
-  z-index: 1; /* Overlay is above the image */
+  background: rgba(0, 0, 0, 0.65);
+  /* Dark overlay for back image */
+  z-index: 1;
+  /* Overlay is above the image */
   border-radius: 16px;
-  pointer-events: none; /* Ensure it doesn't interfere with interactions */
+  pointer-events: none;
+  /* Ensure it doesn't interfere with interactions */
 }
 
 .card.is-flipped .card-front {
@@ -96,7 +99,8 @@
 /* Animation Classes */
 /* Adjusted Animation Duration for Better Experience */
 .swipe-dislike {
-  animation: swipe-dislike 0.5s ease forwards; /* Match duration */
+  animation: swipe-dislike 0.5s ease forwards;
+  /* Match duration */
 }
 
 .swipe-like {
@@ -126,7 +130,31 @@
   object-fit: cover;
   position: absolute;
   border-radius: 16px;
-  z-index: 0; /* Image is in the background */
+  z-index: 0;
+  /* Image is in the background */
+  transition: opacity 0.3s ease-in-out;
+}
+
+.card-image.hidden {
+  opacity: 0;
+}
+
+.card-image.loaded {
+  opacity: 1;
+}
+
+.image-placeholder {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: gray;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 /* Gradient Layer */
@@ -142,8 +170,10 @@
     rgba(0, 0, 0, 0.7) 22%,
     rgba(0, 0, 0, 0) 50%
   );
-  z-index: 1; /* Gradient is above the image but below content */
-  pointer-events: none; /* Prevent interactions with the gradient */
+  z-index: 1;
+  /* Gradient is above the image but below content */
+  pointer-events: none;
+  /* Prevent interactions with the gradient */
 }
 
 /* Front Content (Text and Tags) */
@@ -153,7 +183,8 @@
   left: 20px;
   color: white;
   text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.8);
-  z-index: 2; /* Text is on top of the gradient */
+  z-index: 2;
+  /* Text is on top of the gradient */
 }
 
 .card-name {
@@ -182,7 +213,8 @@
   left: 20px;
   color: white;
   text-align: left;
-  z-index: 2; /* Content is above the dark overlay */
+  z-index: 2;
+  /* Content is above the dark overlay */
 }
 
 .card-back-title {

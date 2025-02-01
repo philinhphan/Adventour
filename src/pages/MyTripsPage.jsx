@@ -119,108 +119,203 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
     <div className="my-trips-page">
       <Navbar logoSrc={logo} profilePicSrc={profil} background="white" />
       <div className="trip-header">
-        <h1>Overview of my Trips.</h1> {/* NEU */}
+        <h1>Overview of my Trips.</h1>
         <p>
           Let’s relive the unique magic of your adventures. Whether it’s
           exploring new destinations or revisiting old favorites.
-        </p>{" "}
-        {/* NEU */}
+        </p>
       </div>
 
       <div className="trips-container">
-        <h3>My Trips</h3>
         {loading ? (
           <p>Loading your trips...</p>
         ) : trips.length > 0 ? (
-          <ul className="trip-list">
-            {trips.map((trip) => {
-              const isMatchReady = !!trip.perfectMatch;
-
-              return (
-                <li
-                  key={trip.id}
-                  className={`trip-box ${
-                    isMatchReady ? "trip-ready" : "trip-pending"
-                  }`}
-                  onClick={() => handleTripClick(trip)}
-                >
-                  <div className="trip-details">
-                    <button
-                      className="delete-button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteTrip(trip.id);
-                      }}
-                    >
-                      ⛌
-                    </button>
-                    <img
-                      src={
-                        trip.perfectMatch
-                          ? trip.perfectMatch.backgroundImage
-                          : barcelona
-                      }
-                      alt="Trip Destination"
-                    />
-                    <div className="trip-title-section">
-                      {isMatchReady ? (
-                        <>
-                          <h2 className="trip-destination">
-                            {trip.perfectMatch.name}
-                          </h2>
-                          <p className="trip-original-name">{trip.name}</p>
-                        </>
-                      ) : (
-                        <h3>{trip.name}</h3>
-                      )}
-                    </div>
-                    <p>
-                      Starts on{" "}
-                      {trip.details?.start_date
-                        ? new Date(
-                            trip.details.start_date.toDate()
-                          ).toLocaleDateString()
-                        : "No start date"}
-                    </p>
-                    <p>
-                      Until{" "}
-                      {trip.details?.end_date
-                        ? new Date(
-                            trip.details.end_date.toDate()
-                          ).toLocaleDateString()
-                        : "No end date"}
-                    </p>
-                    {trip.userDetails && (
-                      <div className="trip-users">
-                        <h4>Participants</h4>
-                        <ul>
-                          {trip.userDetails.map((user) => {
-                            let userClass = "";
-                            if (user.hasPreferences && user.hasSuggestions) {
-                              userClass = "user-complete"; // Green border
-                            } else if (user.id === userId) {
-                              userClass = "user-incomplete-pulsing"; // Pulsing animation for logged-in user
-                            } else {
-                              userClass = "user-incomplete"; // Red border for incomplete users
-                            }
-
-                            return (
-                              <li
-                                key={user.id}
-                                className={`participant ${userClass}`}
-                              >
+          <>
+            {/* Section 1: My Matches (Completed Trips) */}
+            <h3 className="trip-section-title">My Matches</h3>
+            <ul className="trip-list">
+              {trips
+                .filter((trip) => trip.perfectMatch)
+                .map((trip) => (
+                  <li
+                    key={trip.id}
+                    className="trip-box trip-ready"
+                    onClick={() => handleTripClick(trip)}
+                  >
+                    <div className="trip-details">
+                      <button
+                        className="delete-button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteTrip(trip.id);
+                        }}
+                      >
+                        ⛌
+                      </button>
+                      <img
+                        src={trip.perfectMatch.backgroundImage || barcelona}
+                        alt="Trip Destination"
+                      />
+                      <div className="trip-title-section">
+                        <h2 className="trip-destination">
+                          {trip.perfectMatch.name}
+                        </h2>
+                        <p className="trip-original-name">{trip.name}</p>
+                      </div>
+                      <p>
+                        Starts on{" "}
+                        {trip.details?.start_date
+                          ? new Date(
+                              trip.details.start_date.toDate()
+                            ).toLocaleDateString()
+                          : "No start date"}
+                      </p>
+                      <p>
+                        Until{" "}
+                        {trip.details?.end_date
+                          ? new Date(
+                              trip.details.end_date.toDate()
+                            ).toLocaleDateString()
+                          : "No end date"}
+                      </p>
+                      {trip.userDetails && (
+                        <div className="trip-users">
+                          <h4>Participants</h4>
+                          <ul>
+                            {trip.userDetails.map((user) => (
+                              <li key={user.id} className="participant">
                                 {user.name}
                               </li>
-                            );
-                          })}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  </li>
+                ))}
+            </ul>
+
+            {/* Section 2: AdvenTours in Progress */}
+            <h3 className="trip-section-title">AdvenTours in Progress</h3>
+            <ul className="trip-list">
+              {trips
+                .filter((trip) => !trip.perfectMatch && !trip.allUsersCompleted)
+                .map((trip) => (
+                  <li
+                    key={trip.id}
+                    className="trip-box trip-pending"
+                    onClick={() => handleTripClick(trip)}
+                  >
+                    <div className="trip-details">
+                      <button
+                        className="delete-button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteTrip(trip.id);
+                        }}
+                      >
+                        ⛌
+                      </button>
+                      <img src={barcelona} alt="Trip Destination" />
+                      <h3>{trip.name}</h3>
+                      <p>
+                        Starts on{" "}
+                        {trip.details?.start_date
+                          ? new Date(
+                              trip.details.start_date.toDate()
+                            ).toLocaleDateString()
+                          : "No start date"}
+                      </p>
+                      <p>
+                        Until{" "}
+                        {trip.details?.end_date
+                          ? new Date(
+                              trip.details.end_date.toDate()
+                            ).toLocaleDateString()
+                          : "No end date"}
+                      </p>
+                      {trip.userDetails && (
+                        <div className="trip-users">
+                          <h4>Participants</h4>
+                          <ul>
+                            {trip.userDetails.map((user) => (
+                              <li key={user.id} className="participant">
+                                {user.name}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  </li>
+                ))}
+            </ul>
+
+            {/* Section 3: Pending Your Input */}
+            <h3 className="trip-section-title">Pending Your Input</h3>
+            <ul className="trip-list">
+              {trips
+                .filter((trip) => {
+                  const currentUser = trip.userDetails?.find(
+                    (user) => user.id === userId
+                  );
+                  return (
+                    !trip.perfectMatch &&
+                    currentUser &&
+                    (!currentUser.hasPreferences || !currentUser.hasSuggestions)
+                  );
+                })
+                .map((trip) => (
+                  <li
+                    key={trip.id}
+                    className="trip-box trip-user-pending"
+                    onClick={() => handleTripClick(trip)}
+                  >
+                    <div className="trip-details">
+                      <button
+                        className="delete-button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteTrip(trip.id);
+                        }}
+                      >
+                        ⛌
+                      </button>
+                      <img src={barcelona} alt="Trip Destination" />
+                      <h3>{trip.name}</h3>
+                      <p>
+                        Starts on{" "}
+                        {trip.details?.start_date
+                          ? new Date(
+                              trip.details.start_date.toDate()
+                            ).toLocaleDateString()
+                          : "No start date"}
+                      </p>
+                      <p>
+                        Until{" "}
+                        {trip.details?.end_date
+                          ? new Date(
+                              trip.details.end_date.toDate()
+                            ).toLocaleDateString()
+                          : "No end date"}
+                      </p>
+                      {trip.userDetails && (
+                        <div className="trip-users">
+                          <h4>Participants</h4>
+                          <ul>
+                            {trip.userDetails.map((user) => (
+                              <li key={user.id} className="participant">
+                                {user.name}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  </li>
+                ))}
+            </ul>
+          </>
         ) : (
           <p className="no-trips-message">
             No trips planned yet. Start planning your next adventure!

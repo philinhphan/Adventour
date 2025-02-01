@@ -231,15 +231,15 @@
 
 /* ✅ Styling for finished trips (perfect match available) */
 .trip-ready {
-  border: 3px solid #28a745; /* Green border */
-  background-color: #e8f5e9; /* Light green background */
+  border: 3px solid #28a745;
+  background-color: #e8f5e9;
   transition: all 0.3s ease-in-out;
 }
 
-/* ❌ Styling for unfinished trips */
+/* ❌ Styling for trips in progress (waiting for others) */
 .trip-pending {
-  border: 2px solid #ff4d4d; /* Red border */
-  background-color: #ffe5e5;
+  border: 2px solid #ffb74d;
+  background-color: #fff3e0;
   transition: all 0.3s ease-in-out;
 }
 
@@ -264,4 +264,45 @@
 .trip-title-section {
   text-align: center;
   margin-bottom: 10px;
+}
+
+/* Section titles */
+.trip-section-title {
+  font-size: 1.4em;
+  font-weight: bold;
+  color: #333;
+  margin-top: 30px;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 5px;
+  text-align: center;
+}
+
+/* 🚨 Styling for trips where the logged-in user still needs to act */
+.trip-user-pending {
+  border: 2px solid #ff4d4d;
+  background-color: #ffe5e5;
+  animation: pulse 1.5s infinite;
+}
+
+/* Participant list */
+.trip-users {
+  margin-top: 10px;
+}
+
+.trip-users h4 {
+  font-size: 1.1em;
+  color: #333;
+}
+
+.trip-users ul {
+  list-style: none;
+  padding: 0;
+}
+
+.trip-users .participant {
+  padding: 5px;
+  border-radius: 5px;
+  background: #f0f0f0;
+  display: inline-block;
+  margin: 5px;
 }

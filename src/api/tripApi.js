@@ -205,16 +205,20 @@ export const fetchPerfectMatch = async (tripId) => {
     const allPreferences = tripData.preferences || [];
     const allUserSuggestions = tripData.suggestions || [];
 
-    // Perplexity API Request
+    // Perplexity API Request for fetchPerfectMatch
     const perplexityMessages = [
       {
         role: "system",
-        content:
-          "You are an expert at recommending a trip that best matches all group preferences.",
+        content: "You are an expert at recommending a trip that best matches all group preferences.",
       },
       {
         role: "user",
-        content: `We need a final best trip match based on the following:
+        content: 
+        `
+        <Task>
+   
+        Generate a final best trip match based on the following:   
+	      // TODO - Trip Details: ${JSON.stringify(allTripDetails)}
         - Preferences: ${JSON.stringify(allPreferences)}
         - Swipes: ${JSON.stringify(allUserSuggestions)}
 
@@ -227,10 +231,72 @@ export const fetchPerfectMatch = async (tripId) => {
             "restaurants": [{"name": "..."}, ...],
             "accommodations": [{"name": "..."}, ...]
           },
-          "userPreferences": [{"userId": "...", "preferenceMatch": 100}, ...]
+          "userPreferences": [{"userId": "...", "preferenceMatch": 90}, ...]
         }
-        No extra commentary, no code fences, no markdown blocks. Only raw JSON.`,
-      },
+        No extra commentary, no code fences, no markdown blocks. Only raw JSON.
+        
+        For the suggestion of the final best place respect the following rules:
+        - Provide a place from all around the world
+        - Focus on a place that is suitable for the given number of travelers in the group
+        - The place should be perfectly aligned with the given preferences and swipes.
+        
+        - The place should also be perfectly aligned with the given trip details. So the date of travel and the given budget should fit to 
+        the given suggestion.
+        - For finding the right place to the given budget assume the following
+        things: 
+          - We always start our trip from Munich, Germany, so try to do an estimation of the travel costs to the suggested place based on the starting point
+          - Then try to align the preferences with the given budget and the duration
+          - Give us only realistic suggestions that can be done with the given budget and the given duration of the trip.
+
+
+
+        For every attribute in the suggestion respect the following rules:
+        1. name: 
+        - Provide for the place the name of the location and country it is in, separated by a comma, e.g.: Barcelona, Spain
+        2. tags: 
+        - Provide 5 suitable tags that descibe the suggestion in the best possible way
+        - Limit each tag to 10 characters
+        3. description:
+        - Should cover the most important facts about the suggestion
+        - Consists of 2-3 sentences that describes the suggestion in an inspiring, personal, precise and cheeky way
+        - The text is targeted at young individuals aiming to go on a group trip. It should give a good impression
+        on what can be done and general summary of the suggestion. 
+        4. recommendations:
+        - Provide 2-3 restaurants and accomodations suiting the trip details (especially budget) and preferences
+        5. userPreferences:
+        - Provide approximate preferenceMatch scores for each user between 0 and 100, higher scores indicating a better match between place and respective user preference
+        
+
+        
+        </Task>
+        
+        <Example>
+	      {
+		    name: "Barcelona, Spain",
+		    tags: ["sightseeing", "shopping", "beach", "nightlife", "water sport"],
+		    description:
+		      "Get ready to fall in love with Barcelona—a city that blends vibrant culture, stunning architecture, and Mediterranean charm. This trip will take you through the iconic Sagrada Familia, the whimsical wonders of Park Güell, and the winding streets of the Gothic Quarter. You’ll sip sangria by the beach, devour mouthwatering tapas, and soak up breathtaking views from Montjuïc Hill.",
+		    recommendations: {
+		      restaurants: [
+		        { name: "Nine"},
+		        { name: "La Lotja"},
+		        { name: "El Tributz"},
+		      ],
+		      accommodations: [
+		        { name: "Mandarin Oriental"},
+		        { name: "W Hotel"},
+		        { name: "Hyatt Regency"},
+		      ],
+		    },
+		    userPreferences: [
+		      { userId: "john", preferenceMatch: 100 },
+		      { userId: "lisa", preferenceMatch: 90 },
+		      { userId: "emma", preferenceMatch: 93 },
+			    ],
+			  };
+        </Example>
+        `
+      }
     ];
 
     const perplexityURL = "https://api.perplexity.ai/chat/completions";

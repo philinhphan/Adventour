@@ -127,7 +127,7 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "sonar", // TODO: update to better model
+        model: "llama-3.1-sonar-small-128k-online", // TODO: update to better model
         messages: perplexityMessages,
         // max_tokens: 256,
         // temperature: 0.2,

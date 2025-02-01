@@ -11,6 +11,7 @@ import profil from "../assets/images/LisaProfil.jpg";
 const TripDetailPage = ({ userId }) => {
   const { tripId } = useParams();
   const [trip, setTrip] = useState(null);
+  const [additionalImages, setAdditionalImages] = useState([]);
 
   useEffect(() => {
     const fetchTripData = async () => {
@@ -29,7 +30,37 @@ const TripDetailPage = ({ userId }) => {
     };
 
     fetchTripData();
-  }, [tripId]);
+  }, [tripId, userId]);
+
+
+  useEffect(() => {
+    const fetchAdditionalImages = async () => {
+      try {
+        const response = await fetch(
+          `https://api.pexels.com/v1/search?query=${encodeURIComponent(
+            trip.name
+          )}&per_page=5`, // Requesting 5 images
+          {
+            headers: {
+              Authorization: process.env.REACT_APP_PEXELS_API_KEY,
+            },
+          }
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch additional images from Pexels");
+        }
+        const data = await response.json();
+        setAdditionalImages(data.photos);
+      } catch (error) {
+        console.error("Error fetching additional images:", error);
+      }
+    };
+
+    if (trip) {
+      fetchAdditionalImages();
+    }
+  }, [trip]);
+
 
   if (!trip) {
     return <div>Loading...</div>;
@@ -115,6 +146,19 @@ const TripDetailPage = ({ userId }) => {
             </div>
           ))}
         </div>
+
+        <h2>More Images</h2>
+        <div className="additional-images">
+          {additionalImages.map((photo, index) => (
+            <img
+              key={index}
+              src={photo.src.large}
+              alt={`Additional ${index + 1}`}
+              className="additional-image" 
+            />
+          ))}
+        </div>
+
       </div>
     </div>
   );

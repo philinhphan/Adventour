@@ -383,3 +383,34 @@ const fetchPexelsImage = async (query) => {
     return "https://via.placeholder.com/300x600"; // fallback TODO: update placeholder image with good one
   }
 };
+
+
+export const fetchPexelsImages = async (query) => {
+  try {
+    // Changed per_page from 1 to 5 to fetch five images
+    const url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(
+      query
+    )}&per_page=5`; // NEW CODE: Fetch 5 images
+    const response = await fetch(url, {
+      headers: {
+        Authorization: process.env.REACT_APP_PEXELS_API_KEY, // stored in .env
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch from Pexels");
+    }
+
+    const data = await response.json();
+    // Return an array of image URLs using 'large2x' if available, else 'large'
+    if (data.photos && data.photos.length > 0) {
+      return data.photos.map(
+        (photo) => photo.src.large2x || photo.src.large
+      );
+    }
+    return ["https://via.placeholder.com/300x600"]; // fallback image if no photos
+  } catch (error) {
+    console.error("Pexels API error:", error);
+    return ["https://via.placeholder.com/300x600"]; // fallback image on error
+  }
+};

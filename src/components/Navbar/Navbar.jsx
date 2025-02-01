@@ -7,8 +7,7 @@ import { logout } from "../../firebase/firebaseAuth";
 // Logo is wrapped in Link to navigate to home page.
 // Profile picture is displayed with onProfileClick function -> right now it just alerts.
 
-import { storage, db } from "../../firebase/firebase";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { db } from "../../firebase/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 
 const Navbar = ({
@@ -36,17 +35,35 @@ const Navbar = ({
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    if (!userId) { 
+    if (!userId) { // Guard check to ensure userId is defined
       console.error("User ID is not defined; cannot upload profile picture.");
       return;
     }
     try {
-      // Create a storage reference for the profile picture
-      const storageRef = ref(storage, `profilePictures/${userId}/${file.name}`);
-      // Upload the file to Firebase Storage
-      await uploadBytes(storageRef, file);
-      // Get the download URL of the uploaded image
-      const downloadURL = await getDownloadURL(storageRef);
+      // Prepare form data for Cloudinary unsigned upload
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append(
+        "upload_preset",
+        process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET // Must be set in your .env file
+      );
+
+      // Cloudinary API endpoint URL using the cloud name from env variables
+      const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME; // Must be set in your .env file
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Cloudinary upload failed");
+      }
+      const data = await response.json();
+      const downloadURL = data.secure_url; // The URL of the uploaded image
+
       // Update Firestore user document with the new profile picture URL
       const userDocRef = doc(db, "users", userId);
       await updateDoc(userDocRef, { profilePicture: downloadURL });

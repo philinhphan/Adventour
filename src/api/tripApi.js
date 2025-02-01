@@ -258,7 +258,7 @@ export const fetchPerfectMatch = async (tripId) => {
         - Limit each tag to 10 characters
         3. description:
         - Should cover the most important facts about the suggestion
-        - Consists of 2-3 sentences that describes the suggestion in an inspiring, personal, precise and cheeky way
+        - Consists of around 5-10 sentences that describes the suggestion in an inspiring, personal, precise and cheeky way
         - The text is targeted at young individuals aiming to go on a group trip. It should give a good impression
         on what can be done and general summary of the suggestion. 
         4. recommendations:

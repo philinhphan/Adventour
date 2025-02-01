@@ -118,30 +118,30 @@ const TripDetailPage = () => {
 export default TripDetailPage;
 
 // const TripDetailPage = ({ tripData }) => {
-//   const placeholderTrip = {
-//     name: "Barcelona, Spain",
-//     tags: ["sightseeing", "shopping", "beach", "nightlife", "water sport"],
-//     description:
-//       "Get ready to fall in love with Barcelona—a city that blends vibrant culture, stunning architecture, and Mediterranean charm. This trip will take you through the iconic Sagrada Familia, the whimsical wonders of Park Güell, and the winding streets of the Gothic Quarter. You’ll sip sangria by the beach, devour mouthwatering tapas, and soak up breathtaking views from Montjuïc Hill.",
-//     backgroundImage: barcelonaBackground, // Background image for the city section
-//     recommendations: {
-//       restaurants: [
-//         { name: "Nine", image: nine },
-//         { name: "La Lotja", image: ljota },
-//         { name: "El Tributz", image: tribitz },
-//       ],
-//       accommodations: [
-//         { name: "Mandarin Oriental", image: mandarin },
-//         { name: "W Hotel", image: W },
-//         { name: "Hyatt Regency", image: hyatt },
-//       ],
-//     },
-//     userPreferences: [
-//       { userName: "John", preferenceMatch: 100 },
-//       { userName: "Lisa", preferenceMatch: 97 },
-//       { userName: "Emma", preferenceMatch: 93 },
-//     ],
-//   };
+  // const placeholderTrip = {
+  //   name: "Barcelona, Spain",
+  //   tags: ["sightseeing", "shopping", "beach", "nightlife", "water sport"],
+  //   description:
+  //     "Get ready to fall in love with Barcelona—a city that blends vibrant culture, stunning architecture, and Mediterranean charm. This trip will take you through the iconic Sagrada Familia, the whimsical wonders of Park Güell, and the winding streets of the Gothic Quarter. You’ll sip sangria by the beach, devour mouthwatering tapas, and soak up breathtaking views from Montjuïc Hill.",
+  //   backgroundImage: barcelonaBackground, // Background image for the city section
+  //   recommendations: {
+  //     restaurants: [
+  //       { name: "Nine", image: nine },
+  //       { name: "La Lotja", image: ljota },
+  //       { name: "El Tributz", image: tribitz },
+  //     ],
+  //     accommodations: [
+  //       { name: "Mandarin Oriental", image: mandarin },
+  //       { name: "W Hotel", image: W },
+  //       { name: "Hyatt Regency", image: hyatt },
+  //     ],
+  //   },
+  //   userPreferences: [
+  //     { userName: "John", preferenceMatch: 100 },
+  //     { userName: "Lisa", preferenceMatch: 97 },
+  //     { userName: "Emma", preferenceMatch: 93 },
+  //   ],
+  // };
 
 //   const trip = tripData || placeholderTrip;
 

@@ -3,14 +3,14 @@ import Slider from "react-slick";
 import Tile from "../components/Tile/Tile";
 import { useNavigate } from "react-router-dom";
 import "../assets/styles/Preferences.css";
-
+import Navbar from "../components/Navbar/Navbar";
 import { useTripContext } from "../context/TripContext";
 import { fetchSwipeSuggestions } from "../api/tripApi";
 import { savePreferences } from "../firebase/firebaseStore";
 
 //TODO Design: Find better solution for image imports
-/* import logo from "../assets/images/AdventourLogo.svg";
-import profil from "../assets/images/LisaProfil.jpg"; */
+import logo from "../assets/images/AdventourLogo.svg";
+import profil from "../assets/images/LisaProfil.jpg";
 import PreferenceCultural from "../assets/images/PreferenceCultural.jpg";
 import PreferenceAdventure from "../assets/images/PreferenceAdventure.jpg";
 import PreferenceLeisure from "../assets/images/PreferenceLeisure.jpg";
@@ -156,7 +156,7 @@ const PreferencesPage = ({ currentTripId, userId }) => {
 
   return (
     <div className="preferences-page">
-      {/* <Navbar logoSrc={logo} profilePicSrc={profil} /> */}
+      <Navbar logoSrc={logo} profilePicSrc={profil} background="white" />
       <div className="preferences-container">
         <h1>Select general preferences</h1>
         <p className="hint">

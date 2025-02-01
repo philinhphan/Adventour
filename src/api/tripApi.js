@@ -1,4 +1,4 @@
-import { db } from "../firebase/firebase"; 
+import { db } from "../firebase/firebase";
 import { doc, getDoc } from "firebase/firestore";
 
 const API_KEY = process.env.REACT_APP_PERPLEXITY_API_KEY;
@@ -9,26 +9,25 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
     // 1) Build the request payload for Perplexity API
     const perplexityURL = "https://api.perplexity.ai/chat/completions";
     const perplexityMessages = [
-      { role: "system", content: "You are an expert at recommending trip suggestions matching certain user preferences" },
+      {
+        role: "system",
+        content:
+          "You are an expert at recommending trip suggestions matching certain user preferences",
+      },
       {
         role: "user",
         // Ask Perplexity to respond ONLY with a JSON array of suggestions
-        content:                
-        `
+        content: `
         <Task>
         Generate 3 suggestions for a trip based on the following trip details and preferences:
 
         1. Trip Details:       
-        ${JSON.stringify(
-          tripDetails
-        )} 
+        ${JSON.stringify(tripDetails)} 
 
-        2. Preferences: ${JSON.stringify(
-          preferences
-        )} 
+        2. Preferences: ${JSON.stringify(preferences)} 
 
         Return the suggestions ONLY as a valid JSON array of objects. No extra commentary, no code fences, no markdown blocks. Only a raw JSON array.
-        The JSON array and objects should look like:
+        Don't forget quotation marks, brackets and the commas after the propertys. All property names have to be double-quoted. The JSON array and objects should look like:
         [
         {
           "name": "...",
@@ -65,7 +64,7 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
         - Should cover the most important facts about the suggestion
         - Should be formulated in a brief an catchy way covering up to 10 words, e.g.: "Where culture, beaches, and nightlife create epic adventures!
         4. description:
-        - Consists of 2-3 sentences that describes the suggestion in an inspiring, personal, precise and cheeky way
+        - Consists of 4-5 sentences that describes the suggestion in an inspiring, personal, precise and cheeky way
         - The text is targeted at young individuals aiming to go on a group trip. It should give a good impression
         on what can be done and general summary of the suggestion. 
 
@@ -77,26 +76,28 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
             name: "Barcelona, Spain",
             tags: ["#Beaches #Culture #Nightlife #Food #Adventure"],
             shortDescription: "Where culture, beaches, and nightlife create epic adventures!"
-            description: "Barcelona is the ultimate destination for your crew, offering
-            everything from sun-soaked beach days to jaw-dropping Gaudí architecture 
-            and nights that don’t stop until sunrise. Explore the vibrant Gothic Quarter,
-            feast on endless tapas, and catch golden hour at Park Güell for 
-            unforgettable views. It’s the perfect mix of culture, chaos, and coastal 
-            vibes, tailor-made for squad-level memories."
+            description: "Barcelona is a city that brings together the best of history, modernity, 
+            and vibrant energy, making it the ultimate destination for any traveler. Wander through 
+            the enchanting Gothic Quarter, where narrow alleys lead to stunning medieval architecture 
+            and charming hidden cafés. Marvel at Gaudí’s whimsical masterpieces like Sagrada Família 
+            and Park Güell, offering surreal landscapes that are perfect for sunset views. By day, soak up 
+            the Mediterranean sun at Barceloneta Beach, and by night, dive into the city's electric nightlife—whether 
+            it’s sipping cocktails on a rooftop bar, enjoying flamenco performances, or dancing until dawn in world-class clubs. 
+            Every moment in Barcelona feels like an adventure waiting to happen",
 
-        Tags:
-        #BeachVibes #GaudíDreamscape #EpicNightlife #FoodieHeaven #ArtAndAdventure",
           },
           {
             name: "Miami, USA",
             tags: ["#Beaches #Nightlife #Art #Food #Vibes"],
             shortDescription: "Where sun, style, and nonstop fun collide effortlessly!"
             description:
-              "Miami is a playground of golden beaches, vibrant nightlife, and bold flavors 
-              that will have your group living their best lives. Spend your days soaking up 
-              rays in South Beach, exploring the artsy Wynwood district, or feasting on Cuban 
-              sandwiches in Little Havana. When night falls, the city turns electric—perfect 
-              for dancing, rooftop cocktails, and making unforgettable squad memories.",
+              "Miami is a city that radiates energy, making it a must-visit for those who love a mix of beach life, art, 
+              and incredible food. Spend your mornings walking the Art Deco-lined streets of South Beach before diving 
+              into its crystal-clear waters. Take a trip to the Wynwood Walls to witness one of the most impressive urban 
+              art scenes in the world, or explore the diverse culinary offerings in Little Havana, where Cuban coffee and 
+              authentic sandwiches transport you straight to Havana. As the sun sets, Miami comes alive—rooftop lounges, 
+              oceanfront parties, and iconic clubs ensure that your nights are as thrilling as your days. Whether you’re on a 
+              yacht, in a poolside cabana, or dancing beneath neon lights, Miami guarantees unforgettable moments",
           },
           {
             name: "Kyoto, Japan",
@@ -109,12 +110,14 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
               Inari Shrine, and enjoy a tea ceremony to experience timeless traditions. 
               Whether you’re biking along picturesque streets or sampling  local 
               delicacies, Kyoto blends zen and excitement for a trip your crew will 
-              never forget",
+              never forget. Enjoy a moment of tranquility in the beautifully maintained Zen gardens of Ryoanji, before indulging 
+              in Kyoto’s renowned kaiseki cuisine—a multi-course feast that celebrates seasonal flavors. Kyoto is more than a destination; 
+              it’s a journey into Japan’s soul, offering an unforgettable mix of adventure and serenity",
           },
         ]
         </Examples>
-        `
-      }
+        `,
+      },
     ];
 
     const perplexityRequestOptions = {
@@ -124,7 +127,7 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "sonar",   // TODO: update to better model
+        model: "sonar", // TODO: update to better model
         messages: perplexityMessages,
         // max_tokens: 256,
         // temperature: 0.2,
@@ -143,13 +146,15 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
     // 2) Call the Perplexity API
     const response = await fetch(perplexityURL, perplexityRequestOptions);
     if (!response.ok) {
-      throw new Error(`Failed to fetch suggestions from Perplexity: ${response.status}`);
+      throw new Error(
+        `Failed to fetch suggestions from Perplexity: ${response.status}`
+      );
     }
     const data = await response.json();
 
     // 3) Parse the raw JSON array from the response
-    //    (We assume Perplexity returns valid JSON in data.choices[0].message.content) 
-    
+    //    (We assume Perplexity returns valid JSON in data.choices[0].message.content)
+
     let content = data.choices?.[0]?.message?.content || "";
     console.log(content);
 
@@ -158,7 +163,10 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
     const endIndex = content.lastIndexOf("]");
 
     if (startIndex === -1 || endIndex === -1 || endIndex < startIndex) {
-      console.error("Could not find a valid JSON array in the response text:", content);
+      console.error(
+        "Could not find a valid JSON array in the response text:",
+        content
+      );
       throw new Error("No valid JSON array found in the response");
     }
 
@@ -201,7 +209,8 @@ export const fetchPerfectMatch = async (tripId) => {
     const perplexityMessages = [
       {
         role: "system",
-        content: "You are an expert at recommending a trip that best matches all group preferences.",
+        content:
+          "You are an expert at recommending a trip that best matches all group preferences.",
       },
       {
         role: "user",
@@ -220,8 +229,8 @@ export const fetchPerfectMatch = async (tripId) => {
           },
           "userPreferences": [{"userId": "...", "preferenceMatch": 100}, ...]
         }
-        No extra commentary, no code fences, no markdown blocks. Only raw JSON.`
-      }
+        No extra commentary, no code fences, no markdown blocks. Only raw JSON.`,
+      },
     ];
 
     const perplexityURL = "https://api.perplexity.ai/chat/completions";
@@ -263,7 +272,8 @@ export const fetchPerfectMatch = async (tripId) => {
       const userRef = doc(db, "users", user.userId);
       const userSnap = await getDoc(userRef);
       if (userSnap.exists()) {
-        user.profilePicture = userSnap.data().profilePicture || "/assets/images/emptyProfile.jpg"; // Fallback image
+        user.profilePicture =
+          userSnap.data().profilePicture || "/assets/images/emptyProfile.jpg"; // Fallback image
       } else {
         user.profilePicture = "/assets/images/emptyProfile.jpg"; // Fallback image
       }
@@ -280,7 +290,6 @@ export const fetchPerfectMatch = async (tripId) => {
     throw error;
   }
 };
-
 
 const fetchPexelsImage = async (query) => {
   try {
@@ -308,9 +317,3 @@ const fetchPexelsImage = async (query) => {
     return "https://via.placeholder.com/300x600"; // fallback TODO: update placeholder image with good one
   }
 };
-
-
-
-
-
-

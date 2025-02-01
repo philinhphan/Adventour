@@ -197,11 +197,3 @@
 .shadow {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
-.navbar {
-  position: absolute; /* Positions the navbar inside the picture (sticky-header) */
-  top: 0; /* Aligns it to the top of the sticky-header */
-  left: 0; /* Aligns it to the left edge of the sticky-header */
-  background-color: transparent; /* Transparent background */
-  z-index: 2; /* Ensures it appears above the picture but behind fixed elements if needed */
-}

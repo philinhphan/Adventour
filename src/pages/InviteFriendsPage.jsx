@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useTripContext } from "../context/TripContext"; // Import TripContext
 import Button from "../components/Button/Button";
 import "../assets/styles/InviteFriends.css";
+import Navbar from "../components/Navbar/Navbar";
+import logo from "../assets/images/AdventourLogo.svg";
+import profil from "../assets/images/LisaProfil.jpg";
 
 // Import icons
 import whatsapp from "../assets/icons/whatsapp.svg";
@@ -93,6 +96,7 @@ const InviteFriendsPage = () => {
 
   return (
     <div className="invite-friends-page">
+      <Navbar logoSrc={logo} profilePicSrc={profil} background="white" />
       <div className="invite-container">
         <h1>Do you want to invite friends?</h1>
         <h3>Your AdvenTour awaits!</h3>
@@ -201,7 +205,7 @@ const InviteFriendsPage = () => {
           )}
         </div>
         <div className="action-buttons">
-          <Button label="Invite Friends later" styleType="secondary" />
+          <Button label="Invite Friends later" styleType="button-gray" />
           <Button
             label="Continue"
             styleType="primary"

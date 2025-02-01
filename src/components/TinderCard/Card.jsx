@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSwipeable } from "react-swipeable";
 import "../../assets/styles/Card.css";
 
@@ -11,8 +11,13 @@ import likeIcon from "../../assets/icons/like.svg";
 const Card = ({ suggestion, onSwipe, isLastCard, onLastSwipe }) => {
   const [swipeDirection, setSwipeDirection] = useState(null);
   const [buttonPressed, setButtonPressed] = useState(null);
-  const [isHidden, setIsHidden] = useState(false); // State to hide the card
-  const [isFlipped, setIsFlipped] = useState(false); // State to track flip
+  const [isHidden, setIsHidden] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  // Ensure new cards start unflipped
+  useEffect(() => {
+    setTimeout(() => setIsFlipped(false), 10); // Ensure state updates after render
+  }, [suggestion]);
 
   const handleSwipe = (direction) => {
     if (!suggestion) {
@@ -23,21 +28,22 @@ const Card = ({ suggestion, onSwipe, isLastCard, onLastSwipe }) => {
     setSwipeDirection(direction);
     setButtonPressed(direction);
 
-    // Trigger callback after animation with delay
     setTimeout(() => {
       if (isLastCard) {
-        setIsHidden(true); // Hide the card immediately
-        onLastSwipe(direction, suggestion); // Trigger last swipe callback
+        setIsHidden(true);
+        onLastSwipe(direction, suggestion);
       } else {
+        setIsFlipped(false); // Reset flip AFTER swipe animation
         onSwipe(direction, suggestion);
       }
-      setSwipeDirection(null); // Reset swipe direction after animation
-      setButtonPressed(null); // Reset button state
-    }, 1000); // Animation + delay (e.g., 1 second total)
+
+      setSwipeDirection(null);
+      setButtonPressed(null);
+    }, 1000);
   };
 
   const handleFlip = () => {
-    setIsFlipped(!isFlipped); // Toggle the flip state
+    setIsFlipped((prev) => !prev); // Toggle flip state
   };
 
   const swipeHandlers = useSwipeable({
@@ -48,7 +54,7 @@ const Card = ({ suggestion, onSwipe, isLastCard, onLastSwipe }) => {
   });
 
   if (isHidden || !suggestion) {
-    return null; // Hide the card when `isHidden` is true
+    return null;
   }
 
   return (

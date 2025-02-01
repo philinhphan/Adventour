@@ -1,5 +1,9 @@
 import { React } from "react";
 
+import Navbar from "../components/Navbar/Navbar";
+import logo from "../assets/images/AdventourLogo.svg";
+import profil from "../assets/images/LisaProfil.jpg";
+
 import "../assets/styles/FlightPopup.css";
 import plane from "../assets/icons/planeIcon.svg";
 

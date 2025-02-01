@@ -9,6 +9,9 @@ import { fetchPerfectMatch } from "../api/tripApi";
 import { useTripContext } from "../context/TripContext";
 import "../assets/styles/MyTripsPage.css";
 import barcelona from "../assets/images/barcelona.jpg";
+import Navbar from "../components/Navbar/Navbar";
+import logo from "../assets/images/AdventourLogo.svg";
+import profil from "../assets/images/LisaProfil.jpg";
 
 const MyTripsPage = ({ userId, setCurrentTripId }) => {
   const [trips, setTrips] = useState([]);
@@ -115,6 +118,7 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
 
   return (
     <div className="my-trips-page">
+      <Navbar logoSrc={logo} profilePicSrc={profil} background="white" />
       <div className="trip-header">
         <h1>Overview of my Trips.</h1> {/* NEU */}
         <p>

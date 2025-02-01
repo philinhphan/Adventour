@@ -20,9 +20,16 @@
   border: 0.5px solid #ccc; /* before: 2px */
 }
 
+.button-gray {
+  background-color: #f9f9f9;
+  color: #333;
+  border: none;
+}
+
 .button-black {
   background-color: black;
   color: white;
+  max-width: 500px;
   border: none;
 }
 

@@ -2,6 +2,10 @@ import { React, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../assets/styles/App.css";
 import "../assets/styles/PlanningPage.css";
+import Navbar from "../components/Navbar/Navbar";
+import logo from "../assets/images/AdventourLogo.svg";
+import profil from "../assets/images/LisaProfil.jpg";
+
 import { useTripContext } from "../context/TripContext";
 import { addTrip, linkTripToUser } from "../firebase/firebaseStore";
 
@@ -26,6 +30,7 @@ const PlanningPage = ({ userId, setCurrentTripId }) => {
 
   const validateInputs = () => {
     const newErrors = {};
+    const today = new Date().toISOString().split("T")[0];
 
     // Validate trip name (mandatory, alphanumeric)
     if (!tripDetails.name.trim()) {
@@ -38,11 +43,15 @@ const PlanningPage = ({ userId, setCurrentTripId }) => {
     if (tripDetails.dateFlexibility !== "flexible") {
       if (!tripDetails.dateStart) {
         newErrors.dateStart = "Start date is required.";
+      } else if (tripDetails.dateStart < today) {
+        newErrors.dateStart = "Start date cannot be in the past.";
       }
+
       if (!tripDetails.dateEnd) {
         newErrors.dateEnd = "End date is required.";
-      }
-      if (
+      } else if (tripDetails.dateEnd < today) {
+        newErrors.dateEnd = "End date cannot be in the past.";
+      } else if (
         tripDetails.dateStart &&
         tripDetails.dateEnd &&
         new Date(tripDetails.dateStart) > new Date(tripDetails.dateEnd)
@@ -111,11 +120,22 @@ const PlanningPage = ({ userId, setCurrentTripId }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    const today = new Date().toISOString().split("T")[0];
+
     setTripDetails((prevDetails) => ({
       ...prevDetails,
-      [name]: value,
+      [name]: value, // Always update state for all fields
     }));
+
     setIsEdited(true);
+
+    // Only validate date fields
+    if (name === "dateStart" || name === "dateEnd") {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: value < today ? "Date cannot be in the past." : "", // Show error only for past dates
+      }));
+    }
   };
 
   const handleDateFlexibilityChange = (flexibility) => {
@@ -130,6 +150,7 @@ const PlanningPage = ({ userId, setCurrentTripId }) => {
 
   return (
     <div className="planning-page">
+      <Navbar logoSrc={logo} profilePicSrc={profil} background="white" />
       <div className="planning-container">
         <h1 className="title">Please specify your trip details</h1>
         <div className="planning-section">
@@ -154,6 +175,7 @@ const PlanningPage = ({ userId, setCurrentTripId }) => {
                   value={tripDetails.dateStart}
                   onChange={handleInputChange}
                   disabled={tripDetails.dateFlexibility === "flexible"}
+                  min={new Date().toISOString().split("T")[0]} // Prevent past dates
                 />
 
                 <InputField
@@ -163,6 +185,10 @@ const PlanningPage = ({ userId, setCurrentTripId }) => {
                   value={tripDetails.dateEnd}
                   onChange={handleInputChange}
                   disabled={tripDetails.dateFlexibility === "flexible"}
+                  min={
+                    tripDetails.dateStart ||
+                    new Date().toISOString().split("T")[0]
+                  } // Ensure end date is after start date
                 />
               </div>
               {errors.dateStart && (

@@ -72,16 +72,16 @@
   height: 100%;
   background-color: #ff0055; /* Progress bar color */
   width: 0;
-  animation: fillProgress 4s linear forwards; /* SAME duration as the airplane */
+  animation: fillProgress 7s linear forwards; /* SAME duration as the airplane */
 }
 
 /* Airplane and Progress Animation Timing */
 .plane-icon {
-  animation: flyPlane 4s linear forwards; /* Match the duration */
+  animation: flyPlane 7s linear forwards; /* Match the duration */
 }
 
 .progress-fill {
-  animation: fillProgress 4s linear forwards; /* Match the duration */
+  animation: fillProgress 7s linear forwards; /* Match the duration */
 }
 
 /* Keyframe for progress bar */

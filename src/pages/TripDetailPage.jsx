@@ -3,15 +3,9 @@ import { useTripContext } from "../context/TripContext";
 import Slider from "react-slick"; // For swipe functionality
 import "../assets/styles/TripDetailPage.css";
 
+import Navbar from "../components/Navbar/Navbar";
 import logo from "../assets/images/AdventourLogo.svg";
 import profil from "../assets/images/LisaProfil.jpg";
-import nine from "../assets/images/Nine.jpg";
-import ljota from "../assets/images/La-Llotja-1.webp";
-import tribitz from "../assets/images/the-main-dining-area.jpg";
-import barcelonaBackground from "../assets/images/barcelona.jpg"; // Background image
-import hyatt from "../assets/images/hyatt.webp";
-import mandarin from "../assets/images/Mandarin.jpg";
-import W from "../assets/images/w-barcelona.jpg";
 
 const TripDetailPage = () => {
   const { tripData } = useTripContext();
@@ -25,7 +19,7 @@ const TripDetailPage = () => {
     return <div>Loading...</div>;
   }
 
-    const sliderSettings = {
+  const sliderSettings = {
     dots: true,
     infinite: false,
     arrows: false,
@@ -50,6 +44,7 @@ const TripDetailPage = () => {
 
   return (
     <div className="trip-detail-page">
+      <Navbar logoSrc={logo} profilePicSrc={profil} background="white" />
       <div
         className="sticky-header"
         style={{ backgroundImage: `url(${trip.backgroundImage})` }}
@@ -84,11 +79,13 @@ const TripDetailPage = () => {
           <div className="recommendation-category">
             <h3>Accommodations</h3>
             <Slider {...sliderSettings}>
-              {trip.recommendations.accommodations.map((accommodation, index) => (
-                <div key={index} className="recommendation-tile">
-                  <p>{accommodation.name}</p>
-                </div>
-              ))}
+              {trip.recommendations.accommodations.map(
+                (accommodation, index) => (
+                  <div key={index} className="recommendation-tile">
+                    <p>{accommodation.name}</p>
+                  </div>
+                )
+              )}
             </Slider>
           </div>
         </div>
@@ -104,7 +101,10 @@ const TripDetailPage = () => {
                 className="profile-picture"
               />
               <div className="preference-bar-container">
-                <div className="preference-bar-fill" style={{ width: `${user.preferenceMatch}%` }}></div>
+                <div
+                  className="preference-bar-fill"
+                  style={{ width: `${user.preferenceMatch}%` }}
+                ></div>
               </div>
               <p className="preference-percentage">{user.preferenceMatch}%</p>
             </div>
@@ -260,5 +260,3 @@ export default TripDetailPage;
 //     </div>
 //   );
 // };
-
-

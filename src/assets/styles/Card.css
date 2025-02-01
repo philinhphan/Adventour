@@ -14,8 +14,8 @@
 .card {
   perspective: 1000px;
   position: relative;
-  width: 370px;
-  height: 680px;
+  width: 92%;
+  height: 75vh;
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 

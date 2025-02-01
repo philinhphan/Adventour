@@ -8,7 +8,7 @@ import superlikeIcon from "../../assets/icons/superlike.svg";
 import indifferentIcon from "../../assets/icons/indifferent.svg";
 import likeIcon from "../../assets/icons/like.svg";
 
-const Card = ({ suggestion, onSwipe, isLastCard, onLastSwipe }) => {
+const Card = ({ suggestion, onSwipe, isLastCard, onLastSwipe, isVisible }) => {
   const [swipeDirection, setSwipeDirection] = useState(null);
   const [buttonPressed, setButtonPressed] = useState(null);
   const [isHidden, setIsHidden] = useState(false);
@@ -16,20 +16,14 @@ const Card = ({ suggestion, onSwipe, isLastCard, onLastSwipe }) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   useEffect(() => {
-    setIsImageLoaded(false); // Reset loading state on new suggestion
-  }, [suggestion]);
-
-  // Ensure new cards start unflipped
-  useEffect(() => {
-    setTimeout(() => setIsFlipped(false), 10); // Ensure state updates after render
+    const img = new Image();
+    img.src = suggestion.image;
+    img.onload = () => {
+      setIsImageLoaded(true);
+    };
   }, [suggestion]);
 
   const handleSwipe = (direction) => {
-    if (!suggestion) {
-      console.error("No suggestion provided!");
-      return;
-    }
-
     setSwipeDirection(direction);
     setButtonPressed(direction);
 
@@ -38,7 +32,6 @@ const Card = ({ suggestion, onSwipe, isLastCard, onLastSwipe }) => {
         setIsHidden(true);
         onLastSwipe(direction, suggestion);
       } else {
-        setIsFlipped(false); // Reset flip AFTER swipe animation
         onSwipe(direction, suggestion);
       }
 
@@ -61,6 +54,7 @@ const Card = ({ suggestion, onSwipe, isLastCard, onLastSwipe }) => {
   if (isHidden || !suggestion) {
     return null;
   }
+  if (!isVisible) return null; // Hide cards that aren't currently active
 
   return (
     <div className="card-container">

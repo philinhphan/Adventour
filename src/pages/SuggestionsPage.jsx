@@ -33,15 +33,7 @@ const SuggestionsPage = ({ currentTripId, userId }) => {
     setSwipeAnswers((prev) => [...prev, newAnswer]);
 
     if (currentIndex < suggestions.length - 1) {
-      const nextSuggestion = suggestions[currentIndex + 1];
-
-      // Preload the next image
-      const img = new Image();
-      img.src = nextSuggestion.image;
-      img.onload = () => {
-        // Once the image is loaded, update the card index
-        setCurrentIndex((prevIndex) => prevIndex + 1);
-      };
+      setCurrentIndex((prevIndex) => prevIndex + 1);
     } else {
       console.log("No more suggestions. Processing final match...");
       updateSwipeAnswers([...swipeAnswers, newAnswer]);
@@ -64,7 +56,6 @@ const SuggestionsPage = ({ currentTripId, userId }) => {
   };
 
   const generatePerfectMatch = async (allSwipeAnswers) => {
-    //TODO: Check if all users have set their preferences and suggestions only if they have -> generate perfect match
     let success = false;
     let perfectMatch = null;
 
@@ -123,16 +114,16 @@ const SuggestionsPage = ({ currentTripId, userId }) => {
   return (
     <div className="suggestions-page">
       <div className="suggestions-container">
-        {currentIndex < suggestions.length ? (
+        {suggestions.map((suggestion, index) => (
           <Card
-            suggestion={suggestions[currentIndex]}
+            key={suggestion.id}
+            suggestion={suggestion}
             onSwipe={handleSwipe}
-            isLastCard={currentIndex === suggestions.length - 1}
+            isLastCard={index === suggestions.length - 1}
             onLastSwipe={handleLastSwipe}
+            isVisible={index === currentIndex} // Only show the topmost card
           />
-        ) : (
-          <h2>No more suggestions</h2>
-        )}
+        ))}
       </div>
     </div>
   );

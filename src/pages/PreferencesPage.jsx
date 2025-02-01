@@ -77,6 +77,23 @@ const PreferencesPage = ({ currentTripId, userId }) => {
 
   // Handle save preferences button click
   const handleSavePreferences = async () => {
+    if (
+      !preferences ||
+      !Array.isArray(preferences) ||
+      preferences.length === 0
+    ) {
+      console.error("Error: Preferences are empty or not an array.");
+      alert("Please select at least one preference before saving.");
+      return;
+    }
+
+    try {
+      await savePreferences(currentTripId, userId, preferences);
+      updatePreferences(preferences);
+      console.log("Preferences saved successfully!");
+    } catch (error) {
+      console.error("Error saving preferences:", error);
+    }
     // Once all async calls are successful, navigate to flight popup
     navigate("/flight-popup");
     try {

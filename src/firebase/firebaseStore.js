@@ -129,9 +129,10 @@ export const saveSuggestionsAndAnswers = async (
 };
 
 /**
- * Retrieve all trips referenced in the current user's document.
+ * Retrieve all trips referenced in the current user's document,
+ * sorted in descending order by the `createdAt` timestamp.
  * @param {string} userId - The ID of the user document in Firestore.
- * @returns {Promise<Array>} - Resolves with an array of trip documents.
+ * @returns {Promise<Array>} - Resolves with an array of trip documents sorted by `createdAt`.
  */
 export const getUserTrips = async (userId) => {
   try {
@@ -159,6 +160,13 @@ export const getUserTrips = async (userId) => {
         );
       }
     }
+
+    // Sort trips by `createdAt` in descending order
+    trips.sort((a, b) => {
+      const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(0);
+      const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(0);
+      return dateB - dateA; // Descending order
+    });
 
     return trips;
   } catch (error) {
@@ -213,6 +221,87 @@ export const queryUsersByTrip = async (tripId) => {
     return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
   } catch (error) {
     console.error("Error querying users by trip:", error);
+    throw error;
+  }
+};
+
+/**
+ * Save the perfect match data under the current trip in Firestore.
+ * @param {string} tripId - The ID of the current trip.
+ * @param {Object} perfectMatch - The object containing perfect match data.
+ * @returns {Promise<void>} - Resolves when the data is saved.
+ */
+export const updateTripWithPerfectMatch = async (tripId, perfectMatch) => {
+  try {
+    const tripRef = doc(db, "trips", tripId);
+
+    await updateDoc(tripRef, {
+      perfectMatch: perfectMatch,
+    });
+
+    console.log(`Perfect match saved for trip ${tripId}.`);
+  } catch (error) {
+    console.error("Error saving perfect match:", error);
+    throw error;
+  }
+};
+
+/**
+ * Check if all users affiliated with a trip have set their preferences and suggestions.
+ * @param {string} tripId - The ID of the trip.
+ * @returns {Promise<boolean>} - Resolves with `true` if all users have set preferences and suggestions, otherwise `false`.
+ */
+export const checkAllUsersCompleted = async (tripId) => {
+  try {
+    // Fetch the trip document
+    const tripRef = doc(db, "trips", tripId);
+    const tripSnap = await getDoc(tripRef);
+
+    if (!tripSnap.exists()) {
+      throw new Error(`Trip with ID ${tripId} does not exist.`);
+    }
+
+    const tripData = tripSnap.data();
+
+    // Fetch users affiliated with the trip using the provided function
+    const users = await queryUsersByTrip(tripId);
+
+    if (!users.length) {
+      console.warn(`No users found for trip ID ${tripId}.`);
+      return false; // No users = can't be completed
+    }
+
+    // Check if each user has both preferences & suggestions
+    const allUsersCompleted = users.every((user) => {
+      const hasPreferences = tripData.preferences?.some((pref) => pref.creatorId === user.id);
+      const hasSuggestions = tripData.suggestions?.some((suggestion) => suggestion.creatorId === user.id);
+      return hasPreferences && hasSuggestions;
+    });
+
+    return allUsersCompleted;
+  } catch (error) {
+    console.error("Error checking user completion status:", error);
+    throw error;
+  }
+};
+
+/**
+ * Get a Trip by its id from Firestore.
+ * @param {string} tripId - The ID of the trip.
+ * @returns {Promise<object>} - Resolves with the trip data.
+ */
+export const getTripById = async (tripId) => {
+  try {
+    const tripRef = doc(db, "trips", tripId);
+    const tripDoc = await getDoc(tripRef);
+
+    if (!tripDoc.exists()) {
+      throw new Error(`Trip with ID ${tripId} does not exist.`);
+    }
+
+    return { id: tripDoc.id, ...tripDoc.data() };
+  } catch (error) {
+    console.error("Error fetching trip by ID:", error);
     throw error;
   }
 };

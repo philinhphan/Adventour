@@ -21,6 +21,7 @@
   margin-bottom: 10px;
   border-radius: 5px;
   background-color: #f9f9f9;
+  position: relative;
 }
 
 .trip-details {
@@ -33,12 +34,7 @@
   object-fit: cover;
   border-radius: 10px;
   margin-bottom: 10px;
-}
-
-.trip-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  margin-top: 25px;
 }
 
 .trip-list {
@@ -117,17 +113,17 @@
   margin-top: 20px;
 }
 
-.trip-info { 
+.trip-info {
   padding: 10px;
 }
 
-.trip-info h3 { 
+.trip-info h3 {
   font-size: 18px;
   margin: 5px 0;
 
 }
 
-.trip-info p { 
+.trip-info p {
   font-size: 16px;
   color: #555;
 }
@@ -160,19 +156,14 @@
 }
 
 .delete-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
   background: none;
   border: none;
-  color: red;
-  font-size: 1.2em;
+  font-size: 20px;
   cursor: pointer;
-  position: absolute;
-  right: 35px;
-  margin-top: 130px;
-}
-
-.delete-button:hover {
-  transform: scale(1.2);
-  color: darkred;
+  transition: transform 0.2s ease-in-out;
 }
 
 .button-generate-match {
@@ -195,6 +186,7 @@
   color: #777;
   margin-top: 50px;
 }
+
 .no-trips-message {
   font-size: 16px;
   color: #888;

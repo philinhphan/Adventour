@@ -4,9 +4,8 @@ import {
   getUserTrips,
   queryUsersByTrip,
   deleteTrip,
+  clearUserNotification,
 } from "../firebase/firebaseStore";
-import { fetchPerfectMatch } from "../api/tripApi";
-import { useTripContext } from "../context/TripContext";
 import "../assets/styles/MyTripsPage.css";
 import barcelona from "../assets/images/barcelona.jpg";
 import Navbar from "../components/Navbar/Navbar";
@@ -17,7 +16,6 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const { savePerfectMatch } = useTripContext();
 
   useEffect(() => {
     const fetchTrips = async () => {
@@ -109,6 +107,7 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
   const handleDeleteTrip = async (tripId) => {
     try {
       await deleteTrip(tripId);
+      await clearUserNotification(userId, tripId);
       setTrips((prevTrips) => prevTrips.filter((trip) => trip.id !== tripId));
     } catch (error) {
       console.error("Error deleting trip:", error);

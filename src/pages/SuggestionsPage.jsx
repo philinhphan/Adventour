@@ -4,7 +4,12 @@ import { fetchPerfectMatch } from "../api/tripApi";
 import Card from "../components/TinderCard/Card";
 import "../assets/styles/SuggestionsPage.css";
 import { useNavigate } from "react-router-dom";
-import { saveSuggestionsAndAnswers, updateTripWithPerfectMatch, checkAllUsersCompleted} from "../firebase/firebaseStore";
+import {
+  saveSuggestionsAndAnswers,
+  updateTripWithPerfectMatch,
+  checkAllUsersCompleted,
+  notifyUsersOfPerfectMatch,
+} from "../firebase/firebaseStore";
 
 const SuggestionsPage = ({ currentTripId, userId }) => {
   const { tripData, updateSwipeAnswers } = useTripContext();
@@ -63,7 +68,11 @@ const SuggestionsPage = ({ currentTripId, userId }) => {
       let retrySuccess = false;
       while (!retrySuccess) {
         try {
-          await saveSuggestionsAndAnswers(currentTripId, userId, allSwipeAnswers);
+          await saveSuggestionsAndAnswers(
+            currentTripId,
+            userId,
+            allSwipeAnswers
+          );
           retrySuccess = true;
         } catch (retryError) {
           console.error("Retrying saveSuggestionsAndAnswers...", retryError);
@@ -85,8 +94,20 @@ const SuggestionsPage = ({ currentTripId, userId }) => {
           console.error("Error fetching Perfect Match, retrying...", error);
         }
       }
+      success = false;
+      while (!success) {
+        try {
+          await notifyUsersOfPerfectMatch(currentTripId);
+          console.log("Notified all users of Perfect Match");
+          success = true;
+        } catch (error) {
+          console.error(
+            "Error notifying users of Perfect Match, retrying...",
+            error
+          );
+        }
+      }
     }
-
 
     navigate("/processing");
   };

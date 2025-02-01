@@ -273,8 +273,12 @@ export const checkAllUsersCompleted = async (tripId) => {
 
     // Check if each user has both preferences & suggestions
     const allUsersCompleted = users.every((user) => {
-      const hasPreferences = tripData.preferences?.some((pref) => pref.creatorId === user.id);
-      const hasSuggestions = tripData.suggestions?.some((suggestion) => suggestion.creatorId === user.id);
+      const hasPreferences = tripData.preferences?.some(
+        (pref) => pref.creatorId === user.id
+      );
+      const hasSuggestions = tripData.suggestions?.some(
+        (suggestion) => suggestion.creatorId === user.id
+      );
       return hasPreferences && hasSuggestions;
     });
 
@@ -302,6 +306,98 @@ export const getTripById = async (tripId) => {
     return { id: tripDoc.id, ...tripDoc.data() };
   } catch (error) {
     console.error("Error fetching trip by ID:", error);
+    throw error;
+  }
+};
+
+/**
+ * Notify all users affiliated with a trip that the perfect match has been generated.
+ * To do so, we save the trip id under the `notifications` array in each user document.
+ * @param {string} tripId - The ID of the trip.
+ * @returns {Promise<void>} - Resolves when the notifications are saved.
+ */
+export const notifyUsersOfPerfectMatch = async (tripId) => {
+  try {
+    // Fetch users affiliated with the trip using the provided function
+    const users = await queryUsersByTrip(tripId);
+
+    if (!users.length) {
+      console.warn(`No users found for trip ID ${tripId}.`);
+      return;
+    }
+
+    // Save a notification for each user
+    await Promise.all(
+      users.map(async (user) => {
+        const userRef = doc(db, "users", user.id);
+        await updateDoc(userRef, {
+          notifications: arrayUnion(tripId),
+        });
+      })
+    );
+
+    console.log(`Users notified of perfect match for trip ${tripId}.`);
+  } catch (error) {
+    console.error("Error notifying users of perfect match:", error);
+    throw error;
+  }
+};
+
+/**
+ * Clear the notifications array for a user after they have viewed the perfect match.
+ * We first fetch the notifications array, then remove the trip ID from it.
+ * @param {string} userId - The ID of the user.
+ * @param {string} tripId - The ID of the trip.
+ * @returns {Promise<void>} - Resolves when the notifications are cleared.
+ */
+export const clearUserNotification = async (userId, tripId) => {
+  try {
+    const userRef = doc(db, "users", userId);
+    const userDoc = await getDoc(userRef);
+
+    if (!userDoc.exists()) {
+      throw new Error(`User with ID ${userId} does not exist.`);
+    }
+
+    const userData = userDoc.data();
+    if (
+      userData.notifications?.length != 0 &&
+      userData.notifications.includes(tripId)
+    ) {
+      const updatedNotifications = userData.notifications.filter(
+        (notification) => notification !== tripId
+      );
+
+      await updateDoc(userRef, {
+        notifications: updatedNotifications,
+      });
+    }
+
+    console.log(`Notification cleared for user ${userId} for trip ${tripId}.`);
+  } catch (error) {
+    console.error("Error clearing user notification:", error);
+    throw error;
+  }
+};
+
+/**
+ * Fetch all notifications for a user from Firestore.
+ * @param {string} userId - The ID of the user.
+ * @returns {Promise<Array>} - Resolves with an array of trip IDs.
+ */
+export const getUserNotifications = async (userId) => {
+  try {
+    const userRef = doc(db, "users", userId);
+    const userDoc = await getDoc(userRef);
+
+    if (!userDoc.exists()) {
+      throw new Error(`User with ID ${userId} does not exist.`);
+    }
+
+    const userData = userDoc.data();
+    return userData.notifications || [];
+  } catch (error) {
+    console.error("Error fetching user notifications:", error);
     throw error;
   }
 };

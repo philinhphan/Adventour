@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getTripById } from "../firebase/firebaseStore";
+import { getTripById, clearUserNotification } from "../firebase/firebaseStore";
 import Slider from "react-slick";
 import "../assets/styles/TripDetailPage.css";
 
@@ -8,8 +8,8 @@ import Navbar from "../components/Navbar/Navbar";
 import logo from "../assets/images/AdventourLogo.svg";
 import profil from "../assets/images/LisaProfil.jpg";
 
-const TripDetailPage = () => {
-  const { tripId } = useParams(); // Extract trip ID from URL (assuming URL is /trip/:tripId)
+const TripDetailPage = ({ userId }) => {
+  const { tripId } = useParams();
   const [trip, setTrip] = useState(null);
 
   useEffect(() => {
@@ -19,6 +19,7 @@ const TripDetailPage = () => {
 
         if (tripDoc && tripDoc.perfectMatch) {
           setTrip(tripDoc.perfectMatch || null);
+          await clearUserNotification(userId, tripId);
         } else {
           console.warn("Trip does not jet have a perfect match generated.");
         }

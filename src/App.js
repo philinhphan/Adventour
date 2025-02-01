@@ -110,6 +110,7 @@ function App() {
                   <HomePage
                     backgroundImage={backgroundImage}
                     userName={userName} // Use userName state here
+                    userId={userId} // Pass the user document ID
                   />
                 </ProtectedRoute>
               }
@@ -186,12 +187,12 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            {/* TODO PhiLinh: Change TripID once the API creates the trip */}
+
             <Route
               path="/trip-detail/:tripId"
               element={
                 <ProtectedRoute>
-                  <TripDetailPage />
+                  <TripDetailPage userId={userId} />
                 </ProtectedRoute>
               }
             />

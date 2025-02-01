@@ -120,7 +120,6 @@
 .trip-info h3 {
   font-size: 18px;
   margin: 5px 0;
-
 }
 
 .trip-info p {
@@ -191,4 +190,78 @@
   font-size: 16px;
   color: #888;
   text-align: center;
+}
+
+/* Default styling for participants */
+.participant {
+  padding: 8px;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.user-complete {
+  border: 2px solid #28a745; /* Green */
+  background-color: #e8f5e9;
+}
+
+/* ❌ Red border for users who haven't given preferences yet */
+.user-incomplete {
+  border: 2px solid #ff4d4d; /* Red */
+  background-color: #ffe5e5;
+}
+
+/* 🚨 Pulsing animation for logged-in user who hasn't given preferences */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 5px rgba(255, 77, 77, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(255, 77, 77, 0.9);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(255, 77, 77, 0.5);
+  }
+}
+
+.user-incomplete-pulsing {
+  border: 2px solid #ff4d4d; /* Red */
+  background-color: #ffe5e5;
+  animation: pulse 1.5s infinite;
+}
+
+/* ✅ Styling for finished trips (perfect match available) */
+.trip-ready {
+  border: 3px solid #28a745; /* Green border */
+  background-color: #e8f5e9; /* Light green background */
+  transition: all 0.3s ease-in-out;
+}
+
+/* ❌ Styling for unfinished trips */
+.trip-pending {
+  border: 2px solid #ff4d4d; /* Red border */
+  background-color: #ffe5e5;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Title styling for finished trips */
+.trip-destination {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #28a745;
+  text-align: center;
+}
+
+/* Show the original trip name below the match destination */
+.trip-original-name {
+  font-size: 1em;
+  color: #555;
+  font-style: italic;
+  text-align: center;
+  margin-top: 5px;
+}
+
+/* Adjust trip title section */
+.trip-title-section {
+  text-align: center;
+  margin-bottom: 10px;
 }

@@ -20,6 +20,8 @@
 
 .share-section {
   margin-top: 20px;
+  width: -webkit-fill-available;
+  max-width: 500px;
 }
 
 .share-input {

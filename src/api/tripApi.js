@@ -27,7 +27,7 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
         2. Preferences: ${JSON.stringify(preferences)} 
 
         Return the suggestions ONLY as a valid JSON array of objects. No extra commentary, no code fences, no markdown blocks. Only a raw JSON array.
-        Don't forget quotation marks, brackets and the commas after the propertys. All property names have to be double-quoted. The JSON array and objects should look like:
+       All property names have to be double-quoted. The JSON array and objects should look like:
         [
         {
           "name": "...",

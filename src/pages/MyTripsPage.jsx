@@ -74,6 +74,7 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
   const handleTripClick = (trip) => {
     // Check if the current user has completed their preferences and swipes
     const currentUser = trip.userDetails?.find((user) => user.id === userId);
+    setCurrentTripId(trip.id);
 
     // If the user has completed their preferences and swipes but the trip is not finalized, show an alert
     if (
@@ -87,7 +88,6 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
 
     // If the perfect match is generated, navigate to the trip detail page
     if (trip.perfectMatch) {
-      setCurrentTripId(trip.id);
       navigate(`/trip-detail/${trip.id}`);
       return;
     }
@@ -104,11 +104,13 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
     }
   };
 
-  const handleDeleteTrip = async (tripId) => {
+  const handleDeleteTrip = async (trip) => {
     try {
-      await deleteTrip(tripId);
-      await clearUserNotification(userId, tripId);
-      setTrips((prevTrips) => prevTrips.filter((trip) => trip.id !== tripId));
+      await deleteTrip(trip.id);
+      trip.userDetails.forEach(async (user) => {
+        await clearUserNotification(user.id, trip.id);
+      });
+      setTrips((prevTrips) => prevTrips.filter((trp) => trp.id !== trip.id));
     } catch (error) {
       console.error("Error deleting trip:", error);
     }
@@ -146,7 +148,7 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
                         className="delete-button"
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleDeleteTrip(trip.id);
+                          handleDeleteTrip(trip);
                         }}
                       >
                         ⛌
@@ -210,7 +212,7 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
                         className="delete-button"
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleDeleteTrip(trip.id);
+                          handleDeleteTrip(trip);
                         }}
                       >
                         ⛌
@@ -275,7 +277,7 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
                         className="delete-button"
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleDeleteTrip(trip.id);
+                          handleDeleteTrip(trip);
                         }}
                       >
                         ⛌

@@ -5,7 +5,7 @@ import Button from "../components/Button/Button";
 import "../assets/styles/InviteFriends.css";
 import Navbar from "../components/Navbar/Navbar";
 import logo from "../assets/images/AdventourLogo.svg";
-import profil from "../assets/images/LisaProfil.jpg";
+// import profil from "../assets/images/LisaProfil.jpg";
 
 // Import icons
 import whatsapp from "../assets/icons/whatsapp.svg";
@@ -17,7 +17,7 @@ import LinkedIn from "../assets/icons/LinkedIn.svg";
 import Snapchat from "../assets/icons/Snapchat.svg";
 import TikTok from "../assets/icons/TikTok.svg";
 
-const InviteFriendsPage = () => {
+const InviteFriendsPage = ({ profilePic }) => {
   const { tripData } = useTripContext(); // Access trip data from context
   const shareLink = "https://adventour-app.com/share";
 
@@ -96,7 +96,7 @@ const InviteFriendsPage = () => {
 
   return (
     <div className="invite-friends-page">
-      <Navbar logoSrc={logo} profilePicSrc={profil} background="white" />
+      <Navbar logoSrc={logo} profilePicSrc={profilePic} background="white" />
       <div className="invite-container">
         <h1>Do you want to invite friends?</h1>
         <h3>Your AdvenTour awaits!</h3>

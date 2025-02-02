@@ -4,7 +4,7 @@ import "../assets/styles/App.css";
 import "../assets/styles/PlanningPage.css";
 import Navbar from "../components/Navbar/Navbar";
 import logo from "../assets/images/AdventourLogo.svg";
-import profil from "../assets/images/LisaProfil.jpg";
+// import profil from "../assets/images/LisaProfil.jpg";
 
 import { useTripContext } from "../context/TripContext";
 import { addTrip, linkTripToUser } from "../firebase/firebaseStore";
@@ -14,7 +14,7 @@ import Button from "../components/Button/Button";
 import budgetIcon from "../assets/icons/Budget.svg";
 import dateIcon from "../assets/icons/Date.svg";
 
-const PlanningPage = ({ userId, setCurrentTripId }) => {
+const PlanningPage = ({ userId, setCurrentTripId, profilePic }) => {
   const [tripDetails, setTripDetails] = useState({
     name: "",
     dateStart: "",
@@ -150,7 +150,7 @@ const PlanningPage = ({ userId, setCurrentTripId }) => {
 
   return (
     <div className="planning-page">
-      <Navbar logoSrc={logo} profilePicSrc={profil} background="white" />
+      <Navbar logoSrc={logo} profilePicSrc={profilePic} background="white" />
       <div className="planning-container">
         <h1 className="title">Please specify your trip details</h1>
         <div className="planning-section">

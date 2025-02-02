@@ -10,7 +10,7 @@ import { savePreferences } from "../firebase/firebaseStore";
 
 //TODO Design: Find better solution for image imports
 import logo from "../assets/images/AdventourLogo.svg";
-import profil from "../assets/images/LisaProfil.jpg";
+// import profil from "../assets/images/LisaProfil.jpg";
 import PreferenceCultural from "../assets/images/PreferenceCultural.jpg";
 import PreferenceAdventure from "../assets/images/PreferenceAdventure.jpg";
 import PreferenceLeisure from "../assets/images/PreferenceLeisure.jpg";
@@ -28,7 +28,7 @@ import AccommodationAirBnB from "../assets/images/AccommodationAirBnB.jpg";
 import AccommodationCamping from "../assets/images/AccommodationCamping.jpg";
 
 // Preferences page component
-const PreferencesPage = ({ currentTripId, userId }) => {
+const PreferencesPage = ({ currentTripId, userId, profilePic }) => {
   const [preferences, setPreferences] = useState([]);
   const navigate = useNavigate();
   const { tripData, updatePreferences, updateSuggestions } = useTripContext();
@@ -156,7 +156,7 @@ const PreferencesPage = ({ currentTripId, userId }) => {
 
   return (
     <div className="preferences-page">
-      <Navbar logoSrc={logo} profilePicSrc={profil} background="white" />
+      <Navbar logoSrc={logo} profilePicSrc={profilePic} background="white" />
       <div className="preferences-container">
         <h1>Select general preferences</h1>
         <p className="hint">

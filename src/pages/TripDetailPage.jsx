@@ -6,9 +6,9 @@ import "../assets/styles/TripDetailPage.css";
 
 import Navbar from "../components/Navbar/Navbar";
 import logo from "../assets/images/AdventourLogo.svg";
-import profil from "../assets/images/LisaProfil.jpg";
+// import profil from "../assets/images/LisaProfil.jpg";
 
-const TripDetailPage = ({ userId }) => {
+const TripDetailPage = ({ userId, profilePic }) => {
   const { tripId } = useParams();
   const [trip, setTrip] = useState(null);
   const [additionalImages, setAdditionalImages] = useState([]);
@@ -81,7 +81,7 @@ const TripDetailPage = ({ userId }) => {
 
   return (
     <div className="trip-detail-page">
-      <Navbar logoSrc={logo} profilePicSrc={profil} background="white" />
+      <Navbar logoSrc={logo} profilePicSrc={profilePic} background="white" />
       <div
         className="sticky-header"
         style={{ backgroundImage: `url(${trip.backgroundImage})` }}

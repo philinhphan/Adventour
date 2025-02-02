@@ -5,9 +5,10 @@ import Navbar from "../components/Navbar/Navbar";
 import "../assets/styles/LoginPage.css";
 
 import logo from "../assets/images/AdventourLogo.svg";
-import profil from "../assets/images/emptyProfile.png";
+// import profil from "../assets/images/emptyProfile.png";
 
-const LoginPage = () => {
+
+const LoginPage = ({ profilePic }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -28,7 +29,7 @@ const LoginPage = () => {
 
   return (
     <div className="login-page">
-      <Navbar logoSrc={logo} profilePicSrc={profil} />
+      <Navbar logoSrc={logo} profilePicSrc={profilePic} />
       <div className="login-container">
         <h1>Welcome Back !</h1>
         <h2>Start your AdvenTour of a Lifetime</h2>

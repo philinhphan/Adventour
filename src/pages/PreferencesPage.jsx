@@ -27,7 +27,7 @@ import AccommodationResort from "../assets/images/AccommodationResort.jpg";
 import AccommodationAirBnB from "../assets/images/AccommodationAirBnB.jpg";
 import AccommodationCamping from "../assets/images/AccommodationCamping.jpg";
 
-const PreferencesPage = ({ currentTripId, userId }) => {
+const PreferencesPage = ({ currentTripId, userId, profilePic }) => {
   const [preferences, setPreferences] = useState([]);
   const navigate = useNavigate();
   const { tripData, updatePreferences, updateSuggestions } = useTripContext();

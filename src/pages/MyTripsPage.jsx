@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   getUserTrips,
@@ -72,11 +72,9 @@ const MyTripsPage = ({ userId, setCurrentTripId, profilePic }) => {
   }, [userId]);
 
   const handleTripClick = (trip) => {
-    // Check if the current user has completed their preferences and swipes
     const currentUser = trip.userDetails?.find((user) => user.id === userId);
     setCurrentTripId(trip.id);
 
-    // If the user has completed their preferences and swipes but the trip is not finalized, show an alert
     if (
       currentUser?.hasPreferences &&
       currentUser?.hasSuggestions &&
@@ -86,13 +84,11 @@ const MyTripsPage = ({ userId, setCurrentTripId, profilePic }) => {
       return;
     }
 
-    // If the perfect match is generated, navigate to the trip detail page
     if (trip.perfectMatch) {
       navigate(`/trip-detail/${trip.id}`);
       return;
     }
 
-    // Standard navigation logic for users who haven't completed their inputs yet
     if (currentUser) {
       if (!currentUser.hasPreferences) {
         navigate("/preferences");
@@ -132,7 +128,6 @@ const MyTripsPage = ({ userId, setCurrentTripId, profilePic }) => {
           <p>Loading your trips...</p>
         ) : trips.length > 0 ? (
           <>
-            {/* Section 1: My Matches (Completed Trips) */}
             <h3 className="trip-section-title">My Matches</h3>
             <ul className="trip-list">
               {trips
@@ -155,6 +150,15 @@ const MyTripsPage = ({ userId, setCurrentTripId, profilePic }) => {
                     onClick={() => handleTripClick(trip)}
                   >
                     <div className="trip-details">
+                      <button
+                        className="delete-button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteTrip(trip);
+                        }}
+                      >
+                        ⛌
+                      </button>
                       <h2>{trip.perfectMatch?.name || trip.name}</h2>
                       <h4>{trip.name}</h4>
                       <p>
@@ -184,7 +188,6 @@ const MyTripsPage = ({ userId, setCurrentTripId, profilePic }) => {
                 ))}
             </ul>
 
-            {/* Section 2: AdvenTours in Progress */}
             <h3 className="trip-section-title">AdvenTours in Progress</h3>
             <ul className="trip-list">
               {trips
@@ -194,7 +197,7 @@ const MyTripsPage = ({ userId, setCurrentTripId, profilePic }) => {
                   );
                   return (
                     !trip.perfectMatch &&
-                    trip.allUsersCompleted === false &&
+                    !trip.allUsersCompleted &&
                     currentUser?.hasPreferences &&
                     currentUser?.hasSuggestions
                   );
@@ -223,31 +226,27 @@ const MyTripsPage = ({ userId, setCurrentTripId, profilePic }) => {
                               trip.details.start_date.toDate()
                             ).toLocaleDateString() + " - "
                           : null}
-
                         {trip.details?.end_date
                           ? new Date(
                               trip.details.end_date.toDate()
                             ).toLocaleDateString()
                           : "Date is not set for this trip"}
                       </p>
-                      {trip.userDetails && (
-                        <div className="trip-users">
-                          <h4>Participants</h4>
-                          <ul>
-                            {trip.userDetails.map((user) => (
-                              <li key={user.id} className="participant">
-                                {user.name}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
+                      <div className="trip-users">
+                        <h4>Participants</h4>
+                        <ul>
+                          {trip.userDetails?.map((user) => (
+                            <li key={user.id} className="participant">
+                              {user.name}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
                   </li>
                 ))}
             </ul>
 
-            {/* Section 3: Pending Your Input */}
             <h3 className="trip-section-title">Pending Your Input</h3>
             <ul className="trip-list">
               {trips
@@ -285,25 +284,22 @@ const MyTripsPage = ({ userId, setCurrentTripId, profilePic }) => {
                               trip.details.start_date.toDate()
                             ).toLocaleDateString() + " - "
                           : null}
-
                         {trip.details?.end_date
                           ? new Date(
                               trip.details.end_date.toDate()
                             ).toLocaleDateString()
                           : "Date is not set for this trip"}
                       </p>
-                      {trip.userDetails && (
-                        <div className="trip-users">
-                          <h4>Participants</h4>
-                          <ul>
-                            {trip.userDetails.map((user) => (
-                              <li key={user.id} className="participant">
-                                {user.name}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
+                      <div className="trip-users">
+                        <h4>Participants</h4>
+                        <ul>
+                          {trip.userDetails?.map((user) => (
+                            <li key={user.id} className="participant">
+                              {user.name}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
                   </li>
                 ))}

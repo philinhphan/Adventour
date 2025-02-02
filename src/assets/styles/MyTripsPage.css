@@ -357,3 +357,9 @@
 .trip-box.trip-ready .trip-users {
   margin-top: 20px;
 }
+
+.trip-box.trip-ready .delete-button {
+  top: 0px;
+  right: 0px;
+  color: white;
+}

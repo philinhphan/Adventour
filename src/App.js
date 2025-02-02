@@ -5,6 +5,7 @@ import InviteFriendsPage from "./pages/InviteFriendsPage";
 import PlanningPage from "./pages/PlanningPage";
 import PreferencesPage from "./pages/PreferencesPage";
 import SuggestionsPage from "./pages/SuggestionsPage";
+import ScrollToTop from "./components/Utils/ScrollToTop";
 
 import ProcessingPage from "./pages/ProcessingPage";
 import MyTripsPage from "./pages/MyTripsPage";
@@ -103,11 +104,12 @@ function App() {
   return (
     <div>
       <Router>
+        <ScrollToTop />
         <Navbar
           logoSrc={logo}
           profilePicSrc={profilePic}
-          setProfilePic={setProfilePic} 
-          userId={userId} 
+          setProfilePic={setProfilePic}
+          userId={userId}
         />
         <div className="content">
           <Routes>

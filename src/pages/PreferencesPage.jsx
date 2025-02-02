@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import React, { useState } from "react";
 import Slider from "react-slick";
 import Tile from "../components/Tile/Tile";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +8,7 @@ import { useTripContext } from "../context/TripContext";
 import { fetchSwipeSuggestions } from "../api/tripApi";
 import { savePreferences } from "../firebase/firebaseStore";
 
-//TODO Design: Find better solution for image imports
+// Image imports
 import logo from "../assets/images/AdventourLogo.svg";
 // import profil from "../assets/images/LisaProfil.jpg";
 import PreferenceCultural from "../assets/images/PreferenceCultural.jpg";
@@ -27,19 +27,14 @@ import AccommodationResort from "../assets/images/AccommodationResort.jpg";
 import AccommodationAirBnB from "../assets/images/AccommodationAirBnB.jpg";
 import AccommodationCamping from "../assets/images/AccommodationCamping.jpg";
 
-// Preferences page component
-const PreferencesPage = ({ currentTripId, userId, profilePic }) => {
+const PreferencesPage = ({ currentTripId, userId }) => {
   const [preferences, setPreferences] = useState([]);
   const navigate = useNavigate();
   const { tripData, updatePreferences, updateSuggestions } = useTripContext();
 
-  // Handle tile toggle event to update preferences state based on user selection
   const handleTileToggle = (label, isSelected) => {
-    setPreferences(
-      (prev) =>
-        isSelected
-          ? [...prev, label] // Add to preferences
-          : prev.filter((pref) => pref !== label) // Remove from preferences
+    setPreferences((prev) =>
+      isSelected ? [...prev, label] : prev.filter((pref) => pref !== label)
     );
   };
 
@@ -75,15 +70,10 @@ const PreferencesPage = ({ currentTripId, userId, profilePic }) => {
     }
   };
 
-  // Handle save preferences button click
   const handleSavePreferences = async () => {
-    // Once all async calls are successful, navigate to flight popup
     navigate("/flight-popup");
     try {
-      // Save preferences to Firestore
       await savePreferences(currentTripId, userId, preferences);
-
-      // Update context with preferences
       updatePreferences(preferences);
 
       let success = false;
@@ -91,7 +81,6 @@ const PreferencesPage = ({ currentTripId, userId, profilePic }) => {
 
       while (!success) {
         try {
-          // 1) Fetch suggestions from Perplexity
           const rawSuggestions = await fetchSwipeSuggestions(
             tripData.tripDetails,
             preferences
@@ -103,7 +92,7 @@ const PreferencesPage = ({ currentTripId, userId, profilePic }) => {
               return {
                 id: idx + 1,
                 name: s.name,
-                image: imageUrl, // Use the real image from Pexels
+                image: imageUrl,
                 tags: s.tags,
                 shortDescription: s.shortDescription,
                 description: s.description,
@@ -111,18 +100,13 @@ const PreferencesPage = ({ currentTripId, userId, profilePic }) => {
             })
           );
 
-          // Mark as successful
           success = true;
         } catch (error) {
           console.error("Error fetching suggestions, retrying...", error);
         }
       }
 
-      // 2) Store them in global context
       updateSuggestions(suggestionsWithExtras);
-      console.log("Suggestions stored:", suggestionsWithExtras);
-
-      // 3) Finally, navigate to the Suggestions Page
       navigate("/suggestions");
     } catch (error) {
       alert("Error saving preferences.");
@@ -130,7 +114,6 @@ const PreferencesPage = ({ currentTripId, userId, profilePic }) => {
     }
   };
 
-  // Slider settings for tile carousel display on preferences page (responsive)
   const sliderSettings = {
     dots: true,
     infinite: false,
@@ -148,7 +131,7 @@ const PreferencesPage = ({ currentTripId, userId, profilePic }) => {
       {
         breakpoint: 300,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 1,
         },
       },
     ],
@@ -164,7 +147,6 @@ const PreferencesPage = ({ currentTripId, userId, profilePic }) => {
           no specific preferences.
         </p>
 
-        {/* TODO Design: Add all the options you want to display here with picture(jpg) and label. You can add as many categories and tiles as you want */}
         <div className="preferences-section">
           <h2>Activities</h2>
           <Slider {...sliderSettings}>
@@ -259,7 +241,6 @@ const PreferencesPage = ({ currentTripId, userId, profilePic }) => {
         </div>
       </div>
 
-      {/* Added fixed button container */}
       <div className="fixed-button-container">
         <button
           className="button button-primary"

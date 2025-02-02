@@ -19,7 +19,7 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
         // Ask Perplexity to respond ONLY with a JSON array of suggestions
         content: `
         <Task>
-        Generate 3 suggestions for a trip based on the following trip details and preferences:
+        Generate 5 suggestions for a trip based on the following trip details and preferences:
 
         1. Trip Details:       
         ${JSON.stringify(tripDetails)} 
@@ -57,6 +57,7 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
         For every attribute in the suggestions respect the following rules:
         1. name: 
         - Provide for each place the name of the location and country it is in, separated by a comma, e.g.: Barcelona, Spain; Lapland, Finland
+        - In case the location and the country are the same, provide the location and the region instead, so e.g: Barbados, Carribean (instead of Barbados, Barbados)
         2. tags: 
         - Provide 5 suitable tags that descibe the suggestion in the best possible way
         - Limit each tag to 10 characters
@@ -253,6 +254,7 @@ export const fetchPerfectMatch = async (tripId) => {
         For every attribute in the suggestion respect the following rules:
         1. name: 
         - Provide for the place the name of the location and country it is in, separated by a comma, e.g.: Barcelona, Spain
+        - In case the location and the country are the same, provide the location and the region instead, so e.g: Barbados, Carribean (instead of Barbados, Barbados)
         2. tags: 
         - Provide 5 suitable tags that descibe the suggestion in the best possible way
         - Limit each tag to 10 characters
@@ -346,7 +348,7 @@ export const fetchPerfectMatch = async (tripId) => {
     }
 
     // Fetch background image from Pexels
-    const pexelsImage = await fetchPexelsImage(finalMatch.name);
+    const pexelsImage = await fetchPexelsImage(finalMatch.name + "landscape tourism");
     finalMatch.backgroundImage = pexelsImage;
 
     console.log("Perfect Match from Perplexity:", finalMatch);

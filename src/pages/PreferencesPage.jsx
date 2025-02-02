@@ -99,7 +99,7 @@ const PreferencesPage = ({ currentTripId, userId, profilePic }) => {
 
           suggestionsWithExtras = await Promise.all(
             rawSuggestions.map(async (s, idx) => {
-              const imageUrl = await fetchPexelsImage(s.name);
+              const imageUrl = await fetchPexelsImage(s.name + "landscape tourism");
               return {
                 id: idx + 1,
                 name: s.name,

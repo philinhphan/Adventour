@@ -242,8 +242,10 @@
 }
 
 .swipe-buttons button {
-  width: 60px;
-  height: 60px;
+  width: 15vw; /* 10% der Viewport-Breite */
+  height: 15vw; /* Gleiche Höhe für einen Kreis */
+  max-width: 60px; /* Begrenzung, damit es nicht zu groß wird */
+  max-height: 60px;
   border-radius: 50%;
   background-color: white;
   display: flex;

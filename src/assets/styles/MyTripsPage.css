@@ -30,7 +30,7 @@
 
 .trip-details img {
   width: 100%;
-  height: 120px;
+  height: 100px;
   object-fit: cover;
   border-radius: 10px;
   margin-bottom: 10px;
@@ -231,7 +231,6 @@
 
 /* ✅ Styling for finished trips (perfect match available) */
 .trip-ready {
-  border: 3px solid #28a745;
   background-color: #e8f5e9;
   transition: all 0.3s ease-in-out;
 }
@@ -305,4 +304,56 @@
   background: #f0f0f0;
   display: inline-block;
   margin: 5px;
+}
+
+/* Styling for perfect match trips only */
+.trip-box.trip-ready {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 20px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  text-align: center;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Background overlay only for perfect matches */
+.trip-box.trip-ready::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* Dark overlay */
+  z-index: 1;
+}
+
+/* Text styling on top of background */
+.trip-box.trip-ready .trip-details {
+  position: relative;
+  z-index: 2;
+  padding: 20px;
+  text-align: center;
+}
+
+.trip-box.trip-ready h2,
+.trip-box.trip-ready h4,
+.trip-box.trip-ready p {
+  margin: 5px 0;
+  font-weight: bold;
+  color: white;
+}
+
+.trip-box.trip-ready h4 {
+  font-style: italic;
+}
+
+.trip-box.trip-ready .trip-users {
+  margin-top: 20px;
 }

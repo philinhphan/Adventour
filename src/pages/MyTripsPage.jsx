@@ -7,7 +7,7 @@ import {
   clearUserNotification,
 } from "../firebase/firebaseStore";
 import "../assets/styles/MyTripsPage.css";
-import barcelona from "../assets/images/barcelona.jpg";
+import barcelona from "../assets/images/default.jpg";
 import Navbar from "../components/Navbar/Navbar";
 import logo from "../assets/images/AdventourLogo.svg";
 import profil from "../assets/images/LisaProfil.jpg";
@@ -140,57 +140,45 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
                 .map((trip) => (
                   <li
                     key={trip.id}
-                    className="trip-box trip-ready"
+                    className={`trip-box ${
+                      trip.perfectMatch ? "trip-ready" : ""
+                    }`}
+                    style={
+                      trip.perfectMatch
+                        ? {
+                            backgroundImage: `url(${
+                              trip.perfectMatch.backgroundImage || barcelona
+                            })`,
+                          }
+                        : {}
+                    }
                     onClick={() => handleTripClick(trip)}
                   >
                     <div className="trip-details">
-                      <button
-                        className="delete-button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteTrip(trip);
-                        }}
-                      >
-                        ⛌
-                      </button>
-                      <img
-                        src={trip.perfectMatch.backgroundImage || barcelona}
-                        alt="Trip Destination"
-                      />
-                      <div className="trip-title-section">
-                        <h2 className="trip-destination">
-                          {trip.perfectMatch.name}
-                        </h2>
-                        <p className="trip-original-name">{trip.name}</p>
-                      </div>
+                      <h2>{trip.perfectMatch?.name || trip.name}</h2>
+                      <h4>{trip.name}</h4>
                       <p>
-                        Starts on{" "}
                         {trip.details?.start_date
                           ? new Date(
                               trip.details.start_date.toDate()
-                            ).toLocaleDateString()
-                          : "No start date"}
-                      </p>
-                      <p>
-                        Until{" "}
+                            ).toLocaleDateString() + " -"
+                          : null}
                         {trip.details?.end_date
                           ? new Date(
                               trip.details.end_date.toDate()
                             ).toLocaleDateString()
-                          : "No end date"}
+                          : "Date is not set for this trip"}
                       </p>
-                      {trip.userDetails && (
-                        <div className="trip-users">
-                          <h4>Participants</h4>
-                          <ul>
-                            {trip.userDetails.map((user) => (
-                              <li key={user.id} className="participant">
-                                {user.name}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
+                      <div className="trip-users">
+                        <h4>Participants</h4>
+                        <ul>
+                          {trip.userDetails?.map((user) => (
+                            <li key={user.id} className="participant">
+                              {user.name}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
                   </li>
                 ))}
@@ -200,7 +188,17 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
             <h3 className="trip-section-title">AdvenTours in Progress</h3>
             <ul className="trip-list">
               {trips
-                .filter((trip) => !trip.perfectMatch && !trip.allUsersCompleted)
+                .filter((trip) => {
+                  const currentUser = trip.userDetails?.find(
+                    (user) => user.id === userId
+                  );
+                  return (
+                    !trip.perfectMatch &&
+                    trip.allUsersCompleted === false &&
+                    currentUser?.hasPreferences &&
+                    currentUser?.hasSuggestions
+                  );
+                })
                 .map((trip) => (
                   <li
                     key={trip.id}
@@ -220,20 +218,17 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
                       <img src={barcelona} alt="Trip Destination" />
                       <h3>{trip.name}</h3>
                       <p>
-                        Starts on{" "}
                         {trip.details?.start_date
                           ? new Date(
                               trip.details.start_date.toDate()
-                            ).toLocaleDateString()
-                          : "No start date"}
-                      </p>
-                      <p>
-                        Until{" "}
+                            ).toLocaleDateString() + " - "
+                          : null}
+
                         {trip.details?.end_date
                           ? new Date(
                               trip.details.end_date.toDate()
                             ).toLocaleDateString()
-                          : "No end date"}
+                          : "Date is not set for this trip"}
                       </p>
                       {trip.userDetails && (
                         <div className="trip-users">
@@ -285,20 +280,17 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
                       <img src={barcelona} alt="Trip Destination" />
                       <h3>{trip.name}</h3>
                       <p>
-                        Starts on{" "}
                         {trip.details?.start_date
                           ? new Date(
                               trip.details.start_date.toDate()
-                            ).toLocaleDateString()
-                          : "No start date"}
-                      </p>
-                      <p>
-                        Until{" "}
+                            ).toLocaleDateString() + " - "
+                          : null}
+
                         {trip.details?.end_date
                           ? new Date(
                               trip.details.end_date.toDate()
                             ).toLocaleDateString()
-                          : "No end date"}
+                          : "Date is not set for this trip"}
                       </p>
                       {trip.userDetails && (
                         <div className="trip-users">

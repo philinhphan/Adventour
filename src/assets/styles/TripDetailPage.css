@@ -1,0 +1,203 @@
+/* General Page Styling */
+.trip-detail-page {
+  color: #333;
+  line-height: 1.6;
+  padding-top: 0;
+  /* Remove padding for the fixed header */
+}
+
+/* Sticky Header with Background */
+.sticky-header {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  height: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  z-index: 1;
+  padding: 20px;
+}
+
+/* Fixed Icons (Logo and Profile Picture) */
+.fixed-logo {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  width: 40px;
+  height: 40px;
+  z-index: 100;
+  /* Ensure it stays on top */
+}
+
+.fixed-profile-icon {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  z-index: 100;
+  /* Ensure it stays on top */
+}
+
+/* Dark Overlay */
+.sticky-header .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: -1;
+}
+
+/* Headline and Tags */
+.sticky-header h1 {
+  font-size: 3em;
+  margin-bottom: 20px;
+}
+
+.trip-tags {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.trip-tag {
+  background-color: #ff0055;
+  color: white;
+  border-radius: 12px;
+  padding: 5px 10px;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+/* Content Container */
+.trip-detail-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  /* Center content horizontally */
+}
+
+.trip-description {
+  margin: 20px 0;
+  text-align: justify;
+  font-size: 16px;
+}
+
+/* Recommendations Section */
+.recommendations-section {
+  margin-top: 20px;
+}
+
+.recommendation-category {
+  margin-bottom: 5px;
+}
+
+.recommendation-category h3 {
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 400;
+  margin-bottom: -10px;
+  color: #333;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.recommendation-tile {
+  text-align: center;
+  padding: 10px;
+  max-width: 200px;
+  margin: 0 auto;
+}
+
+.recommendation-image {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+.recommendation-tile p {
+  font-size: 16px;
+  color: #555;
+  font-weight: bold;
+  margin: -10px;
+}
+
+/* Slick Slider Overrides */
+.slick-slide {
+  display: flex;
+  justify-content: center;
+}
+
+.slick-dots li button:before {
+  color: #ff0055;
+}
+
+.slick-dots {
+  bottom: -10px;
+  margin-top: -20px;
+}
+
+/* Balanced Preferences */
+.balanced-preferences {
+  margin-top: 20px;
+}
+
+.preference-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.profile-picture {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.preference-bar-container {
+  flex-grow: 1;
+  height: 10px;
+  background-color: #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+}
+
+.preference-bar-fill {
+  height: 100%;
+  background-color: #ff0055;
+  transition: width 0.3s ease;
+}
+
+.preference-percentage {
+  font-size: 0.9em;
+  margin-left: 10px;
+  color: #555;
+}
+
+/* Utility Classes */
+.text-center {
+  text-align: center;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.shadow {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}

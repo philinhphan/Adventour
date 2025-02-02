@@ -1,0 +1,163 @@
+.login-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-image: url('../images/LogInPage.jpg'); /* Add your image here */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  position: relative; /* Required for the overlay */
+}
+
+.login-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.56); /* Adjust opacity to make it darker */
+  z-index: 1; /* Make sure it stays behind the content */
+}
+
+.login-container {
+  z-index: 2; /* Place content above the overlay */
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+
+.login-container h1 {
+  margin-bottom: -15px;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #ff0055;
+}
+
+
+.login-container h2 { 
+  margin-bottom: 40px; /* Slightly increase spacing for better readability */
+  font-size: 20px; /* Larger font size for emphasis */
+  font-weight: 600; /* Semi-bold for a softer touch */
+  color: #ffffff; /* A calming blue that evokes trust and the sky/ocean */
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Adds subtle depth */
+  line-height: 1.4; /* Improves spacing between lines */
+  text-align: center; /* Center alignment for a quote-like appearance */
+}
+
+.login-container p {
+  margin-bottom: 20px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #ffffff;
+  text-align: center;
+  margin-top: -25px;
+}
+
+.login-container p2 {
+  margin-bottom: 20px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #ffffff;
+  text-align: center;
+  margin-top: -29px;
+  letter-spacing: 1.3px;
+}
+
+.login-form {
+  width: calc(100% - 40px); /* Reduces width to leave space for margin */
+  max-width: 400px;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 20px; /* Adds space between the paragraph and the form */
+  position: relative;
+  top: -30px; /* Moves the form upwards */
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #ff0055;
+  box-shadow: 0 0 5px rgba(255, 0, 85, 0.5);
+}
+
+.button {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.button-primary {
+  background-color: #ff0055;
+  color: white;
+  transition: background-color 0.3s;
+}
+
+.button-primary:hover {
+  background-color: #e0004d;
+}
+
+.error-message {
+  color: #ff0055;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.signup-prompt {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #ddd;
+}
+
+.signup-prompt a {
+  color: #ff0055;
+  text-decoration: none;
+  font-weight: 550;
+}
+
+.signup-prompt a:hover {
+  text-decoration: underline;
+}
+
+.signup-prompt {
+  position: absolute; /* Ensure it sticks to the bottom of the container */
+  bottom: 0; /* Align it to the bottom */
+  left: 0; /* Align to the left */
+  right: 0; /* Stretch to the right */
+  margin: 0 auto; /* Center-align horizontally */
+  text-align: center; /* Center the text itself */
+  padding: 10px 0; /* Add some padding for breathing space */
+  font-size: 1em; /* Adjust size for readability */
+}

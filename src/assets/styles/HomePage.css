@@ -1,5 +1,5 @@
 .home-page {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   background-size: cover;
@@ -10,6 +10,7 @@
 
 .home-page-content {
   padding: 20px;
+  margin-top: 60px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -21,6 +22,7 @@
 .home-page-content h1 {
   margin-bottom: 100px;
 }
+
 .highlight {
   color: #ff0055;
 }
@@ -33,21 +35,50 @@
 }
 
 .options-tile {
-  position: relative; /* Allows absolute positioning inside */
+  position: relative;
+  /* Allows absolute positioning inside */
   background: rgba(0, 0, 0, 0.6);
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  text-align: left; /* Align the text to the left */
+  text-align: left;
+  /* Align the text to the left */
 }
 
-.options-tile h2 {
-  font-size: 20px;
-  margin-top: 8px;
-  margin-bottom: 8px;
+.options-tile {
+  position: relative;
+  /* Needed for absolute positioning inside */
+  background: rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  /* Align the text to the left */
 }
 
-.options-tile p {
-  font-size: 16px;
-  margin-bottom: 16px;
+.notification-badge {
+  position: absolute;
+  top: -10px;
+  /* Slightly outside the top */
+  right: -10px;
+  /* Slightly outside the right */
+  background-color: red;
+  color: white;
+  font-size: 0.8em;
+  font-weight: bold;
+  padding: 5px 12px;
+  border-radius: 12px;
+  box-shadow: 0 0 8px rgba(255, 0, 0, 0.5);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
 }

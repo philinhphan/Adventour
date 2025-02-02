@@ -1,21 +1,21 @@
 import React, { useState } from "react";
 import Slider from "react-slick";
-import Navbar from "../components/Navbar/Navbar";
 import Tile from "../components/Tile/Tile";
 import { useNavigate } from "react-router-dom";
 import "../assets/styles/Preferences.css";
-
+import Navbar from "../components/Navbar/Navbar";
 import { useTripContext } from "../context/TripContext";
 import { fetchSwipeSuggestions } from "../api/tripApi";
+import { savePreferences } from "../firebase/firebaseStore";
 
-//TODO Design: Find better solution for image imports
+// Image imports
 import logo from "../assets/images/AdventourLogo.svg";
 import profil from "../assets/images/LisaProfil.jpg";
-import PreferenceCultural from "../assets/images/PreferenceCultural.png";
-import PreferenceAdventure from "../assets/images/PreferenceAdventure.png";
-import PreferenceLeisure from "../assets/images/PreferenceLeisure.png";
-import PreferenceSports from "../assets/images/PreferenceSports.png";
-import PreferenceNature from "../assets/images/PreferenceNature.png";
+import PreferenceCultural from "../assets/images/PreferenceCultural.jpg";
+import PreferenceAdventure from "../assets/images/PreferenceAdventure.jpg";
+import PreferenceLeisure from "../assets/images/PreferenceLeisure.jpg";
+import PreferenceSports from "../assets/images/PreferenceSports.jpg";
+import PreferenceNature from "../assets/images/PreferenceNature.jpg";
 import WeatherCold from "../assets/images/WeatherCold.jpg";
 import WeatherWarm from "../assets/images/WeatherWarm.jpg";
 import WeatherMixed from "../assets/images/WeatherMixed.jpg";
@@ -27,56 +27,93 @@ import AccommodationResort from "../assets/images/AccommodationResort.jpg";
 import AccommodationAirBnB from "../assets/images/AccommodationAirBnB.jpg";
 import AccommodationCamping from "../assets/images/AccommodationCamping.jpg";
 
-// Preferences page component
-const PreferencesPage = () => {
+const PreferencesPage = ({ currentTripId, userId }) => {
   const [preferences, setPreferences] = useState([]);
   const navigate = useNavigate();
   const { tripData, updatePreferences, updateSuggestions } = useTripContext();
 
-  // Handle tile toggle event to update preferences state based on user selection
   const handleTileToggle = (label, isSelected) => {
-    setPreferences(
-      (prev) =>
-        isSelected
-          ? [...prev, label] // Add to preferences
-          : prev.filter((pref) => pref !== label) // Remove from preferences
+    setPreferences((prev) =>
+      isSelected ? [...prev, label] : prev.filter((pref) => pref !== label)
     );
   };
 
-  // Handle save preferences button click
-  const handleSavePreferences = async () => {
-    navigate("/processingstart");
-    console.log("Saved Preferences:", preferences);
-    updatePreferences(preferences); // Update context with preferences
+  /**
+   * Helper to get the best matching image from Pexels for the given query.
+   * Returns a fallback placeholder if no match is found or if an error occurs.
+   */
+  // Possible TODO: update query: 'travel' or other keywords can yield more relevant travel images
+  const fetchPexelsImage = async (query) => {
     try {
-      // 1) Fetch suggestions from Perplexity
-      const rawSuggestions = await fetchSwipeSuggestions(
-        tripData.tripDetails,
-        preferences
-      );
+      const url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(
+        query
+      )}&per_page=1`; // We only want the top match
+      const response = await fetch(url, {
+        headers: {
+          Authorization: process.env.REACT_APP_PEXELS_API_KEY, // stored in .env
+        },
+      });
 
-      // 2) Transform them: add 'id' and 'image' for each
-      const suggestionsWithExtras = rawSuggestions.map((s, idx) => ({
-        id: idx + 1, // or use a unique ID approach if desired
-        name: s.name,
-        image: "https://via.placeholder.com/300x600", // fixed placeholder
-        tags: s.tags,
-        description: s.description,
-      }));
+      if (!response.ok) {
+        throw new Error("Failed to fetch from Pexels");
+      }
 
-      // 3) Store them in our global context
-      updateSuggestions(suggestionsWithExtras);
-      console.log("Suggestions stored:", suggestionsWithExtras);
-
-      // 4) Navigate to the Suggestions Page
-      navigate("/suggestions");
+      const data = await response.json();
+      // Return the 'large' image if we have results, else fallback to placeholder
+      if (data.photos && data.photos.length > 0) {
+        return data.photos[0].src.large2x || data.photos[0].src.large;
+      }
+      return "https://via.placeholder.com/300x600"; // fallback TODO: update placeholder image with good one
     } catch (error) {
-      alert("Error fetching suggestions.");
-      console.error("Error fetching suggestions:", error);
+      console.error("Pexels API error:", error);
+      return "https://via.placeholder.com/300x600"; // fallback TODO: update placeholder image with good one
     }
   };
 
-  // Slider settings for tile carousel display on preferences page (responsive)
+  const handleSavePreferences = async () => {
+    navigate("/flight-popup");
+    try {
+      await savePreferences(currentTripId, userId, preferences);
+      updatePreferences(preferences);
+
+      let success = false;
+      let suggestionsWithExtras = [];
+
+      while (!success) {
+        try {
+          const rawSuggestions = await fetchSwipeSuggestions(
+            tripData.tripDetails,
+            preferences
+          );
+
+          suggestionsWithExtras = await Promise.all(
+            rawSuggestions.map(async (s, idx) => {
+              const imageUrl = await fetchPexelsImage(s.name);
+              return {
+                id: idx + 1,
+                name: s.name,
+                image: imageUrl,
+                tags: s.tags,
+                shortDescription: s.shortDescription,
+                description: s.description,
+              };
+            })
+          );
+
+          success = true;
+        } catch (error) {
+          console.error("Error fetching suggestions, retrying...", error);
+        }
+      }
+
+      updateSuggestions(suggestionsWithExtras);
+      navigate("/suggestions");
+    } catch (error) {
+      alert("Error saving preferences.");
+      console.error("Error saving preferences:", error);
+    }
+  };
+
   const sliderSettings = {
     dots: true,
     infinite: false,
@@ -94,7 +131,7 @@ const PreferencesPage = () => {
       {
         breakpoint: 300,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 1,
         },
       },
     ],
@@ -102,7 +139,7 @@ const PreferencesPage = () => {
 
   return (
     <div className="preferences-page">
-      <Navbar logoSrc={logo} profilePicSrc={profil} />
+      <Navbar logoSrc={logo} profilePicSrc={profil} background="white" />
       <div className="preferences-container">
         <h1>Select general preferences</h1>
         <p className="hint">
@@ -110,7 +147,6 @@ const PreferencesPage = () => {
           no specific preferences.
         </p>
 
-        {/* TODO Design: Add all the options you want to display here with picture(jpg) and label. You can add as many categories and tiles as you want */}
         <div className="preferences-section">
           <h2>Activities</h2>
           <Slider {...sliderSettings}>
@@ -205,7 +241,6 @@ const PreferencesPage = () => {
         </div>
       </div>
 
-      {/* Added fixed button container */}
       <div className="fixed-button-container">
         <button
           className="button button-primary"

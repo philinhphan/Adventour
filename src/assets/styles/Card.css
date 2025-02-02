@@ -2,8 +2,9 @@
 .card-container {
   position: relative;
   width: 100%;
-  max-width: 400px;
+  max-width: 550px;
   margin: 20px auto;
+  margin-top: 200px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -13,8 +14,8 @@
 .card {
   perspective: 1000px;
   position: relative;
-  width: 370px;
-  height: 680px;
+  width: 92%;
+  height: 75vh;
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
@@ -22,7 +23,7 @@
 .card-back {
   position: absolute;
   width: 100%;
-  height: 100%;
+  height: 75vh;
   backface-visibility: hidden;
   transition: transform 0.6s ease;
   border-radius: 16px;
@@ -38,16 +39,19 @@
 
 /* Darken Back of the Card */
 .card-back .card-image-container::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.65); /* Dark overlay for back image */
-  z-index: 1; /* Overlay is above the image */
+  height: 75vh;
+  background: rgba(0, 0, 0, 0.65);
+  /* Dark overlay for back image */
+  z-index: 1;
+  /* Overlay is above the image */
   border-radius: 16px;
-  pointer-events: none; /* Ensure it doesn't interfere with interactions */
+  pointer-events: none;
+  /* Ensure it doesn't interfere with interactions */
 }
 
 .card.is-flipped .card-front {
@@ -59,32 +63,62 @@
 }
 
 /* Swipe Animations */
-@keyframes swipe-left {
+
+/* Dislike Animation */
+@keyframes swipe-dislike {
   to {
     transform: translateX(-100%) rotate(-20deg);
     opacity: 0;
   }
 }
 
-@keyframes swipe-right {
+/* Like Animation */
+@keyframes swipe-like {
   to {
     transform: translateX(100%) rotate(20deg);
     opacity: 0;
   }
 }
 
-.swipe-left {
-  animation: swipe-left 0.5s ease forwards;
+/* Superlike Animation */
+@keyframes swipe-superlike {
+  to {
+    transform: translateY(-100%) rotate(0deg);
+    opacity: 0;
+  }
 }
 
-.swipe-right {
-  animation: swipe-right 0.5s ease forwards;
+/* Indifferent Animation */
+@keyframes swipe-indifferent {
+  to {
+    transform: translateY(100%) rotate(0deg);
+    opacity: 0;
+  }
+}
+
+/* Animation Classes */
+/* Adjusted Animation Duration for Better Experience */
+.swipe-dislike {
+  animation: swipe-dislike 0.5s ease forwards;
+  /* Match duration */
+}
+
+.swipe-like {
+  animation: swipe-like 0.5s ease forwards;
+}
+
+.swipe-superlike {
+  animation: swipe-superlike 0.5s ease forwards;
+}
+
+.swipe-indifferent {
+  animation: swipe-indifferent 0.5s ease forwards;
 }
 
 /* Image Styling */
 .card-image-container {
   width: 100%;
-  height: 100%;
+  height: 75vh;
   overflow: hidden;
   position: relative;
   border-radius: 16px;
@@ -92,11 +126,35 @@
 
 .card-image {
   width: 100%;
-  height: 100%;
+  height: 75vh;
   object-fit: cover;
   position: absolute;
   border-radius: 16px;
-  z-index: 0; /* Image is in the background */
+  z-index: 0;
+  /* Image is in the background */
+  transition: opacity 0.3s ease-in-out;
+}
+
+.card-image.hidden {
+  opacity: 0;
+}
+
+.card-image.loaded {
+  opacity: 1;
+}
+
+.image-placeholder {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: gray;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 /* Gradient Layer */
@@ -107,9 +165,15 @@
   width: 100%;
   height: 100%;
   border-radius: 16px;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 22%, rgba(0, 0, 0, 0) 50%);
-  z-index: 1; /* Gradient is above the image but below content */
-  pointer-events: none; /* Prevent interactions with the gradient */
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.7) 22%,
+    rgba(0, 0, 0, 0) 50%
+  );
+  z-index: 1;
+  /* Gradient is above the image but below content */
+  pointer-events: none;
+  /* Prevent interactions with the gradient */
 }
 
 /* Front Content (Text and Tags) */
@@ -119,7 +183,8 @@
   left: 20px;
   color: white;
   text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.8);
-  z-index: 2; /* Text is on top of the gradient */
+  z-index: 2;
+  /* Text is on top of the gradient */
 }
 
 .card-name {
@@ -148,18 +213,19 @@
   left: 20px;
   color: white;
   text-align: left;
-  z-index: 2; /* Content is above the dark overlay */
+  z-index: 2;
+  /* Content is above the dark overlay */
 }
 
 .card-back-title {
-  font-size: 2.0rem;
+  font-size: 1.5em;
   font-weight: bold;
   margin-bottom: 10px;
 }
 
 .card-back-text {
-  font-size: 1.1rem;
-  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-family: "Poppins", sans-serif;
   font-weight: 500;
   line-height: 1.5;
   margin-right: 20px;
@@ -176,8 +242,10 @@
 }
 
 .swipe-buttons button {
-  width: 60px;
-  height: 60px;
+  width: 15vw; /* 10% der Viewport-Breite */
+  height: 15vw; /* Gleiche Höhe für einen Kreis */
+  max-width: 60px; /* Begrenzung, damit es nicht zu groß wird */
+  max-height: 60px;
   border-radius: 50%;
   background-color: white;
   display: flex;
@@ -186,28 +254,6 @@
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
   border: none;
   transition: transform 0.2s ease;
-}
-
-/* Hover animation */
-.swipe-buttons button:hover {
-  transform: scale(1.2);
-}
-
-/* Pop animation for active button */
-.swipe-buttons button.button-pressed {
-  animation: pop 0.2s ease-out;
-}
-
-@keyframes pop {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.5);
-  }
-  0% {
-    transform: scale(1);
-  }
 }
 
 /* Button Icon */

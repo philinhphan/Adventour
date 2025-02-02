@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
+import imageCompression from "browser-image-compression"; 
+
 import { Link, useNavigate } from "react-router-dom";
 import "../../assets/styles/Navbar.css";
 import { logout } from "../../firebase/firebaseAuth";
+import profilePicDefault from "../../assets/images/LisaProfil.jpg";
 
 // Navbar component, takes in logoSrc, profilePicSrc and onProfileClick function.
 // Logo is wrapped in Link to navigate to home page.
@@ -21,6 +24,7 @@ const Navbar = ({
   const navigate = useNavigate();
   const profileRef = useRef(null);
   const fileInputRef = useRef(null);
+  const finalProfilePic = profilePicSrc || profilePicDefault;
 
   const handleLogout = async () => {
     try {
@@ -40,9 +44,19 @@ const Navbar = ({
       return;
     }
     try {
+      const options = {
+        maxSizeMB: 0.5, // Maximum size in MB (adjust as needed)
+        maxWidthOrHeight: 800, // Maximum width or height in pixels (adjust as needed)
+        useWebWorker: true,
+      };
+      const compressedFile = await imageCompression(file, options);
+      if (!compressedFile) {
+        console.log("File compression failed");
+      }
+
       // Prepare form data for Cloudinary unsigned upload
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("file", compressedFile);
       formData.append(
         "upload_preset",
         process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET // Must be set in your .env file

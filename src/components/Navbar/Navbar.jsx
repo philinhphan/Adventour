@@ -120,10 +120,9 @@ const Navbar = ({
           onChange={handleFileChange}
         />
         {showLogout && (
-          // <-- UPDATED: Dropdown now includes two options
           <div className="navbar-dropdown">
             <button
-              className="dropdown-button"
+              className="logout-button"
               onClick={() => {
                 // Trigger the file input dialog for uploading a new profile picture
                 fileInputRef.current.click();
@@ -131,7 +130,7 @@ const Navbar = ({
             >
               Change Profile Picture
             </button>
-            <button className="dropdown-button" onClick={handleLogout}>
+            <button className="logout-button" onClick={handleLogout}>
               Logout
             </button>
           </div>
@@ -142,3 +141,5 @@ const Navbar = ({
 };
 
 export default Navbar;
+
+

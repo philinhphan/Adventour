@@ -79,6 +79,18 @@ const TripDetailPage = ({ userId, profilePic }) => {
     ],
   };
 
+
+  // Slider settings for the horizontal gallery of additional images
+  const imageSliderSettings = {
+    dots: true,
+    infinite: true,
+    arrows: true, // Enable arrows for navigation
+    speed: 500,
+    slidesToShow: 1, // Show one image at a time
+    slidesToScroll: 1,
+    swipe: true, // Allow swipe gestures
+  };
+
   return (
     <div className="trip-detail-page">
       <Navbar logoSrc={logo} profilePicSrc={profilePic} background="white" />
@@ -147,17 +159,18 @@ const TripDetailPage = ({ userId, profilePic }) => {
           ))}
         </div>
 
-        <h2>More Images</h2>
-        <div className="additional-images">
+        <h2>Gallery</h2>
+        <Slider {...imageSliderSettings} className="additional-images-slider">
           {additionalImages.map((photo, index) => (
-            <img
-              key={index}
-              src={photo.src.large}
-              alt={`Additional ${index + 1}`}
-              className="additional-image" 
-            />
+            <div key={index}>
+              <img
+                src={photo.src.large}
+                alt={`Additional ${index + 1}`}
+                className="additional-image" // TODO
+              />
+            </div>
           ))}
-        </div>
+        </Slider>
 
       </div>
     </div>

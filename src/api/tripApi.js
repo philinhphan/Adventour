@@ -19,7 +19,7 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
         // Ask Perplexity to respond ONLY with a JSON array of suggestions
         content: `
         <Task>
-        Generate 5 suggestions for a trip based on the following trip details and preferences:
+        Generate 10 suggestions for a trip based on the following trip details and preferences:
 
         1. Trip Details:       
         ${JSON.stringify(tripDetails)} 

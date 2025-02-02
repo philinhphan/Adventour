@@ -1,14 +1,11 @@
-import { React, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "../assets/styles/App.css";
 import "../assets/styles/PlanningPage.css";
 import Navbar from "../components/Navbar/Navbar";
 import logo from "../assets/images/AdventourLogo.svg";
 import profil from "../assets/images/LisaProfil.jpg";
-
 import { useTripContext } from "../context/TripContext";
 import { addTrip, linkTripToUser } from "../firebase/firebaseStore";
-
 import InputField from "../components/FormElements/InputField";
 import Button from "../components/Button/Button";
 import budgetIcon from "../assets/icons/Budget.svg";
@@ -52,8 +49,6 @@ const PlanningPage = ({ userId, setCurrentTripId }) => {
       } else if (tripDetails.dateEnd < today) {
         newErrors.dateEnd = "End date cannot be in the past.";
       } else if (
-        tripDetails.dateStart &&
-        tripDetails.dateEnd &&
         new Date(tripDetails.dateStart) > new Date(tripDetails.dateEnd)
       ) {
         newErrors.dateEnd = "End date must be after the start date.";
@@ -103,8 +98,6 @@ const PlanningPage = ({ userId, setCurrentTripId }) => {
 
       if (userId) {
         const tripId = await addTrip(tripData, userId);
-        //await linkTripToUser("phi-linh", tripId);
-        //await linkTripToUser("franzi", tripId);
         await linkTripToUser("jannik", tripId);
         await linkTripToUser("smilla", tripId);
 
@@ -119,6 +112,24 @@ const PlanningPage = ({ userId, setCurrentTripId }) => {
       console.error("Error saving trip details:", error);
     }
   };
+
+  useEffect(() => {
+    if (tripDetails.dateStart) {
+      const startDate = new Date(tripDetails.dateStart);
+      const nextDay = new Date(startDate);
+      nextDay.setDate(startDate.getDate() + 1); // Set end date to next day
+
+      const formattedNextDay = nextDay.toISOString().split("T")[0];
+
+      // Update end date only if it's empty or before start date
+      if (!tripDetails.dateEnd || new Date(tripDetails.dateEnd) < startDate) {
+        setTripDetails((prevDetails) => ({
+          ...prevDetails,
+          dateEnd: formattedNextDay,
+        }));
+      }
+    }
+  }, [tripDetails.dateStart]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -179,7 +190,6 @@ const PlanningPage = ({ userId, setCurrentTripId }) => {
                   disabled={tripDetails.dateFlexibility === "flexible"}
                   min={new Date().toISOString().split("T")[0]} // Prevent past dates
                 />
-
                 <InputField
                   label="End Date"
                   type="date"
@@ -242,7 +252,6 @@ const PlanningPage = ({ userId, setCurrentTripId }) => {
                 value={tripDetails.budgetMin}
                 onChange={handleInputChange}
               />
-
               <InputField
                 label="Maximum Budget"
                 type="number"

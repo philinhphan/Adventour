@@ -39,11 +39,9 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
         ]
 
         For the suggestion of places respect the following rules:
-        - Provide places from all around the world
         - Focus on places that are suitable for travelers and groups of friends.
-        - The places should be perfectly alligned with the given preferences.
-        - The given examples should be as diverse as possible and should include places from different
-        ccountries and enable doing different activities, still aligning with the preferences. 
+        - The places should be perfectly aligned with the given preferences.
+        - The given examples should be as diverse as possible. 
         - The places we want to travel to should also be perfectly aligned with the given trip details. So the date of travel and the given budget should fit to 
         the given suggestion.
         - For finding the right places to the given budget assume the following
@@ -51,6 +49,7 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
           - We always start our trip from Munich, Germany, so try to do an estimation of the travel costs to the suggested place based on the starting point
           - Then try to align the preferences with the given budget and the duration
           - Give us only realistic suggestions that can be done with the given budget and the given duration of the trip.
+          - So e.g. for a day trip with a budget of maximum 100 Euros, places like Salzburg, Regensburg or Garmisch are feasible since they can be done in one day with 100 Euros; but not e.g. Lisboa, Rome or Madrid since those are too far for a daytrip and too expensive for 100 Euros
 
 
 
@@ -237,10 +236,8 @@ export const fetchPerfectMatch = async (tripId) => {
         No extra commentary, no code fences, no markdown blocks. Only raw JSON.
         
         For the suggestion of the final best place respect the following rules:
-        - Provide a place from all around the world
         - Focus on a place that is suitable for the given number of travelers in the group
         - The place should be perfectly aligned with the given preferences and swipes.
-        
         - The place should also be perfectly aligned with the given trip details. So the date of travel and the given budget should fit to 
         the given suggestion.
         - For finding the right place to the given budget assume the following
@@ -248,7 +245,7 @@ export const fetchPerfectMatch = async (tripId) => {
           - We always start our trip from Munich, Germany, so try to do an estimation of the travel costs to the suggested place based on the starting point
           - Then try to align the preferences with the given budget and the duration
           - Give us only realistic suggestions that can be done with the given budget and the given duration of the trip.
-
+          - So e.g. for a day trip with a budget of maximum 100 Euros, places like Salzburg, Regensburg or Garmisch are feasible since they can be done in one day with 100 Euros; but not e.g. Lisboa, Rome or Madrid since those are too far for a daytrip and too expensive for 100 Euros
 
 
         For every attribute in the suggestion respect the following rules:

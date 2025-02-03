@@ -69,7 +69,7 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
         - Should cover the most important facts about the suggestion
         - Should be formulated in a brief an catchy way covering up to 10 words, e.g.: "Where culture, beaches, and nightlife create epic adventures!
         4. description:
-        - Consists of at least 5 to 10 sentences that describes the suggestion in an inspiring, personal, precise and cheeky way
+        - Consists of at least 3-5 sentences that describes the suggestion in an inspiring, personal, precise and cheeky way
         - The text is targeted at young individuals aiming to go on a group trip. It should give a good impression
         on what can be done and general summary of the suggestion. 
 
@@ -122,7 +122,7 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "meta-llama/llama-3.1-70b-instruct:free", // TODO: update to better model
+        model: "google/gemini-flash-1.5-8b-exp", 
         messages: messages,
         // max_tokens: 256,
         // temperature: 0.2,
@@ -253,7 +253,7 @@ export const fetchPerfectMatch = async (tripId) => {
         - Limit each tag to 10 characters
         3. description:
         - Should cover the most important facts about the suggestion
-        - Consists of around 10 sentences that describes the suggestion in an inspiring, personal, precise and cheeky way
+        - Consists of around 5-7 sentences that describes the suggestion in an inspiring, personal, precise and cheeky way
         - The text is targeted at young individuals aiming to go on a group trip. It should give a good impression
         on what can be done and general summary of the suggestion. 
         4. recommendations:
@@ -309,7 +309,7 @@ export const fetchPerfectMatch = async (tripId) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "meta-llama/llama-3.1-70b-instruct:free",
+        model: "google/gemini-flash-1.5-8b-exp",
         messages: messages,
         return_images: false,
         return_related_questions: false,

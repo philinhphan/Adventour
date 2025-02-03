@@ -8,6 +8,13 @@ import Navbar from "../components/Navbar/Navbar";
 import logo from "../assets/images/AdventourLogo.svg";
 // import profil from "../assets/images/LisaProfil.jpg";
 
+import hotel1 from "../assets/images/hotel1.jpeg";
+import hotel2 from "../assets/images/hotel2.jpeg";
+import hotel3 from "../assets/images/hotel3.jpeg";
+import restaurant1 from "../assets/images/restaurant1.jpeg";
+import restaurant2 from "../assets/images/restaurant2.jpeg";
+import restaurant3 from "../assets/images/restaurant3.jpeg";
+
 const TripDetailPage = ({ userId, profilePic }) => {
   const { tripId } = useParams();
   const [trip, setTrip] = useState(null);
@@ -76,6 +83,7 @@ const TripDetailPage = ({ userId, profilePic }) => {
     return <div>Loading...</div>;
   }
 
+
   const sliderSettings = {
     dots: true,
     infinite: false,
@@ -84,11 +92,37 @@ const TripDetailPage = ({ userId, profilePic }) => {
     slidesToShow: 3,
     slidesToScroll: 1,
     responsive: [
-      { breakpoint: 600, settings: { slidesToShow: 2 } },
-      { breakpoint: 300, settings: { slidesToShow: 1 } },
+      {
+        breakpoint: 600,
+        settings: { slidesToShow: 2 },
+      },
+      {
+        breakpoint: 300,
+        settings: { slidesToShow: 1 },
+      },
     ],
   };
 
+  // NEW: Arrays of static images for restaurants and accommodations
+  const restaurantImages = [restaurant1, restaurant2, restaurant3];
+  const accommodationImages = [hotel1, hotel2, hotel3];
+
+  const recommendationSliderSettings = {
+    dots: true,
+    infinite: false,
+    arrows: false,
+    speed: 500,
+    slidesToShow: 2,
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
+  };
 
   // Slider settings for the horizontal gallery of additional images
   const imageSliderSettings = {
@@ -104,18 +138,12 @@ const TripDetailPage = ({ userId, profilePic }) => {
   return (
     <div
       className="trip-detail-page"
-      style={{
-        backgroundImage: `url(${trip.backgroundImage})`,
-        backgroundSize: "cover", 
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}
     >
       <Navbar logoSrc={logo} profilePicSrc={profilePic} background="white" />
       <div
         className="sticky-header"
         style={{
-          height: "300px",
+          height: "500px",
           backgroundImage: `url(${trip.backgroundImage})`,
           backgroundSize: "cover", 
           backgroundPosition: "center center",
@@ -137,64 +165,57 @@ const TripDetailPage = ({ userId, profilePic }) => {
         <p className="trip-description">{trip.description}</p>
 
         <h2>Recommendations</h2>
-        <div
-            className="recommendations-flex-container"
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "10px",
-              justifyContent: "center",
-            }}
-          >
-            {trip.recommendations.restaurants.map((restaurant, index) => (
-              <div
-                key={`restaurant-${index}`}
-                className="recommendation-tile"
+        <h3>Restaurants</h3>
+        <Slider {...sliderSettings}>
+          {trip.recommendations.restaurants.map((restaurant, index) => (
+            <div
+              key={`restaurant-${index}`}
+              className="recommendation-tile"
+              style={{ padding: "10px", textAlign: "center" }}
+            >
+              <img
+                src={restaurantImages[index % restaurantImages.length]}
+                alt="Restaurant"
                 style={{
-                  flex: "1 1 45%",
-                  border: "1px solid #ccc",
-                  padding: "10px",
-                  textAlign: "center",
+                  width: "150px",        // fixed width for square shape
+                  height: "150px",       // fixed height for square shape
+                  objectFit: "cover",
+                  margin: "0 auto 5px",  // centered horizontally with bottom margin
+                  display: "block",
+                  borderRadius: "8px",
                 }}
-              >
-                <img
-                  src=""
-                  alt="Restaurant"
-                  style={{
-                    width: "100%",
-                    height: "100px",
-                    backgroundColor: "#eee",
-                    marginBottom: "5px",
-                  }}
-                />
-                <p>{restaurant.name}</p>
-              </div>
-            ))}
-            {trip.recommendations.accommodations.map((accommodation, index) => (
-              <div
-                key={`accommodation-${index}`}
-                className="recommendation-tile"
+              />
+              <p style={{ marginTop: "10px" }}>{restaurant.name}</p>
+            </div>
+          ))}
+        </Slider>
+
+        <h3>Accommodations</h3>
+        <Slider {...sliderSettings}>
+          {trip.recommendations.accommodations.map((accommodation, index) => (
+            <div
+              key={`accommodation-${index}`}
+              className="recommendation-tile"
+              style={{ padding: "10px", textAlign: "center" }}
+            >
+              <img
+                src={accommodationImages[index % accommodationImages.length]}
+                alt="Accommodation"
                 style={{
-                  flex: "1 1 45%",
-                  border: "1px solid #ccc",
-                  padding: "10px",
-                  textAlign: "center",
+                  width: "150px",        // fixed width for square shape
+                  height: "150px",       // fixed height for square shape
+                  objectFit: "cover",
+                  margin: "0 auto 5px",  // centered horizontally with bottom margin
+                  display: "block",
+                  borderRadius: "8px",
                 }}
-              >
-                <img
-                  src=""
-                  alt="Accommodation"
-                  style={{
-                    width: "100%",
-                    height: "100px",
-                    backgroundColor: "#eee",
-                    marginBottom: "5px",
-                  }}
-                />
-                <p>{accommodation.name}</p>
-              </div>
-            ))}
-          </div>
+              />
+              <p style={{ marginTop: "10px" }}>{accommodation.name}</p>
+            </div>
+          ))}
+        </Slider>
+
+
 
         <h2>Balanced Preferences</h2>
         <div className="balanced-preferences">

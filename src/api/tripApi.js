@@ -122,7 +122,7 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-flash-1.5-8b-exp", 
+        model: "openai/gpt-4o-mini", 
         messages: messages,
         // max_tokens: 256,
         // temperature: 0.2,
@@ -309,7 +309,7 @@ export const fetchPerfectMatch = async (tripId) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-flash-1.5-8b-exp",
+        model: "openai/gpt-4o-mini",
         messages: messages,
         return_images: false,
         return_related_questions: false,

@@ -54,7 +54,7 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
           - Then try to align the preferences with the given budget and the duration
           - Give us only realistic suggestions that can be done with the given budget and the given duration of the trip.
           - So e.g. for a day trip with a budget of maximum 20 Euros, places like Salzburg, Regensburg or Garmisch are feasible since they can be done in one day with 20 Euros; but not e.g. Lisboa, Rome or Madrid since those are too far for a daytrip and too expensive for 20 Euros
-          - The places should be perfectly aligned with the given trip details and preferences, dates and budget being the most important ones to adhere to (since else the trip would not be feasible). That means that even if user preference is warm, do not propose places in Spain if e.g. the user wants to travel in the winter for only 1 day with a maximum budget of 20 Euros but you have to choose local ones which might not be as warm.
+          - The places should be perfectly aligned with the given trip details and preferences, dates and budget being the most important ones to adhere to (since else the trip would not be feasible). That means that even if user preference is warm and beach, do not propose places in Mexico if e.g. the user wants to travel in the winter for only 1 day with a maximum budget of 20 Euros since that is not feasible. Thus, you have to choose local recommendations which might not be as warm, trying to find a compromise with e.g. local lakes.
 
 
 
@@ -236,13 +236,12 @@ export const fetchPerfectMatch = async (tripId) => {
         - Regarding temperature, consider also the season of the given time frame to align with the preference.
         - The place should also be perfectly aligned with the given trip details. So the date of travel and the given budget should fit to 
         the given suggestion.
-        - For finding the right place to the given budget assume the following
-        things: 
+        - For finding the right place to the given budget assume the following things: 
           - We always start our trip from Munich, Germany, so try to do an estimation of the travel costs to the suggested place based on the starting point
           - Then try to align the preferences with the given budget and the duration
           - Give us only realistic suggestions that can be done with the given budget and the given duration of the trip.
           - So e.g. for a day trip with a budget of maximum 20 Euros, places like Salzburg, Regensburg or Garmisch are feasible since they can be done in one day with 20 Euros; but not e.g. Lisboa, Rome or Madrid since those are too far for a daytrip and too expensive for 20 Euros
-          - The place should be perfectly aligned with the given trip details and preferences, dates and budget being the most important ones to adhere to (since else the trip would not be feasible). That means that even if user preference is warm, do not propose places in Spain if e.g. the user wants to travel in the winter for only 1 day with a maximum budget of 20 Euros but you have to choose local ones which might not be as warm.
+          - The place should be perfectly aligned with the given trip details and preferences, dates and budget being the most important ones to adhere to (since else the trip would not be feasible). That means that even if user preference is warm and beach, do not propose places in Mexico if e.g. the user wants to travel in the winter for only 1 day with a maximum budget of 20 Euros since that is not feasible. Thus, you have to choose local recommendations which might not be as warm, trying to find a compromise with e.g. local lakes.
 
 
         For every attribute in the suggestion respect the following rules:

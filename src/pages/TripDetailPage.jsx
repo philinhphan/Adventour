@@ -12,6 +12,16 @@ const TripDetailPage = ({ userId, profilePic }) => {
   const { tripId } = useParams();
   const [trip, setTrip] = useState(null);
   const [additionalImages, setAdditionalImages] = useState([]);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 480); // threshold for mobile devices
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchTripData = async () => {
@@ -38,7 +48,7 @@ const TripDetailPage = ({ userId, profilePic }) => {
       try {
         const response = await fetch(
           `https://api.pexels.com/v1/search?query=${encodeURIComponent(
-            trip.name
+            trip.name + "landscape tourism"
           )}&per_page=5`, // Requesting 5 images
           {
             headers: {
@@ -92,11 +102,25 @@ const TripDetailPage = ({ userId, profilePic }) => {
   };
 
   return (
-    <div className="trip-detail-page">
+    <div
+      className="trip-detail-page"
+      style={{
+        backgroundImage: `url(${trip.backgroundImage})`,
+        backgroundSize: "cover", 
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
       <Navbar logoSrc={logo} profilePicSrc={profilePic} background="white" />
       <div
         className="sticky-header"
-        style={{ backgroundImage: `url(${trip.backgroundImage})` }}
+        style={{
+          height: "300px",
+          backgroundImage: `url(${trip.backgroundImage})`,
+          backgroundSize: "cover", 
+          backgroundPosition: "center center",
+          backgroundRepeat: "no-repeat",
+        }}
       >
         <div className="overlay"></div>
         <h1>{trip.name}</h1>
@@ -113,31 +137,64 @@ const TripDetailPage = ({ userId, profilePic }) => {
         <p className="trip-description">{trip.description}</p>
 
         <h2>Recommendations</h2>
-        <div className="recommendations-section">
-          <div className="recommendation-category">
-            <h3>Restaurants</h3>
-            <Slider {...sliderSettings}>
-              {trip.recommendations.restaurants.map((restaurant, index) => (
-                <div key={index} className="recommendation-tile">
-                  <p>{restaurant.name}</p>
-                </div>
-              ))}
-            </Slider>
+        <div
+            className="recommendations-flex-container"
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "10px",
+              justifyContent: "center",
+            }}
+          >
+            {trip.recommendations.restaurants.map((restaurant, index) => (
+              <div
+                key={`restaurant-${index}`}
+                className="recommendation-tile"
+                style={{
+                  flex: "1 1 45%",
+                  border: "1px solid #ccc",
+                  padding: "10px",
+                  textAlign: "center",
+                }}
+              >
+                <img
+                  src=""
+                  alt="Restaurant"
+                  style={{
+                    width: "100%",
+                    height: "100px",
+                    backgroundColor: "#eee",
+                    marginBottom: "5px",
+                  }}
+                />
+                <p>{restaurant.name}</p>
+              </div>
+            ))}
+            {trip.recommendations.accommodations.map((accommodation, index) => (
+              <div
+                key={`accommodation-${index}`}
+                className="recommendation-tile"
+                style={{
+                  flex: "1 1 45%",
+                  border: "1px solid #ccc",
+                  padding: "10px",
+                  textAlign: "center",
+                }}
+              >
+                <img
+                  src=""
+                  alt="Accommodation"
+                  style={{
+                    width: "100%",
+                    height: "100px",
+                    backgroundColor: "#eee",
+                    marginBottom: "5px",
+                  }}
+                />
+                <p>{accommodation.name}</p>
+              </div>
+            ))}
           </div>
-
-          <div className="recommendation-category">
-            <h3>Accommodations</h3>
-            <Slider {...sliderSettings}>
-              {trip.recommendations.accommodations.map(
-                (accommodation, index) => (
-                  <div key={index} className="recommendation-tile">
-                    <p>{accommodation.name}</p>
-                  </div>
-                )
-              )}
-            </Slider>
-          </div>
-        </div>
 
         <h2>Balanced Preferences</h2>
         <div className="balanced-preferences">
@@ -160,17 +217,28 @@ const TripDetailPage = ({ userId, profilePic }) => {
         </div>
 
         <h2>Gallery</h2>
-        <Slider {...imageSliderSettings} className="additional-images-slider">
+        <div
+          className="additional-images"
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "10px",
+            justifyContent: "center",
+          }}
+        >
           {additionalImages.map((photo, index) => (
-            <div key={index}>
-              <img
-                src={photo.src.large}
-                alt={`Additional ${index + 1}`}
-                className="additional-image" // TODO
-              />
-            </div>
+            <img
+              key={index}
+              src={photo.src.large}
+              alt={`Additional ${index + 1}`}
+              style={{
+                flex: "1 1 calc(33% - 10px)",
+                maxWidth: "calc(33% - 10px)",
+                objectFit: "cover",
+              }}
+            />
           ))}
-        </Slider>
+        </div>
 
       </div>
     </div>

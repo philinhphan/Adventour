@@ -1,14 +1,18 @@
 import { db } from "../firebase/firebase";
 import { doc, getDoc } from "firebase/firestore";
 
-const API_KEY = process.env.REACT_APP_PERPLEXITY_API_KEY;
+// const API_KEY = process.env.REACT_APP_PERPLEXITY_API_KEY;
+const perplexityURL = "https://api.perplexity.ai/chat/completions";
+const API_KEY = process.env.REACT_APP_OPENROUTER_API_KEY;
+const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
+
 const PEXELS_API_KEY = process.env.REACT_APP_PEXELS_API_KEY;
 
 export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
+
   try {
-    // 1) Build the request payload for Perplexity API
-    const perplexityURL = "https://api.perplexity.ai/chat/completions";
-    const perplexityMessages = [
+    // 1) Build the request payload for the LLM
+    const messages = [
       {
         role: "system",
         content:
@@ -16,10 +20,10 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
       },
       {
         role: "user",
-        // Ask Perplexity to respond ONLY with a JSON array of suggestions
+        // Ask LLM to respond ONLY with a JSON array of suggestions
         content: `
         <Task>
-        Generate 10 suggestions for a trip based on the following trip details and preferences:
+        Generate 7 suggestions for a trip based on the following trip details and preferences:
 
         1. Trip Details:       
         ${JSON.stringify(tripDetails)} 
@@ -40,7 +44,7 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
 
         For the suggestion of places respect the following rules:
         - Focus on places that are suitable for travelers and groups of friends.
-        - The places should be perfectly aligned with the given preferences.
+        - Regarding temperature, consider also the season of the given time frame to align with the preference.
         - The given examples should be as diverse as possible. 
         - The places we want to travel to should also be perfectly aligned with the given trip details. So the date of travel and the given budget should fit to 
         the given suggestion.
@@ -49,7 +53,8 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
           - We always start our trip from Munich, Germany, so try to do an estimation of the travel costs to the suggested place based on the starting point
           - Then try to align the preferences with the given budget and the duration
           - Give us only realistic suggestions that can be done with the given budget and the given duration of the trip.
-          - So e.g. for a day trip with a budget of maximum 100 Euros, places like Salzburg, Regensburg or Garmisch are feasible since they can be done in one day with 100 Euros; but not e.g. Lisboa, Rome or Madrid since those are too far for a daytrip and too expensive for 100 Euros
+          - So e.g. for a day trip with a budget of maximum 20 Euros, places like Salzburg, Regensburg or Garmisch are feasible since they can be done in one day with 20 Euros; but not e.g. Lisboa, Rome or Madrid since those are too far for a daytrip and too expensive for 20 Euros
+          - The places should be perfectly aligned with the given trip details and preferences, dates and budget being the most important ones to adhere to (since else the trip would not be feasible). That means that even if user preference is warm, do not propose places in Spain if e.g. the user wants to travel in the winter for only 1 day with a maximum budget of 20 Euros but you have to choose local ones which might not be as warm.
 
 
 
@@ -64,7 +69,7 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
         - Should cover the most important facts about the suggestion
         - Should be formulated in a brief an catchy way covering up to 10 words, e.g.: "Where culture, beaches, and nightlife create epic adventures!
         4. description:
-        - Consists of 4-5 sentences that describes the suggestion in an inspiring, personal, precise and cheeky way
+        - Consists of at least 5 to 10 sentences that describes the suggestion in an inspiring, personal, precise and cheeky way
         - The text is targeted at young individuals aiming to go on a group trip. It should give a good impression
         on what can be done and general summary of the suggestion. 
 
@@ -87,19 +92,6 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
 
           },
           {
-            name: "Miami, USA",
-            tags: ["#Beaches #Nightlife #Art #Food #Vibes"],
-            shortDescription: "Where sun, style, and nonstop fun collide effortlessly!"
-            description:
-              "Miami is a city that radiates energy, making it a must-visit for those who love a mix of beach life, art, 
-              and incredible food. Spend your mornings walking the Art Deco-lined streets of South Beach before diving 
-              into its crystal-clear waters. Take a trip to the Wynwood Walls to witness one of the most impressive urban 
-              art scenes in the world, or explore the diverse culinary offerings in Little Havana, where Cuban coffee and 
-              authentic sandwiches transport you straight to Havana. As the sun sets, Miami comes alive—rooftop lounges, 
-              oceanfront parties, and iconic clubs ensure that your nights are as thrilling as your days. Whether you’re on a 
-              yacht, in a poolside cabana, or dancing beneath neon lights, Miami guarantees unforgettable moments",
-          },
-          {
             name: "Kyoto, Japan",
             tags: [#Culture #Temples #Nature #Food #Zen],
             shortDescription: "Where ancient traditions meet modern squad-worthy adventures!"
@@ -114,21 +106,24 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
               in Kyoto’s renowned kaiseki cuisine—a multi-course feast that celebrates seasonal flavors. Kyoto is more than a destination; 
               it’s a journey into Japan’s soul, offering an unforgettable mix of adventure and serenity",
           },
+          ...
         ]
         </Examples>
         `,
       },
     ];
 
-    const perplexityRequestOptions = {
+    console.log(messages);
+
+    const requestOptions = {
       method: "POST",
       headers: {
         Authorization: `Bearer ${API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "llama-3.1-sonar-small-128k-online", // TODO: update to better model
-        messages: perplexityMessages,
+        model: "meta-llama/llama-3.1-70b-instruct:free", // TODO: update to better model
+        messages: messages,
         // max_tokens: 256,
         // temperature: 0.2,
         // top_p: 0.9,
@@ -140,11 +135,12 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
         // stream: false,
         // presence_penalty: 0,
         // frequency_penalty: 1,
+        // repetition_penalty: 1
       }),
     };
 
-    // 2) Call the Perplexity API
-    const response = await fetch(perplexityURL, perplexityRequestOptions);
+    // 2) Call the LLM API
+    const response = await fetch(OPENROUTER_URL, requestOptions);
     if (!response.ok) {
       throw new Error(
         `Failed to fetch suggestions from Perplexity: ${response.status}`
@@ -153,7 +149,7 @@ export const fetchSwipeSuggestions = async (tripDetails, preferences) => {
     const data = await response.json();
 
     // 3) Parse the raw JSON array from the response
-    //    (We assume Perplexity returns valid JSON in data.choices[0].message.content)
+    //    (We assume LLM returns valid JSON in data.choices[0].message.content)
 
     let content = data.choices?.[0]?.message?.content || "";
     console.log(content);
@@ -206,7 +202,7 @@ export const fetchPerfectMatch = async (tripId) => {
     const allUserSuggestions = tripData.suggestions || [];
 
     // Perplexity API Request for fetchPerfectMatch
-    const perplexityMessages = [
+    const messages = [
       {
         role: "system",
         content: "You are an expert at recommending a trip that best matches all group preferences.",
@@ -237,7 +233,7 @@ export const fetchPerfectMatch = async (tripId) => {
         
         For the suggestion of the final best place respect the following rules:
         - Focus on a place that is suitable for the given number of travelers in the group
-        - The place should be perfectly aligned with the given preferences and swipes.
+        - Regarding temperature, consider also the season of the given time frame to align with the preference.
         - The place should also be perfectly aligned with the given trip details. So the date of travel and the given budget should fit to 
         the given suggestion.
         - For finding the right place to the given budget assume the following
@@ -245,7 +241,8 @@ export const fetchPerfectMatch = async (tripId) => {
           - We always start our trip from Munich, Germany, so try to do an estimation of the travel costs to the suggested place based on the starting point
           - Then try to align the preferences with the given budget and the duration
           - Give us only realistic suggestions that can be done with the given budget and the given duration of the trip.
-          - So e.g. for a day trip with a budget of maximum 100 Euros, places like Salzburg, Regensburg or Garmisch are feasible since they can be done in one day with 100 Euros; but not e.g. Lisboa, Rome or Madrid since those are too far for a daytrip and too expensive for 100 Euros
+          - So e.g. for a day trip with a budget of maximum 20 Euros, places like Salzburg, Regensburg or Garmisch are feasible since they can be done in one day with 20 Euros; but not e.g. Lisboa, Rome or Madrid since those are too far for a daytrip and too expensive for 20 Euros
+          - The place should be perfectly aligned with the given trip details and preferences, dates and budget being the most important ones to adhere to (since else the trip would not be feasible). That means that even if user preference is warm, do not propose places in Spain if e.g. the user wants to travel in the winter for only 1 day with a maximum budget of 20 Euros but you have to choose local ones which might not be as warm.
 
 
         For every attribute in the suggestion respect the following rules:
@@ -257,13 +254,14 @@ export const fetchPerfectMatch = async (tripId) => {
         - Limit each tag to 10 characters
         3. description:
         - Should cover the most important facts about the suggestion
-        - Consists of around 5-10 sentences that describes the suggestion in an inspiring, personal, precise and cheeky way
+        - Consists of around 10 sentences that describes the suggestion in an inspiring, personal, precise and cheeky way
         - The text is targeted at young individuals aiming to go on a group trip. It should give a good impression
         on what can be done and general summary of the suggestion. 
         4. recommendations:
         - Provide 2-3 restaurants and accomodations suiting the trip details (especially budget) and preferences
         5. userPreferences:
         - Provide approximate preferenceMatch scores for each user between 0 and 100, higher scores indicating a better match between place and respective user preference
+        - Consider for the estimation all preferences and swipes of the users, e.g. if a user swiped right on a place that is similar to the final suggestion, the preferenceMatch should be higher, or if a user prefers cold weather , the preferenceMatch for a hot place like Dubai should be low
         
 
         
@@ -274,7 +272,14 @@ export const fetchPerfectMatch = async (tripId) => {
 		    name: "Barcelona, Spain",
 		    tags: ["sightseeing", "shopping", "beach", "nightlife", "water sport"],
 		    description:
-		      "Get ready to fall in love with Barcelona—a city that blends vibrant culture, stunning architecture, and Mediterranean charm. This trip will take you through the iconic Sagrada Familia, the whimsical wonders of Park Güell, and the winding streets of the Gothic Quarter. You’ll sip sangria by the beach, devour mouthwatering tapas, and soak up breathtaking views from Montjuïc Hill.",
+		      "Barcelona is a city that brings together the best of history, modernity, 
+            and vibrant energy, making it the ultimate destination for any traveler. Wander through 
+            the enchanting Gothic Quarter, where narrow alleys lead to stunning medieval architecture 
+            and charming hidden cafés. Marvel at Gaudí’s whimsical masterpieces like Sagrada Família 
+            and Park Güell, offering surreal landscapes that are perfect for sunset views. By day, soak up 
+            the Mediterranean sun at Barceloneta Beach, and by night, dive into the city's electric nightlife—whether 
+            it’s sipping cocktails on a rooftop bar, enjoying flamenco performances, or dancing until dawn in world-class clubs. 
+            Every moment in Barcelona feels like an adventure waiting to happen",
 		    recommendations: {
 		      restaurants: [
 		        { name: "Nine"},
@@ -288,9 +293,9 @@ export const fetchPerfectMatch = async (tripId) => {
 		      ],
 		    },
 		    userPreferences: [
-		      { userId: "john", preferenceMatch: 100 },
-		      { userId: "lisa", preferenceMatch: 90 },
-		      { userId: "emma", preferenceMatch: 93 },
+		      { userId: "john", preferenceMatch: 69 },
+		      { userId: "lisa", preferenceMatch: 73 },
+		      { userId: "emma", preferenceMatch: 96 },
 			    ],
 			  };
         </Example>
@@ -298,23 +303,22 @@ export const fetchPerfectMatch = async (tripId) => {
       }
     ];
 
-    const perplexityURL = "https://api.perplexity.ai/chat/completions";
-    const perplexityRequestOptions = {
+    const requestOptions = {
       method: "POST",
       headers: {
         Authorization: `Bearer ${API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "llama-3.1-sonar-small-128k-online",
-        messages: perplexityMessages,
+        model: "meta-llama/llama-3.1-70b-instruct:free",
+        messages: messages,
         return_images: false,
         return_related_questions: false,
       }),
     };
 
     // Call Perplexity API
-    const response = await fetch(perplexityURL, perplexityRequestOptions);
+    const response = await fetch(OPENROUTER_URL, requestOptions);
     if (!response.ok) {
       throw new Error(`Failed to fetch perfect match: ${response.status}`);
     }

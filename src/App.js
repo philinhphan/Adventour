@@ -105,6 +105,7 @@ function App() {
     <div>
       <Router>
         <ScrollToTop />
+        {/* Pass setProfilePic and userId to Navbar for profile picture upload functionality */}
         <Navbar
           logoSrc={logo}
           profilePicSrc={profilePic}

@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../assets/styles/PlanningPage.css";
 import Navbar from "../components/Navbar/Navbar";
 import logo from "../assets/images/AdventourLogo.svg";
-// import profil from "../assets/images/LisaProfil.jpg";
-
+import profil from "../assets/images/LisaProfil.jpg";
 import { useTripContext } from "../context/TripContext";
 import { addTrip, linkTripToUser } from "../firebase/firebaseStore";
 import InputField from "../components/FormElements/InputField";

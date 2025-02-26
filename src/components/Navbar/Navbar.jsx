@@ -59,11 +59,11 @@ const Navbar = ({
       formData.append("file", compressedFile);
       formData.append(
         "upload_preset",
-        process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET // Must be set in your .env file
+        process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET 
       );
 
       // Cloudinary API endpoint URL using the cloud name from env variables
-      const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME; // Must be set in your .env file
+      const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
       const response = await fetch(
         `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
         {

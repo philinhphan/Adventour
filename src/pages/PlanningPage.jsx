@@ -11,6 +11,11 @@ import Button from "../components/Button/Button";
 import budgetIcon from "../assets/icons/Budget.svg";
 import dateIcon from "../assets/icons/Date.svg";
 
+// This page allows users to specify the details of their trip
+// Users can enter the trip name, dates, and budget range
+// They can also specify the flexibility of the dates
+// The trip details are saved to the database when the user clicks "Save details"
+// The user is then redirected to the invite friends page
 const PlanningPage = ({ userId, setCurrentTripId, profilePic }) => {
   const [tripDetails, setTripDetails] = useState({
     name: "",
@@ -75,6 +80,7 @@ const PlanningPage = ({ userId, setCurrentTripId, profilePic }) => {
     return Object.keys(newErrors).length === 0; // Return true if no errors
   };
 
+  // Save trip details to the database
   const saveTripDetails = async () => {
     if (!validateInputs()) {
       return; // Prevent save if validation fails
@@ -96,14 +102,14 @@ const PlanningPage = ({ userId, setCurrentTripId, profilePic }) => {
         },
       };
 
+      // Add trip to database and link to current user
+      // Important for Testing: Only use the users you want to link the trip to!
       if (userId) {
         const tripId = await addTrip(tripData, userId);
         await linkTripToUser("franzi", tripId);
         await linkTripToUser("phi-linh", tripId);
         await linkTripToUser("smilla", tripId);
         await linkTripToUser("jannik", tripId);
- 
-
 
         setCurrentTripId(tripId);
         updateTripDetails(tripDetails);
@@ -117,6 +123,7 @@ const PlanningPage = ({ userId, setCurrentTripId, profilePic }) => {
     }
   };
 
+  // Automatically set end date to next day if not specified
   useEffect(() => {
     if (tripDetails.dateStart) {
       const startDate = new Date(tripDetails.dateStart);
@@ -135,6 +142,7 @@ const PlanningPage = ({ userId, setCurrentTripId, profilePic }) => {
     }
   }, [tripDetails.dateStart]);
 
+  // Handle input changes and validate date fields
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     const today = new Date().toISOString().split("T")[0];

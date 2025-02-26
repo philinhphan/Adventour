@@ -15,6 +15,9 @@ import restaurant1 from "../assets/images/restaurant1.jpeg";
 import restaurant2 from "../assets/images/restaurant2.jpeg";
 import restaurant3 from "../assets/images/restaurant3.jpeg";
 
+// This page displays the details of a specific trip
+// It shows the trip name, description, tags, recommendations, and user preferences
+// It also displays a gallery of additional images related to the trip
 const TripDetailPage = ({ userId, profilePic }) => {
   const { tripId } = useParams();
   const [trip, setTrip] = useState(null);
@@ -49,7 +52,6 @@ const TripDetailPage = ({ userId, profilePic }) => {
     fetchTripData();
   }, [tripId, userId]);
 
-
   useEffect(() => {
     const fetchAdditionalImages = async () => {
       try {
@@ -78,11 +80,9 @@ const TripDetailPage = ({ userId, profilePic }) => {
     }
   }, [trip]);
 
-
   if (!trip) {
     return <div>Loading...</div>;
   }
-
 
   const sliderSettings = {
     dots: true,
@@ -103,7 +103,7 @@ const TripDetailPage = ({ userId, profilePic }) => {
     ],
   };
 
-  // NEW: Arrays of static images for restaurants and accommodations
+  // Arrays of static images for restaurants and accommodations
   const restaurantImages = [restaurant1, restaurant2, restaurant3];
   const accommodationImages = [hotel1, hotel2, hotel3];
 
@@ -136,16 +136,14 @@ const TripDetailPage = ({ userId, profilePic }) => {
   };
 
   return (
-    <div
-      className="trip-detail-page"
-    >
+    <div className="trip-detail-page">
       <Navbar logoSrc={logo} profilePicSrc={profilePic} background="white" />
       <div
         className="sticky-header"
         style={{
           height: "500px",
           backgroundImage: `url(${trip.backgroundImage})`,
-          backgroundSize: "cover", 
+          backgroundSize: "cover",
           backgroundPosition: "center center",
           backgroundRepeat: "no-repeat",
         }}
@@ -177,10 +175,10 @@ const TripDetailPage = ({ userId, profilePic }) => {
                 src={restaurantImages[index % restaurantImages.length]}
                 alt="Restaurant"
                 style={{
-                  width: "150px",        // fixed width for square shape
-                  height: "150px",       // fixed height for square shape
+                  width: "150px", // fixed width for square shape
+                  height: "150px", // fixed height for square shape
                   objectFit: "cover",
-                  margin: "0 auto 5px",  // centered horizontally with bottom margin
+                  margin: "0 auto 5px", // centered horizontally with bottom margin
                   display: "block",
                   borderRadius: "8px",
                 }}
@@ -202,10 +200,10 @@ const TripDetailPage = ({ userId, profilePic }) => {
                 src={accommodationImages[index % accommodationImages.length]}
                 alt="Accommodation"
                 style={{
-                  width: "150px",        // fixed width for square shape
-                  height: "150px",       // fixed height for square shape
+                  width: "150px", // fixed width for square shape
+                  height: "150px", // fixed height for square shape
                   objectFit: "cover",
-                  margin: "0 auto 5px",  // centered horizontally with bottom margin
+                  margin: "0 auto 5px", // centered horizontally with bottom margin
                   display: "block",
                   borderRadius: "8px",
                 }}
@@ -214,8 +212,6 @@ const TripDetailPage = ({ userId, profilePic }) => {
             </div>
           ))}
         </Slider>
-
-
 
         <h2>Balanced Preferences</h2>
         <div className="balanced-preferences">
@@ -260,7 +256,6 @@ const TripDetailPage = ({ userId, profilePic }) => {
             />
           ))}
         </div>
-
       </div>
     </div>
   );

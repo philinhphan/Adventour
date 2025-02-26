@@ -1,6 +1,11 @@
 import React from "react";
 import "../../assets/styles/InputField.css";
 
+// InputField component, takes in label, type, name, value, placeholder, onChange function, and disabled flag.
+// Default disabled flag is false.
+// The input mode is set to numeric for number types and text for other types.
+// Only numeric values are allowed for number types.
+
 const InputField = ({
   label,
   type,

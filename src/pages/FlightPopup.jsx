@@ -7,6 +7,9 @@ import profil from "../assets/images/LisaProfil.jpg";
 import "../assets/styles/FlightPopup.css";
 import plane from "../assets/icons/planeIcon.svg";
 
+// This Page is displayed when the user submits their preferences
+// It shows a loading animation and a progress bar
+// It is used to simulate the process of fetching and processing data
 const FlightPopup = () => {
   return (
     <div className="processing-page">

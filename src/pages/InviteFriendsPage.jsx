@@ -7,7 +7,7 @@ import Navbar from "../components/Navbar/Navbar";
 import logo from "../assets/images/AdventourLogo.svg";
 // import profil from "../assets/images/LisaProfil.jpg";
 
-// Import icons
+// Import icons for social media sharing
 import whatsapp from "../assets/icons/whatsapp.svg";
 import Instagram from "../assets/icons/Instagram.svg";
 import More from "../assets/icons/More.svg";
@@ -17,6 +17,9 @@ import LinkedIn from "../assets/icons/LinkedIn.svg";
 import Snapchat from "../assets/icons/Snapchat.svg";
 import TikTok from "../assets/icons/TikTok.svg";
 
+// This page allows users to invite friends to join their trip
+// Users can customize the message and share it via various platforms
+// The message includes a link to the trip planning page
 const InviteFriendsPage = ({ profilePic }) => {
   const { tripData } = useTripContext(); // Access trip data from context
   const shareLink = "https://adventour-app.com/share";

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import imageCompression from "browser-image-compression"; 
+import imageCompression from "browser-image-compression";
 
 import { Link, useNavigate } from "react-router-dom";
 import "../../assets/styles/Navbar.css";
@@ -17,8 +17,8 @@ const Navbar = ({
   logoSrc,
   profilePicSrc,
   background = "transparent",
-  setProfilePic, 
-  userId,        
+  setProfilePic,
+  userId,
 }) => {
   const [showLogout, setShowLogout] = useState(false); // Zustand für das Logout-Menü
   const navigate = useNavigate();
@@ -39,7 +39,8 @@ const Navbar = ({
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    if (!userId) { // Guard check to ensure userId is defined
+    if (!userId) {
+      // Guard check to ensure userId is defined
       console.error("User ID is not defined; cannot upload profile picture.");
       return;
     }
@@ -59,7 +60,7 @@ const Navbar = ({
       formData.append("file", compressedFile);
       formData.append(
         "upload_preset",
-        process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET 
+        process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET
       );
 
       // Cloudinary API endpoint URL using the cloud name from env variables
@@ -155,5 +156,3 @@ const Navbar = ({
 };
 
 export default Navbar;
-
-

@@ -4,10 +4,16 @@ import "../assets/styles/HomePage.css";
 import Button from "../components/Button/Button";
 import { getUserNotifications } from "../firebase/firebaseStore";
 
+// HomePage component, displays the home page with options to start planning or view trips.
+// Props:
+// - backgroundImage: Background image for the home page
+// - userName: Name of the user
+// - userId: ID of the user
 const HomePage = ({ backgroundImage, userName, userId }) => {
   const [notifications, setNotifications] = useState([]);
   const navigate = useNavigate();
 
+  // Fetch notifications for the user
   useEffect(() => {
     if (!userId) return;
 
@@ -23,7 +29,9 @@ const HomePage = ({ backgroundImage, userName, userId }) => {
     fetchNotifications();
   }, [userId]);
 
+  // Event handler for starting planning
   const handleStartPlanning = () => navigate("/planning");
+  // Event handler for viewing trips
   const handleViewTrips = () => navigate("/my-trips");
 
   return (

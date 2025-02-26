@@ -3,9 +3,16 @@ import "../../assets/styles/Tile.css";
 import { Img } from "react-image";
 import { OrbitProgress } from "react-loading-indicators";
 
+// Tile component, displays an image with a label and handles selection state.
+// Props:
+// - label: The label to display below the image
+// - imageSrc: The source URL of the image to display
+// - onToggle: Function to call when the tile is toggled
+
 const Tile = ({ label, imageSrc, onToggle }) => {
   const [isSelected, setIsSelected] = useState(false);
 
+  // Handles the toggle action for the tile
   const handleToggle = () => {
     setIsSelected(!isSelected);
     onToggle(label, !isSelected);

@@ -11,6 +11,10 @@ import {
 } from "../firebase/firebaseStore";
 import { fetchPerfectMatch } from "../api/tripApi";
 
+// SuggestionsPage component, displays the suggestions for the trip.
+// Users can swipe left or right on the suggestions to indicate their preference.
+// The swipe answers are saved to the database and used to generate a perfect match.
+// Once all users have completed the swipe, the perfect match is generated.
 const SuggestionsPage = ({ currentTripId, userId }) => {
   const { tripData, updateSwipeAnswers } = useTripContext();
   const navigate = useNavigate();

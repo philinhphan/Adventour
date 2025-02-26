@@ -27,6 +27,11 @@ import AccommodationResort from "../assets/images/AccommodationResort.jpg";
 import AccommodationAirBnB from "../assets/images/AccommodationAirBnB.jpg";
 import AccommodationCamping from "../assets/images/AccommodationCamping.jpg";
 
+// This page allows users to select their preferences for the upcoming trip
+// Users can select multiple options for activities, weather, location, and accommodation
+// The selected preferences are saved to the database and used to generate trip suggestions
+// The user is then redirected to the suggestions page
+
 const PreferencesPage = ({ currentTripId, userId, profilePic }) => {
   const [preferences, setPreferences] = useState([]);
   const navigate = useNavigate();
@@ -88,7 +93,9 @@ const PreferencesPage = ({ currentTripId, userId, profilePic }) => {
 
           suggestionsWithExtras = await Promise.all(
             rawSuggestions.map(async (s, idx) => {
-              const imageUrl = await fetchPexelsImage(s.name + "landscape tourism");
+              const imageUrl = await fetchPexelsImage(
+                s.name + "landscape tourism"
+              );
               return {
                 id: idx + 1,
                 name: s.name,

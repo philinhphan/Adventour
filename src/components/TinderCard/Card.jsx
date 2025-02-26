@@ -8,6 +8,14 @@ import superlikeIcon from "../../assets/icons/superlike.svg";
 import indifferentIcon from "../../assets/icons/indifferent.svg";
 import likeIcon from "../../assets/icons/like.svg";
 
+// Card component, displays a suggestion card with swipeable actions.
+// Props:
+// - suggestion: The suggestion data to display
+// - onSwipe: Function to call when the card is swiped
+// - isLastCard: Flag to indicate if this is the last card
+// - onLastSwipe: Function to call when the last card is swiped
+// - isVisible: Flag to indicate if the card is visible
+
 const Card = ({ suggestion, onSwipe, isLastCard, onLastSwipe, isVisible }) => {
   const [swipeDirection, setSwipeDirection] = useState(null);
   const [buttonPressed, setButtonPressed] = useState(null);
@@ -15,6 +23,7 @@ const Card = ({ suggestion, onSwipe, isLastCard, onLastSwipe, isVisible }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
+  // Preload the suggestion image
   useEffect(() => {
     const img = new Image();
     img.src = suggestion.image;
@@ -23,6 +32,7 @@ const Card = ({ suggestion, onSwipe, isLastCard, onLastSwipe, isVisible }) => {
     };
   }, [suggestion]);
 
+  // Handles the swipe action for the card
   const handleSwipe = (direction) => {
     setSwipeDirection(direction);
     setButtonPressed(direction);

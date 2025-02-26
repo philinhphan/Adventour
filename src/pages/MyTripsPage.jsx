@@ -12,11 +12,19 @@ import Navbar from "../components/Navbar/Navbar";
 import logo from "../assets/images/AdventourLogo.svg";
 // import profil from "../assets/images/LisaProfil.jpg";
 
+// This page displays an overview of the user's trips
+// It shows the trips the user is part of, their status, and allows the user to navigate to the trip details
+// The user can also delete trips they are part of
+// Props:
+// - userId: ID of the user
+// - setCurrentTripId: Function to set the current trip ID
+// - profilePic: Profile picture of the user
 const MyTripsPage = ({ userId, setCurrentTripId, profilePic }) => {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // Function to fetch user trips and associated data
   useEffect(() => {
     const fetchTrips = async () => {
       if (!userId) {
@@ -71,6 +79,8 @@ const MyTripsPage = ({ userId, setCurrentTripId, profilePic }) => {
     fetchTrips();
   }, [userId]);
 
+  // Function to handle click on a trip
+  // It sets the current trip ID and navigates to the trip details page
   const handleTripClick = (trip) => {
     const currentUser = trip.userDetails?.find((user) => user.id === userId);
     setCurrentTripId(trip.id);

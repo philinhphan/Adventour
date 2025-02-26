@@ -7,7 +7,11 @@ import "../assets/styles/LoginPage.css";
 import logo from "../assets/images/AdventourLogo.svg";
 import profil from "../assets/images/emptyProfile.png";
 
-
+// This page allows users to log in to their account
+// Users can enter their email and password to access their account
+// If the login is successful, they are redirected to the home page
+// If the login fails, an error message is displayed
+// Users can navigate to the sign-up page if they do not have an account -> not implemented yet
 const LoginPage = ({ profilePic }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -60,7 +64,6 @@ const LoginPage = ({ profilePic }) => {
           <button type="submit" className="button button-primary">
             Login
           </button>
-
         </form>
         <p2>Please login to continue your AdvenTour</p2>
         <p className="signup-prompt">

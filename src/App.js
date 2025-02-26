@@ -21,6 +21,10 @@ import profilePicDefault from "./assets/images/LisaProfil.jpg"; // Use a default
 import profilePic from "./assets/images/LisaProfil.jpg";
 import FlightPopup from "./pages/FlightPopup";
 
+// Main App component
+// Manages the Firebase initialization and user authentication state
+// Renders the Navbar and the main content area
+// Routes are defined using the React Router
 function App() {
   const [firebaseReady, setFirebaseReady] = useState(false);
   const [user, setUser] = useState(null);
@@ -28,17 +32,6 @@ function App() {
   const [userId, setUserId] = useState(null); // State for storing the user's document ID
   const [profilePic, setProfilePic] = useState(profilePicDefault);
   const [currentTripId, setCurrentTripId] = useState(null); // State for storing the current trip ID
-  /* const [profilePic, setProfilePic] = useState("/assets/images/defaultProfile.jpg"); // Standard-Profilbild */
-
-  /* DOESNT WORK AT THE MOMENT! const getProfilePicture = (userName) => {
-    const profilePictures = {
-      Franzi: "/assets/images/Profil2.jpg", // Beispiel für User 2
-      Smilla: "/assets/images/LisaProfil.jpg", // Beispiel für User 3
-      default: "/assets/images/emptyProfile.jpg", // Standardbild
-    };
-    
-    return profilePictures[userName] || profilePictures.default; // Rückgabebild
-  } */
 
   // Firebase Initialization Check
   useEffect(() => {
@@ -78,7 +71,6 @@ function App() {
             const userData = results[0];
             setUserName(userData.name || "User"); // Update userName with the name field
             setUserId(userData.id); // Store the user document ID
-            /* setProfilePic(getProfilePicture(userData.name)); // Dynamisches Profilbild setzen */
             setProfilePic(userData.profilePicture || profilePicDefault);
           } else {
             console.warn("No user document found for the email", user.email);
@@ -114,7 +106,10 @@ function App() {
         />
         <div className="content">
           <Routes>
-            <Route path="/login" element={<LoginPage profilePic={profilePic} />} />
+            <Route
+              path="/login"
+              element={<LoginPage profilePic={profilePic} />}
+            />
             <Route
               path="/"
               element={
@@ -207,7 +202,7 @@ function App() {
               path="/trip-detail/:tripId"
               element={
                 <ProtectedRoute>
-                  <TripDetailPage userId={userId} profilePic={profilePic}/>
+                  <TripDetailPage userId={userId} profilePic={profilePic} />
                 </ProtectedRoute>
               }
             />

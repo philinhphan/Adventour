@@ -4,6 +4,9 @@ import Popup from "../components/PopUp/PopUp";
 import "../assets/styles/ProcessingPage.css";
 import plane from "../assets/icons/Notifcation.svg";
 
+// This Page is displayed when the user submits their preferences
+// It shows a loading animation and a progress bar
+// It is used to simulate the process of fetching and processing data
 const ProcessingPage = () => {
   const navigate = useNavigate();
   const location = useLocation();

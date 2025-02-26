@@ -11,7 +11,7 @@ import Button from "../components/Button/Button";
 import budgetIcon from "../assets/icons/Budget.svg";
 import dateIcon from "../assets/icons/Date.svg";
 
-const PlanningPage = ({ userId, setCurrentTripId }) => {
+const PlanningPage = ({ userId, setCurrentTripId, profilePic }) => {
   const [tripDetails, setTripDetails] = useState({
     name: "",
     dateStart: "",
@@ -98,8 +98,12 @@ const PlanningPage = ({ userId, setCurrentTripId }) => {
 
       if (userId) {
         const tripId = await addTrip(tripData, userId);
-        await linkTripToUser("jannik", tripId);
+        await linkTripToUser("franzi", tripId);
+        await linkTripToUser("phi-linh", tripId);
         await linkTripToUser("smilla", tripId);
+        await linkTripToUser("jannik", tripId);
+ 
+
 
         setCurrentTripId(tripId);
         updateTripDetails(tripDetails);
@@ -163,7 +167,7 @@ const PlanningPage = ({ userId, setCurrentTripId }) => {
 
   return (
     <div className="planning-page">
-      <Navbar logoSrc={logo} profilePicSrc={profil} background="white" />
+      <Navbar logoSrc={logo} profilePicSrc={profilePic} background="white" />
       <div className="planning-container">
         <h1 className="title">Please specify your trip details</h1>
         <div className="planning-section">

@@ -10,9 +10,9 @@ import "../assets/styles/MyTripsPage.css";
 import barcelona from "../assets/images/default.jpg";
 import Navbar from "../components/Navbar/Navbar";
 import logo from "../assets/images/AdventourLogo.svg";
-import profil from "../assets/images/LisaProfil.jpg";
+// import profil from "../assets/images/LisaProfil.jpg";
 
-const MyTripsPage = ({ userId, setCurrentTripId }) => {
+const MyTripsPage = ({ userId, setCurrentTripId, profilePic }) => {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -114,7 +114,7 @@ const MyTripsPage = ({ userId, setCurrentTripId }) => {
 
   return (
     <div className="my-trips-page">
-      <Navbar logoSrc={logo} profilePicSrc={profil} background="white" />
+      <Navbar logoSrc={logo} profilePicSrc={profilePic} background="white" />
       <div className="trip-header">
         <h1>Overview of my Trips.</h1>
         <p>

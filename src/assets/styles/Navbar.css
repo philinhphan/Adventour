@@ -39,10 +39,17 @@
   cursor: pointer;
 }
 
-.logout-button {
+.navbar-dropdown {
   position: absolute;
-  top: 50px; /* Abstand vom Profilbild */
+  top: 50px; /* Position below the profile picture */
   right: 0;
+  display: flex;
+  flex-direction: column; /* Stack buttons vertically */
+  gap: 5px; /* Space between buttons */
+  z-index: 1001; /* Ensure dropdown is above other elements */
+}
+
+.logout-button {
   background-color: #ff0055;
   color: white;
   border: none;

@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
+import imageCompression from "browser-image-compression"; 
+
 import { Link, useNavigate } from "react-router-dom";
 import "../../assets/styles/Navbar.css";
 import { logout } from "../../firebase/firebaseAuth";
+import profilePicDefault from "../../assets/images/LisaProfil.jpg";
 
 // Navbar component, takes in logoSrc, profilePicSrc and onProfileClick function.
 // Logo is wrapped in Link to navigate to home page.
 // Profile picture is displayed with onProfileClick function -> right now it just alerts.
 
-import { storage, db } from "../../firebase/firebase";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { db } from "../../firebase/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 
 const Navbar = ({
@@ -22,6 +24,7 @@ const Navbar = ({
   const navigate = useNavigate();
   const profileRef = useRef(null);
   const fileInputRef = useRef(null);
+  const finalProfilePic = profilePicSrc || profilePicDefault;
 
   const handleLogout = async () => {
     try {
@@ -36,17 +39,45 @@ const Navbar = ({
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    if (!userId) { 
+    if (!userId) { // Guard check to ensure userId is defined
       console.error("User ID is not defined; cannot upload profile picture.");
       return;
     }
     try {
-      // Create a storage reference for the profile picture
-      const storageRef = ref(storage, `profilePictures/${userId}/${file.name}`);
-      // Upload the file to Firebase Storage
-      await uploadBytes(storageRef, file);
-      // Get the download URL of the uploaded image
-      const downloadURL = await getDownloadURL(storageRef);
+      const options = {
+        maxSizeMB: 0.5, // Maximum size in MB (adjust as needed)
+        maxWidthOrHeight: 800, // Maximum width or height in pixels (adjust as needed)
+        useWebWorker: true,
+      };
+      const compressedFile = await imageCompression(file, options);
+      if (!compressedFile) {
+        console.log("File compression failed");
+      }
+
+      // Prepare form data for Cloudinary unsigned upload
+      const formData = new FormData();
+      formData.append("file", compressedFile);
+      formData.append(
+        "upload_preset",
+        process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET 
+      );
+
+      // Cloudinary API endpoint URL using the cloud name from env variables
+      const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Cloudinary upload failed");
+      }
+      const data = await response.json();
+      const downloadURL = data.secure_url; // The URL of the uploaded image
+
       // Update Firestore user document with the new profile picture URL
       const userDocRef = doc(db, "users", userId);
       await updateDoc(userDocRef, { profilePicture: downloadURL });
@@ -103,10 +134,9 @@ const Navbar = ({
           onChange={handleFileChange}
         />
         {showLogout && (
-          // <-- UPDATED: Dropdown now includes two options
           <div className="navbar-dropdown">
             <button
-              className="dropdown-button"
+              className="logout-button"
               onClick={() => {
                 // Trigger the file input dialog for uploading a new profile picture
                 fileInputRef.current.click();
@@ -114,7 +144,7 @@ const Navbar = ({
             >
               Change Profile Picture
             </button>
-            <button className="dropdown-button" onClick={handleLogout}>
+            <button className="logout-button" onClick={handleLogout}>
               Logout
             </button>
           </div>
@@ -125,3 +155,5 @@ const Navbar = ({
 };
 
 export default Navbar;
+
+

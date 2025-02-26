@@ -7,7 +7,8 @@ import "../assets/styles/LoginPage.css";
 import logo from "../assets/images/AdventourLogo.svg";
 import profil from "../assets/images/emptyProfile.png";
 
-const LoginPage = () => {
+
+const LoginPage = ({ profilePic }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

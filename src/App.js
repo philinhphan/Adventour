@@ -114,7 +114,7 @@ function App() {
         />
         <div className="content">
           <Routes>
-            <Route path="/login" element={<LoginPage />} />
+            <Route path="/login" element={<LoginPage profilePic={profilePic} />} />
             <Route
               path="/"
               element={
@@ -131,7 +131,7 @@ function App() {
               path="/invite"
               element={
                 <ProtectedRoute>
-                  <InviteFriendsPage />
+                  <InviteFriendsPage profilePic={profilePic} />
                 </ProtectedRoute>
               }
             />
@@ -142,6 +142,7 @@ function App() {
                   <PlanningPage
                     setCurrentTripId={setCurrentTripId} // Pass state setter for currentTripId
                     userId={userId} // Pass the user document ID
+                    profilePic={profilePic}
                   />
                 </ProtectedRoute>
               }
@@ -153,6 +154,7 @@ function App() {
                   <PreferencesPage
                     currentTripId={currentTripId}
                     userId={userId}
+                    profilePic={profilePic}
                   />
                 </ProtectedRoute>
               }
@@ -186,6 +188,7 @@ function App() {
                   <MyTripsPage
                     userId={userId}
                     setCurrentTripId={setCurrentTripId}
+                    profilePic={profilePic}
                   />
                 </ProtectedRoute>
               }
@@ -204,7 +207,7 @@ function App() {
               path="/trip-detail/:tripId"
               element={
                 <ProtectedRoute>
-                  <TripDetailPage userId={userId} />
+                  <TripDetailPage userId={userId} profilePic={profilePic}/>
                 </ProtectedRoute>
               }
             />
